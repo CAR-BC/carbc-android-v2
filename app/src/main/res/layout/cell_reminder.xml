@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/reminder_vid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="veicle ID"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/reminder_job"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="description"
+            android:textSize="18dp"/>
+
+        <TextView
+            android:id="@+id/reminder_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="DD/MM/YYYY"
+            android:textSize="16dp"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

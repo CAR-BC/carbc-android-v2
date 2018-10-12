@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_add_event"
+            android:icon="@drawable/round_swap_horiz_black_24dp"
+            android:title="Add Transaction" />
+
+        <item
+            android:id="@+id/navigation_view_vehicle"
+            android:icon="@drawable/round_directions_car_black_24dp"
+            android:title="Search Vehicle" />
+
+        <item
+            android:id="@+id/navigation_notifications"
+            android:icon="@drawable/baseline_notifications_black_24dp"
+            android:title="Notifications" />
+
+    </group>
+
+    <item android:title="My History">
+        <menu>
+            <item
+                android:id="@+id/navigation_status"
+                android:icon="@drawable/outline_assistant_photo_black_24dp"
+                android:title="Status" />
+
+            <item
+                android:id="@+id/navigation_reminders"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="Reminders" />
+
+            <item
+                android:id="@+id/navigation_info"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Info" />
+        </menu>
+    </item>
+
+</menu>
