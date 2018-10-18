@@ -5,78 +5,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SellVehicleActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_gravity="left"
-        android:background="?attr/colorPrimary"
-        android:elevation="6dp"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        <ImageView
-            android:layout_marginLeft="10dp"
-            android:id="@+id/back_button"
-            android:layout_width="50dp"
-            android:layout_gravity="left"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_gravity="left"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
-            android:src="@drawable/ic_baseline_arrow_back_black_24dp"/>
+            android:background="?attr/colorPrimary"
+            android:elevation="6dp"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <TextView
-            android:layout_marginLeft="15dp"
-            android:text="Sell Vehicle"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:background="@null"/>
-    </android.support.v7.widget.Toolbar>
+            <ImageView
+                android:id="@+id/back_button"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="left"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="0dp"
+                android:src="@drawable/ic_baseline_arrow_back_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:background="@null"
+                android:text="Sell Vehicle"
+                android:textSize="20dp" />
+        </android.support.v7.widget.Toolbar>
 
         <TextView
             android:id="@+id/vehicle_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Vehicle Number"
             android:layout_gravity="center"
-            android:padding="20dp"
             android:layout_margin="20dp"
-            android:textSize="20dp"/>
+            android:hint="Vehicle Number"
+            android:padding="20dp"
+            android:textSize="20dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="15dp"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:text="New Owner" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/buy_vehicle_previous_owner"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_margin="15dp"
-            android:hint="Enter buyer's ID number"
-            android:textSize="20dp" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="15dp"
+                android:text="New Owner"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/buy_vehicle_previous_owner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="15dp"
+                android:hint="Enter buyer's ID number"
+                android:textSize="20dp" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,21 +86,21 @@
             android:orientation="horizontal">
 
             <Button
-                android:layout_marginLeft="100dp"
                 android:id="@+id/cancel_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
+                android:layout_gravity="left"
+                android:layout_marginLeft="100dp"
                 android:gravity="center"
-                android:layout_gravity="left" />
+                android:text="Cancel" />
 
             <Button
                 android:id="@+id/done_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Done"
+                android:layout_gravity="right"
                 android:gravity="center"
-                android:layout_gravity="right" />
+                android:text="Done" />
         </LinearLayout>
 
     </LinearLayout>

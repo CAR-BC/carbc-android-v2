@@ -37,7 +37,7 @@ public class InfoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_info, container, false);
 
-        spinner =(Spinner)view.findViewById(R.id.vehicle_number);
+        spinner = (Spinner) view.findViewById(R.id.vehicle_number);
         List<String> list = new ArrayList<String>();
         list.add("NW-6060");
         list.add("WP-2112");
@@ -48,12 +48,12 @@ public class InfoFragment extends Fragment {
         spinner.setAdapter(dataAdapter);
 
 
-        listView = (ListView)view.findViewById(R.id.info_list);
+        listView = (ListView) view.findViewById(R.id.info_list);
 
         final ReminderItem[] reminderItems = new ReminderItem[3];
-        ReminderItem item1 = new ReminderItem("NW-2563","Leasing payment","12/05/2018");
-        ReminderItem item2 = new ReminderItem("NW-6395","insurance payment","13/05/2018");
-        ReminderItem item3 = new ReminderItem("WP-3025","annual service","02/05/2018");
+        ReminderItem item1 = new ReminderItem("NW-2563", "Leasing payment", "12/05/2018");
+        ReminderItem item2 = new ReminderItem("NW-6395", "insurance payment", "13/05/2018");
+        ReminderItem item3 = new ReminderItem("WP-3025", "annual service", "02/05/2018");
 
         reminderItems[0] = item1;
         reminderItems[1] = item2;
@@ -116,7 +116,6 @@ public class InfoFragment extends Fragment {
                 return cellUser;
             }
         });
-
 
 
         return view;

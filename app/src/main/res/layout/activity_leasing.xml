@@ -109,7 +109,7 @@
             android:textSize="18dp"/>
 
         <EditText
-            android:id="@+id/insure_insurance_info"
+            android:id="@+id/leasing_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Leasing amount"
