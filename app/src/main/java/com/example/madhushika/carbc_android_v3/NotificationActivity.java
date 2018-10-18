@@ -37,8 +37,8 @@ public class NotificationActivity extends AppCompatActivity {
         BlockInfo b3 = new BlockInfo("EP-6342", "Serviced at ACD Motors", "02/08/2018");
         final BlockInfo[] blockInfoList = new BlockInfo[3];
         blockInfoList[0] = b;
-        blockInfoList[1] = b;
-        blockInfoList[2] = b;
+        blockInfoList[1] = b2;
+        blockInfoList[2] = b3;
 
         notification.setAdapter(new BaseAdapter() {
             @Override
