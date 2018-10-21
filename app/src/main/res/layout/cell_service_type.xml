@@ -9,7 +9,7 @@
         android:orientation="vertical"
         android:layout_margin="10dp">
         <TextView
-            android:id="@+id/service_type_txt"
+            android:id="@+id/spare_parts_txt"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="25dp"

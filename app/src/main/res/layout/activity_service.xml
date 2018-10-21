@@ -58,13 +58,12 @@
             android:textSize="20dp" />
 
         <ListView
-            android:id="@+id/service_type_list"
+            android:id="@+id/service_location_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
+            android:layout_height="wrap_content"></ListView>
 
         <ListView
-            android:id="@+id/service_location_list"
+            android:id="@+id/service_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></ListView>
 
@@ -91,10 +90,7 @@
                 android:text="Done" />
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/service_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></ListView>
+
 
 
     </LinearLayout>

@@ -70,6 +70,8 @@ public class NewTransactionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), BuyVehicleActivity.class);
+                String vehiclNo = spinner.getSelectedItem().toString();
+                i.putExtra("vid",vehiclNo);
                 startActivity(i);
             }
         });
@@ -77,6 +79,8 @@ public class NewTransactionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), SellVehicleActivity.class);
+                String vehiclNo = spinner.getSelectedItem().toString();
+                i.putExtra("vid",vehiclNo);
                 startActivity(i);
             }
         });
@@ -84,6 +88,8 @@ public class NewTransactionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ServiceActivity.class);
+                String vehiclNo = spinner.getSelectedItem().toString();
+                i.putExtra("vid",vehiclNo);
                 startActivity(i);
 
             }
@@ -92,6 +98,8 @@ public class NewTransactionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), RegisterVehicleActivity.class);
+                String vehiclNo = spinner.getSelectedItem().toString();
+                i.putExtra("vid",vehiclNo);
                 startActivity(i);
 
             }
@@ -100,6 +108,8 @@ public class NewTransactionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), InsureActivity.class);
+                String vehiclNo = spinner.getSelectedItem().toString();
+                i.putExtra("vid",vehiclNo);
                 startActivity(i);
 
             }
@@ -108,6 +118,8 @@ public class NewTransactionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), LeasingActivity.class);
+                String vehiclNo = spinner.getSelectedItem().toString();
+                i.putExtra("vid",vehiclNo);
                 startActivity(i);
 
             }
@@ -116,6 +128,8 @@ public class NewTransactionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), LeasingPaymentActivity.class);
+                String vehiclNo = spinner.getSelectedItem().toString();
+                i.putExtra("vid",vehiclNo);
                 startActivity(i);
 
             }
@@ -124,6 +138,8 @@ public class NewTransactionFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), EmmisiontestingActivity.class);
+                String vehiclNo = spinner.getSelectedItem().toString();
+                i.putExtra("vid",vehiclNo);
                 startActivity(i);
 
             }
