@@ -67,9 +67,10 @@ public class SellVehicleActivity extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject();
                             JSONObject jsonObjectNewOwner = new JSONObject();
                             JSONObject jsonSecondary = new JSONObject();
+
                             jsonObjectNewOwner.put("name", "Ashan");
                             jsonObjectNewOwner.put("publicKey", KeyGenerator.getInstance().getPublicKeyAsString());
-                            getFilesDir();
+
                             jsonSecondary.put("NewOwner", jsonObjectNewOwner);
                             jsonObject.put("SecondaryParty", jsonSecondary);
                             jsonObject.put("ThirdParty", new JSONArray());
@@ -87,6 +88,7 @@ public class SellVehicleActivity extends AppCompatActivity {
 
                             Block block = new Block(blockHeader, blockBody);
                             MessageSender.getInstance().broadCastBlockTest(block);
+
 
                         } catch (Exception e) {
                             e.printStackTrace();

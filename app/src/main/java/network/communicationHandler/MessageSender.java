@@ -127,7 +127,6 @@ public class MessageSender {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void sendSignedBlockChain(Neighbour blockchainRequeseter, String signedBlockchain, String blockchainHash) {
@@ -179,7 +178,7 @@ public class MessageSender {
             RequestMessage blockMessage = MessageCreator.createMessage(jsonObject,"BlockBroadcast");
             blockMessage.addHeader("keepActive", "false");
             blockMessage.addHeader("messageType", "BlockBroadcast");
-            Node.getInstance().sendMessageToPeer("192.168.8.103",49222, blockMessage);
+            Node.getInstance().sendMessageToPeer("192.168.8.102",49211, blockMessage);
         } catch (JSONException e) {
             e.printStackTrace();
         }

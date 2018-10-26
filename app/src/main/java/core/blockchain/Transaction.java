@@ -24,6 +24,14 @@ public class Transaction {
         this.time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
     }
 
+    public Transaction(String transactionType, String sender, String event, String jsonData){
+        this.transactionId = generateTransactionID(transactionType);
+        this.sender = sender;
+        this.event = event;
+        this.data = jsonData;
+        this.time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+    }
+
     public Transaction() {
         this.transactionId = "0-0000";
         this.sender = "CAR.BC";
@@ -67,5 +75,11 @@ public class Transaction {
 
     public void setTime() {
         this.time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+    }
+
+    public void setAddress() {
+        Random random = new Random(System.currentTimeMillis());
+        int number = 10000 + Math.abs(random.nextInt(90000));
+        this.address = "V -"+ number;
     }
 }
