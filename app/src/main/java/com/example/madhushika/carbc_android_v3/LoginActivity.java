@@ -37,27 +37,26 @@ public class LoginActivity extends AppCompatActivity {
         newUser_btn = (TextView) findViewById(R.id.new_user_register);
         fogot_pw_btn = (TextView) findViewById(R.id.forget_password);
         usernametxt = (EditText) findViewById(R.id.login_name);
-        passwordtxt =(EditText) findViewById(R.id.login_password);
+        passwordtxt = (EditText) findViewById(R.id.login_password);
 
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (!login_statusStored){
+                if (!login_statusStored) {
                     String usernameGiven = usernametxt.getText().toString();
                     String passwordGiven = passwordtxt.getText().toString();
 
-                    if (usernameGiven.equals(userNameStored) && passwordGiven.equals(passwordStored)){
+                    if (usernameGiven.equals(userNameStored) && passwordGiven.equals(passwordStored)) {
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         LoginActivity.this.finish();
-                        editor.putBoolean("login_status",true);
-                    }
-                    else {
-                        Toast.makeText(LoginActivity.this,"Please enter correct username and " +
-                                "password to continue",Toast.LENGTH_SHORT).show();
+                        editor.putBoolean("login_status", true);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Please enter correct username and " +
+                                "password to continue", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

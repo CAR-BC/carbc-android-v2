@@ -1,5 +1,6 @@
 package com.example.madhushika.carbc_android_v3;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -73,15 +74,18 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
 
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()>0){
                     if (!isValidEmail(s)){
+                        emailGiven.setTextColor(R.color.colorRed);
                         //red
-                        Toast.makeText(RegisterActivity.this,"not a valid email",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(RegisterActivity.this,"not a valid email",Toast.LENGTH_SHORT).show();
                     }
                     else {
                         //green
+                        emailGiven.setTextColor(R.color.colorgGreen);
                         Toast.makeText(RegisterActivity.this,"valid email",Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -129,6 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (isValidEmail(email) && checkStrongPassword(password) && password.equals(confirmPassword)
                         && !username.equals(" ") && !id.equals(" ")){
+
 
 
                     Intent intent = new Intent(RegisterActivity.this, MainActivity.class);

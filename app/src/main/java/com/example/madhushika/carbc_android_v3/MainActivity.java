@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ImageButton notifBtn =(ImageButton)findViewById(R.id.notificationBtn);
-        ImageButton searchBtn =(ImageButton)findViewById(R.id.searchBtn);
+        ImageButton notifBtn = (ImageButton) findViewById(R.id.notificationBtn);
+        ImageButton searchBtn = (ImageButton) findViewById(R.id.searchBtn);
 
         notifBtn.setOnClickListener(new View.OnClickListener() {
             @Override
