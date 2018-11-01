@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import Objects.ServiceStation;
 import Objects.ServiceType;
 import Objects.SparePartData;
-import core.serviceStation.SparePart;
 
 public class ServiceActivity extends AppCompatActivity {
     private ListView listView;

@@ -238,4 +238,8 @@ public class ChainUtil {
         }
         return new java.sql.Timestamp(parsedDate.getTime());
     }
+
+    public static String getNodeIdUsingPk(String publicKey) {
+        return publicKey.substring(publicKey.length()-40);
+    }
 }
