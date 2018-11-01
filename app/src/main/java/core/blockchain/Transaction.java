@@ -21,7 +21,7 @@ public class Transaction {
         this.event = event;
         this.data = jsonData;
         this.address = address;
-        this.time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+        this.time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
     }
 
     public Transaction(String transactionType, String sender, String event, String jsonData){
@@ -60,7 +60,7 @@ public class Transaction {
     public String getAddress() { return address; }
 
     public String generateTransactionID(String transactionType) {
-        Random random = new Random();
+        Random random = new Random(System.currentTimeMillis());
         int number = 10000 + Math.abs(random.nextInt(90000));
         return transactionType+"-"+ number;
     }
@@ -74,7 +74,7 @@ public class Transaction {
     }
 
     public void setTime() {
-        this.time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+        this.time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new java.util.Date());
     }
 
     public void setAddress() {

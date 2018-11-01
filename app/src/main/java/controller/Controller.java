@@ -61,8 +61,8 @@ public class Controller {
 
     }
 
-    public void sendConfirmation(Block block) {
-        Consensus.getInstance().sendAgreementForBlock(block);
+    public void sendConfirmation(String blockHash) {
+        Consensus.getInstance().sendAgreementForBlock(blockHash);
     }
 
     public void requestAdditionalData(Block block) {

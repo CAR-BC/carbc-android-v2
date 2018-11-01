@@ -111,8 +111,15 @@ public class Consensus {
 
                 synchronized (agreementCollectors) {
                     if (agreementCollector.getMandatoryValidators().size() == 0) {
-                        if (agreementCollector.getAgreements().size() >= agreementCollector.getThreshold()) {
+                        int agreementCount = agreementCollector.getAgreements().size();
+                        if (agreementCount >= agreementCollector.getThreshold()) {
                             qualifiedBlocks.add(b);
+
+                            //rating calculations
+                            agreementCollector.getRating().setAgreementCount(agreementCount);
+                            double rating = agreementCollector.getRating().calRating(agreementCollector.
+                                    getMandatoryArraySize(),agreementCollector.getSecondaryArraySize());
+                            b.getBlockHeader().setRating(rating);
                             this.agreementCollectors.remove(agreementCollector);
                         }
                     } else {
@@ -196,11 +203,10 @@ public class Consensus {
     }
 
     //no need of synchronizing
-    public void sendAgreementForBlock(Block block) {
-        String blockHash = block.getBlockHeader().getHash();
+    public void sendAgreementForBlock(String blockHash) {
         String signedBlock = ChainUtil.getInstance().digitalSignature(blockHash);
         MessageSender.sendAgreement(signedBlock, blockHash);
-        log.info("Agreement Sent for: {}", block.getBlockHeader().getHash());
+        log.info("Agreement Sent for: {}", blockHash);
     }
 
     public void sendAgreementForBlockTest(Block block) {
