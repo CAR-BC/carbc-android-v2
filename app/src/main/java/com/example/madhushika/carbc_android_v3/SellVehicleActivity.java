@@ -11,6 +11,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import chainUtil.ChainUtil;
+import chainUtil.KeyGenerator;
+import controller.Controller;
+import core.blockchain.Block;
+import core.blockchain.BlockBody;
+import core.blockchain.BlockHeader;
+import core.blockchain.Transaction;
+import network.Node;
+import network.communicationHandler.MessageSender;
+
 public class SellVehicleActivity extends AppCompatActivity {
     private TextView vehicleNumber;
     private EditText previousOwner;
@@ -38,10 +51,8 @@ public class SellVehicleActivity extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (!vehicleNumber.getText().toString().isEmpty() && !previousOwner.getText().toString().isEmpty()) {
-
-
+                    
                     AlertDialog.Builder builder = new AlertDialog.Builder(SellVehicleActivity.this);
                     builder.setTitle("Add a Transaction");
                     builder.setMessage("Do you really need to add this transaction? ");

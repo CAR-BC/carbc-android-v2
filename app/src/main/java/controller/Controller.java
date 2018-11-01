@@ -26,23 +26,13 @@ public class Controller {
     private final Logger log = LoggerFactory.getLogger(Controller.class);
 
 
-    public void requestTransactionData(String vehicleID, String date, String peerID) {
+    public void requestServiceTransactionData(String vehicleID, String date, String peerID) {
         DataCollector.getInstance().requestTransactionData(vehicleID, date, peerID);
     }
 
-    public void sendTransaction(String transactionType, String event, String data) throws ParseException {
-        String sender = KeyGenerator.getInstance().getPublicKeyAsString();
-        String nodeID = Node.getInstance().getNodeConfig().getNodeID();
-        Transaction transaction = new Transaction(transactionType,sender,event, data, nodeID);
-
-        BlockBody blockBody = new BlockBody();
-        blockBody.setTransaction(transaction);
-        String blockHash = ChainUtil.getBlockHash(blockBody);
-        BlockHeader blockHeader = new BlockHeader(blockHash);
-
-        Block block = new Block(blockHeader, blockBody);
-        System.out.println(ChainUtil.getJsonBlock(block));
-        Consensus.getInstance().broadcastBlock(block, data);
+    public void sendTransaction(String event, String vehicleID, JSONObject data) {
+        BlockSender blockSender = new BlockSender(event, vehicleID, data);
+        blockSender.start();
     }
 
     //test method
@@ -71,8 +61,8 @@ public class Controller {
 
     }
 
-    public void sendConfirmation(Block block) {
-        Consensus.getInstance().sendAgreementForBlock(block);
+    public void sendConfirmation(String blockHash) {
+        Consensus.getInstance().sendAgreementForBlock(blockHash);
     }
 
     public void requestAdditionalData(Block block) {

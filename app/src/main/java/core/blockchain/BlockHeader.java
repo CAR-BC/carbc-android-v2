@@ -14,6 +14,7 @@ public class BlockHeader {
     private String blockTime;
     private long blockNumber;
     private boolean validity = false;
+    private double rating;
 
     public BlockHeader(){}
 
@@ -23,6 +24,7 @@ public class BlockHeader {
         this.hash = hash;
         this.blockNumber = Blockchain.getRecentBlockNumber() + 1;
         signature = ChainUtil.getInstance().digitalSignature(hash);
+        rating = 0;
     }
 
     public String getPreviousHash() {
@@ -71,5 +73,13 @@ public class BlockHeader {
 
     public void setSignature(String signature) {
         this.signature = signature;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }
