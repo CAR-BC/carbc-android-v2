@@ -3,6 +3,7 @@ package core.consensus;
 import android.content.Context;
 import android.content.Intent;
 
+import com.example.madhushika.carbc_android_v3.MyApp;
 import com.example.madhushika.carbc_android_v3.ServiceActivity;
 
 import chainUtil.ChainUtil;
@@ -30,7 +31,7 @@ public class DataCollector {
     private ArrayList<DataRequester> requestedAdditionalDataDetails;
 
     private final Logger log = LoggerFactory.getLogger(DataCollector.class);
-    Context context;
+    private static Context context;
 
     private DataCollector() {
         requestedTransactionDataDetails = new ArrayList<>();
@@ -44,25 +45,26 @@ public class DataCollector {
         return dataCollector;
     }
 
-    public void requestTransactionData(String vehicleID, String date, String peerID) {
+    public void requestTransactionData(String type, String vehicleID, String date, String peerID) {
         Neighbour dataOwner = Node.getInstance().getPeer(peerID);
         if (dataOwner != null) {
-            TransactionDataRequester dataRequester = new TransactionDataRequester(peerID, vehicleID, date);
+            TransactionDataRequester dataRequester = new TransactionDataRequester(type, peerID, vehicleID, date);
             dataRequester.setDataOwner(dataOwner);
             requestedTransactionDataDetails.add(dataRequester);
-            requestTransactionDataFromDataOwner(vehicleID, date, dataOwner);
+            requestTransactionDataFromDataOwner(type, vehicleID, date, dataOwner);
         } else {
             log.info("No Peer Details found for: {}", peerID);
             PeerDetailsCollector.getInstance().addPeerDetail(new PeerDetail(peerID, "TransactionData"));
-            TransactionDataRequester dataRequester = new TransactionDataRequester(peerID, vehicleID, date);
+            TransactionDataRequester dataRequester = new TransactionDataRequester(type, peerID, vehicleID, date);
             requestedTransactionDataDetails.add(dataRequester);
             MessageSender.requestPeerDetails(peerID);
         }
     }
 
-    public void requestTransactionDataFromDataOwner(String vehicleID, String date, Neighbour dataOwner) {
+    public void requestTransactionDataFromDataOwner(String transactionType, String vehicleID, String date, Neighbour dataOwner) {
         JSONObject jsonObject = new JSONObject();
         try {
+            jsonObject.put("transactionType", transactionType);
             jsonObject.put("vehicleID", vehicleID);
             jsonObject.put("dataOwner", dataOwner.getPeerID());
             jsonObject.put("date", date);
@@ -93,7 +95,8 @@ public class DataCollector {
 
                 if (requestedType.equals("TransactionData")) {
                     TransactionDataRequester transactionDataRequester = (TransactionDataRequester) dataRequester;
-                    requestTransactionDataFromDataOwner(transactionDataRequester.getVehicleID(), transactionDataRequester.getDate(), dataOwner);
+                    requestTransactionDataFromDataOwner(transactionDataRequester.getTransactionType(),
+                            transactionDataRequester.getVehicleID(), transactionDataRequester.getDate(), dataOwner);
                 } else if (requestedType.equals("AdditionalData")) {
                     AddtionalDataRequester addtionalDataRequester = (AddtionalDataRequester) dataRequester;
                     requestAdditionalDataFromDataOwner(addtionalDataRequester.getBlockHash(), dataOwner);
@@ -127,11 +130,12 @@ public class DataCollector {
     }
 
     public void handleReceivedTransactionData(JSONObject transactionData, String signature, String signedData, String peerID) {
+
         //broadcast json
         Intent intent = new Intent("ReceivedTransactionData");
         intent.putExtra("responseFormServiceStation", transactionData.toString());
         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-        context.sendBroadcast(intent);
+        MyApp.getContext().sendBroadcast(intent);
 
         IdentityJDBC identityJDBC = new IdentityJDBC();
         if (ChainUtil.signatureVerification(identityJDBC.getPeerPublicKey(peerID), signature, signedData)) {
@@ -143,7 +147,7 @@ public class DataCollector {
     public void requestAdditionalData(Block block) {
         String blockHash = block.getBlockHeader().getHash();
         String signedBlock = ChainUtil.digitalSignature(blockHash);
-        String peerID = block.getBlockBody().getTransaction().getAddress();
+        String peerID = ChainUtil.getNodeIdUsingPk(block.getBlockBody().getTransaction().getSender());
         AddtionalDataRequester addtionalDataRequester = new AddtionalDataRequester(peerID, blockHash);
         requestedAdditionalDataDetails.add(addtionalDataRequester);
         Neighbour dataOwner = Node.getInstance().getPeer(peerID);

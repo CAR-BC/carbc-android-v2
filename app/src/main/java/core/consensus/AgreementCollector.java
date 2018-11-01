@@ -46,6 +46,7 @@ public class AgreementCollector extends Thread {
         this.mandatoryValidators = new ArrayList<>();
         this.specialValidators = new ArrayList<>();
         this.threshold = 1;
+        rating = new Rating(block.getBlockBody().getTransaction().getEvent());
 
         setMandatoryAgreements();
 
@@ -65,7 +66,6 @@ public class AgreementCollector extends Thread {
                 System.out.println(blockData);
                 secondaryParties = blockData.getJSONObject("SecondaryParty");
                 thirdParties = blockData.getJSONArray("ThirdParty");
-                rating = new Rating(event);
                 secondaryCount = thirdParties.length();
                 rating.setSpecialValidators(secondaryCount);
 

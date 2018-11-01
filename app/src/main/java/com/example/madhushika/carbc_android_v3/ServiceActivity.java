@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import Objects.ServiceStation;
 import Objects.ServiceType;
 import Objects.SparePartData;
+
 import controller.Controller;
 
 public class ServiceActivity extends AppCompatActivity {
@@ -34,6 +35,8 @@ public class ServiceActivity extends AppCompatActivity {
     private JSONObject jsonObject;
     private TextView vehicleNumber;
     private BroadcastReceiver broadcastReceiver;
+    private JSONObject obj;
+    private String serviceStationTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,21 +66,12 @@ public class ServiceActivity extends AppCompatActivity {
         //getServiceStation(received json)
 
         //setArrayAdaptersToLocationList
-        Controller controller = new Controller();
-        controller.requestServiceTransactionData("23456","2018/05/21", "pqr567");
-        registerReceiver(broadcastReceiver, new IntentFilter("ReceivedTransactionData"));
+        final Controller controller = new Controller();
 
-        broadcastReceiver =new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String str = intent.getStringExtra("responseFormServiceStation");
-                try {
-                    setArrayAdaptersToServiceTypeList(getServiceTypes(new JSONObject(str)));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
+        controller.requestTransactionDataTest("repair&service","23456","2018/05/21", "pqr567");
+        registerReceiver(broadcastReceiver1, new IntentFilter("ReceivedTransactionData"));
+
+
 
 
         //catch the response and stop activity indicator
@@ -100,7 +94,12 @@ public class ServiceActivity extends AppCompatActivity {
                         dialog.dismiss();
                         //get json array and add
                         //call blockchain method
-
+                        try {
+                            obj.put("secondaryParty", serviceStationTxt);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        controller.sendTransaction("ServiceRepair","23456",obj);
                         finish();
                     }
                 });
@@ -142,6 +141,20 @@ public class ServiceActivity extends AppCompatActivity {
         });
     }
 
+    BroadcastReceiver broadcastReceiver1 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String str = intent.getStringExtra("responseFormServiceStation");
+            try {
+                obj = new JSONObject(str);
+                ArrayList<ServiceType> arrayList = getServiceTypes(new JSONObject(str));
+                System.out.println(arrayList);
+                setArrayAdaptersToServiceTypeList(arrayList);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
     private void hideActionBar() {
         //Hide the action bar only if it exists
         if (getSupportActionBar() != null) {
@@ -362,7 +375,7 @@ public class ServiceActivity extends AppCompatActivity {
                 }
 
                 PlaceholderLocation ph = (PlaceholderLocation) cellUser.getTag();
-                TextView name;
+                final TextView name;
                 TextView address;
                 Button select;
 
@@ -389,6 +402,7 @@ public class ServiceActivity extends AppCompatActivity {
                 select.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        serviceStationTxt = name.getText().toString();
                         //send request to get service info
                         //activity indicator
                     }
@@ -417,8 +431,8 @@ public class ServiceActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(broadcastReceiver);
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver1);
     }
 }
