@@ -1,5 +1,10 @@
 package core.consensus;
 
+import android.content.Context;
+import android.content.Intent;
+
+import com.example.madhushika.carbc_android_v3.ServiceActivity;
+
 import chainUtil.ChainUtil;
 import chainUtil.KeyGenerator;
 import controller.Controller;
@@ -25,7 +30,7 @@ public class DataCollector {
     private ArrayList<DataRequester> requestedAdditionalDataDetails;
 
     private final Logger log = LoggerFactory.getLogger(DataCollector.class);
-
+    Context context;
 
     private DataCollector() {
         requestedTransactionDataDetails = new ArrayList<>();
@@ -122,6 +127,12 @@ public class DataCollector {
     }
 
     public void handleReceivedTransactionData(JSONObject transactionData, String signature, String signedData, String peerID) {
+        //broadcast json
+        Intent intent = new Intent("ReceivedTransactionData");
+        intent.putExtra("responseFormServiceStation", transactionData.toString());
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        context.sendBroadcast(intent);
+
         IdentityJDBC identityJDBC = new IdentityJDBC();
         if (ChainUtil.signatureVerification(identityJDBC.getPeerPublicKey(peerID), signature, signedData)) {
             getDataRequester("TransactionData", peerID).setReceivedData(transactionData);

@@ -1,7 +1,10 @@
 package com.example.madhushika.carbc_android_v3;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,19 +27,20 @@ import Objects.ServiceStation;
 import Objects.ServiceType;
 import Objects.SparePartData;
 import controller.Controller;
-import core.serviceStation.SparePart;
 
 public class ServiceActivity extends AppCompatActivity {
     private ListView listView;
     private ListView locationListView;
     private JSONObject jsonObject;
     private TextView vehicleNumber;
+    private BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
         hideActionBar();
+
 
         ImageView backBtn = (ImageView) findViewById(R.id.back_button);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -58,11 +62,23 @@ public class ServiceActivity extends AppCompatActivity {
 
         //getServiceStation(received json)
 
-
-
         //setArrayAdaptersToLocationList
         Controller controller = new Controller();
-        //controller.requestTransactionData(vid,"2018/05/21",);
+        controller.requestServiceTransactionData("23456","2018/05/21", "pqr567");
+        registerReceiver(broadcastReceiver, new IntentFilter("ReceivedTransactionData"));
+
+        broadcastReceiver =new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String str = intent.getStringExtra("responseFormServiceStation");
+                try {
+                    setArrayAdaptersToServiceTypeList(getServiceTypes(new JSONObject(str)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
 
         //catch the response and stop activity indicator
         //getServiceTypes(response)
@@ -398,5 +414,11 @@ public class ServiceActivity extends AppCompatActivity {
         public TextView address;
         public Button select;
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
     }
 }
