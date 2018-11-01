@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import Objects.ServiceStation;
 import Objects.ServiceType;
 import Objects.SparePartData;
+import controller.Controller;
 import core.serviceStation.SparePart;
 
 public class ServiceActivity extends AppCompatActivity {
@@ -50,10 +51,19 @@ public class ServiceActivity extends AppCompatActivity {
 
         vehicleNumber.setText(i.getExtras().getString("vid"));
 
+        String vid = i.getExtras().getString("vid");
+
 
         //get location and request nearby service stations
+
         //getServiceStation(received json)
+
+
+
         //setArrayAdaptersToLocationList
+        Controller controller = new Controller();
+        //controller.requestTransactionData(vid,"2018/05/21",);
+
         //catch the response and stop activity indicator
         //getServiceTypes(response)
         //set adapter
