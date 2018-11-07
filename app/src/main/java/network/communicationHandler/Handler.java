@@ -11,6 +11,7 @@ import core.consensus.DataCollector;
 import network.Neighbour;
 import network.Node;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -170,7 +171,7 @@ public class Handler extends Thread{
             int listeningPort = clientInfo.getInt("ListeningPort");
             Neighbour blockchainRequester = new Neighbour(peerID, ip, listeningPort);
             BlockchainRequester.getInstance().handleBlockchainHashRequest(blockchainRequester);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -203,10 +204,8 @@ public class Handler extends Thread{
         try {
             jsonObject = new JSONObject(data);
             String ip = jsonObject.getString("ip");
-            int listeningPort = jsonObject.getInt("ListeningPort");
-            int blockchainLength = jsonObject.getInt("blockchainLength");
-            JSONObject jsonBlockchain = new JSONObject(jsonObject.getString("blockchain"));
-            BlockchainRequester.getInstance().addReceivedBlockchain(peerID,jsonBlockchain,blockchainLength);
+            JSONArray jsonBlockchain = jsonObject.getJSONArray("blockchain");
+            BlockchainRequester.getInstance().addReceivedBlockchain(peerID,jsonBlockchain);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -239,7 +238,7 @@ public class Handler extends Thread{
             String JSONBlock = (String)receivedJSONObject.get("block");
             Block decodedBlock = JSONStringToBlock(JSONBlock);
             Consensus.getInstance().handleNonApprovedBlock(decodedBlock);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
