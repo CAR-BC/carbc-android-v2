@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import Objects.ServiceStation;
 import Objects.ServiceType;
@@ -34,9 +35,8 @@ public class ServiceActivity extends AppCompatActivity {
     private ListView locationListView;
     private JSONObject jsonObject;
     private TextView vehicleNumber;
-    private BroadcastReceiver broadcastReceiver;
-    private JSONObject obj;
-    private String serviceStationTxt;
+    private JSONObject serviceDataJSON;
+    private JSONObject serviceStationJson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +63,15 @@ public class ServiceActivity extends AppCompatActivity {
 
         //get location and request nearby service stations
 
+
+
         //getServiceStation(received json)
 
         //setArrayAdaptersToLocationList
         final Controller controller = new Controller();
 
         controller.requestTransactionDataTest("repair&service","23456","2018/05/21", "pqr567");
-        registerReceiver(broadcastReceiver1, new IntentFilter("ReceivedTransactionData"));
+        registerReceiver(broadcastReceiver, new IntentFilter("ReceivedTransactionData"));
 
 
 
@@ -95,11 +97,11 @@ public class ServiceActivity extends AppCompatActivity {
                         //get json array and add
                         //call blockchain method
                         try {
-                            obj.put("secondaryParty", serviceStationTxt);
+                            serviceDataJSON.put("secondaryParty", serviceStationJson);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        controller.sendTransaction("ServiceRepair","23456",obj);
+                        controller.sendTransaction("ServiceRepair","23456",serviceDataJSON);
                         finish();
                     }
                 });
@@ -141,12 +143,12 @@ public class ServiceActivity extends AppCompatActivity {
         });
     }
 
-    BroadcastReceiver broadcastReceiver1 = new BroadcastReceiver() {
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String str = intent.getStringExtra("responseFormServiceStation");
             try {
-                obj = new JSONObject(str);
+                serviceDataJSON = new JSONObject(str);
                 ArrayList<ServiceType> arrayList = getServiceTypes(new JSONObject(str));
                 System.out.println(arrayList);
                 setArrayAdaptersToServiceTypeList(arrayList);
@@ -328,10 +330,8 @@ public class ServiceActivity extends AppCompatActivity {
                 String address = station.getString("location");
                 String publicKey = station.getString("publicKey");
                 String role = station.getString("role");
-
                 ServiceStation serviceStation = new ServiceStation(name,address,publicKey,role);
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -402,9 +402,7 @@ public class ServiceActivity extends AppCompatActivity {
                 select.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        serviceStationTxt = name.getText().toString();
-                        //send request to get service info
-                        //activity indicator
+                        serviceStationJson = new JSONObject((Map) serviceStation);
                     }
                 });
 
@@ -433,6 +431,6 @@ public class ServiceActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(broadcastReceiver1);
+        unregisterReceiver(broadcastReceiver);
     }
 }

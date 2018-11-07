@@ -61,8 +61,9 @@ public class Blockchain {
         ResultSet rs = null;
         JSONObject convertedResultSet = null;
         try {
-            rs = blockJDBCDAO.getBlockchain(from);
-            convertedResultSet = convertResultSetIntoJSON(rs);
+           // rs = blockJDBCDAO.getBlockchain(from);
+           // convertedResultSet = convertResultSetIntoJSON(rs);
+            convertedResultSet = blockJDBCDAO.getBlockchain(from);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
