@@ -1,8 +1,10 @@
 package core.connection;
 
+import HelperInterface.AsyncResponse;
 import chainUtil.KeyGenerator;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Connection;
@@ -10,63 +12,54 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class IdentityJDBC {
-    Connection connection = null;
-    PreparedStatement ptmt = null;
-    ResultSet resultSet = null;
+import static core.connection.BlockJDBCDAO.base_url;
 
-    public JSONObject getIdentity(String query, String type) throws SQLException {
-        JSONObject identity = null;
+public class IdentityJDBC implements AsyncResponse {
 
+    JSONArray jsonArray;
+
+    APICaller apiCaller = new APICaller();
+
+    //get an identity of a person by address
+    public JSONObject getIdentityByAddress(String address) throws SQLException, JSONException {
+        apiCaller.delegate = this;
         try {
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(query);
-            ptmt.setString(1, type);
-            resultSet = ptmt.executeQuery();
 
-            if (resultSet.next()){
-                System.out.println(resultSet);
-                identity = new JSONObject();
-                String publicKey = resultSet.getString("public_key");
-                String role = resultSet.getString("role");
-                String name = resultSet.getString("name");
-                String location = resultSet.getString("location");
+            apiCaller.execute(base_url+"blockinfo?block_number=" , "GET", "v", "g");
 
-                identity.put("publicKey", publicKey);
-                identity.put("role", role);
-                identity.put("name", name);
-                identity.put("location", location);
-
-                return identity;
-
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (resultSet != null)
-                resultSet.close();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
-            return identity;
+
         }
-
-    }
-
-
-    //get an identity of a person by address
-    public JSONObject getIdentityByAddress(String address) throws SQLException {
-        String query = "SELECT public_key, role, name, location FROM `Identity` WHERE `public_key` = ?";
-        return getIdentity(query, address);
+        return jsonArray.getJSONObject(0);
     }
 
     //get an identity of a person by address
-    public JSONObject getIdentityByRole(String role) throws SQLException {
-        String query = "SELECT public_key, role, name, location FROM `Identity` WHERE `role` = ?";
-        return getIdentity(query, role);
+    public JSONObject getIdentityByRole(String role) throws SQLException, JSONException {
+        apiCaller.delegate = this;
+        try {
+
+            apiCaller.execute(base_url+"blockinfo?block_number=" , "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return jsonArray.getJSONObject(0);
     }
 
     public String getPeerPublicKey(String peerID) {
@@ -74,45 +67,31 @@ public class IdentityJDBC {
     }
 
     public JSONArray getPeersByLocation(String location) throws SQLException {
-        String query = "SELECT public_key, role, name, location FROM `Identity` WHERE `location` LIKE %?%";
-
-        JSONArray nodes = new JSONArray();
-        JSONObject identity = new JSONObject();
-
+        apiCaller.delegate = this;
         try {
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(query);
-            ptmt.setString(1, location);
-            resultSet = ptmt.executeQuery();
 
-            while (resultSet.next()){
-                String publicKey = resultSet.getString("public_key");
-                String role = resultSet.getString("role");
-                String name = resultSet.getString("name");
-                String address = resultSet.getString("location");
+            apiCaller.execute(base_url+"blockinfo?block_number=" , "GET", "v", "g");
 
-                identity.put("publicKey", publicKey);
-                identity.put("role", role);
-                identity.put("name", name);
-                identity.put("location", address);
-
-                nodes.put(identity);
-                identity = new JSONObject();
-
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (resultSet != null)
-                resultSet.close();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
-            return nodes;
+
+        }
+        return jsonArray;
         }
 
+
+
+    @Override
+    public JSONArray processFinish(JSONArray output) {
+        System.out.println("process finish executed");
+        this.jsonArray = output;
+        return output;
     }
 }
