@@ -1,5 +1,6 @@
 package controller;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import chainUtil.ChainUtil;
@@ -31,10 +32,11 @@ public class BlockSender extends Thread {
         switch (event) {
             case "RegisterVehicle":
                 sendRegisterTransaction();
+                break;
 
             default:
                 sendTransaction();
-
+                break;
         }
     }
 
@@ -47,6 +49,7 @@ public class BlockSender extends Thread {
         String blockHash = ChainUtil.getInstance().getBlockHash(blockBody);
         BlockHeader blockHeader = new BlockHeader(blockHash);
         Block block = new Block(blockHeader, blockBody);
+//        MessageSender.broadCastBlockTest(block);
         Consensus.getInstance().broadcastBlock(block, data.toString());
     }
 
@@ -59,5 +62,35 @@ public class BlockSender extends Thread {
         BlockHeader blockHeader = new BlockHeader(blockHash);
         Block block = new Block(blockHeader, blockBody);
         Consensus.getInstance().broadcastBlock(block, data.toString());
+    }
+
+    public String getDataJsonObject(JSONObject data, String event) {
+        String jsonData = null;
+        switch (event) {
+            case "ServiceRepair":
+                jsonData = createServiceRepairJson(data);
+                break;
+        }
+
+        return jsonData;
+    }
+
+    public String createServiceRepairJson(JSONObject data) {
+        try{
+            JSONArray services = data.getJSONArray("services");
+            JSONArray sparePartProvider = new JSONArray();
+            for(int service = 0; service < services.length(); service++) {
+                JSONArray serviceData = services.getJSONObject(service).getJSONArray("serviceData");
+                for(int part = 0; part < serviceData.length(); part++) {
+                    sparePartProvider.put(serviceData.getJSONObject(part).get("seller"));
+                }
+            }
+            JSONObject thirdParty = new JSONObject();
+            thirdParty.put("SparePartProvider", sparePartProvider);
+            data.put("ThirdParty", thirdParty);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data.toString();
     }
 }

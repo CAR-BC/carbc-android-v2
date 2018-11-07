@@ -16,7 +16,8 @@ import java.util.ArrayList;
 
 public class Blockchain {
 
-    private static Blockchain blockchain;
+    //changed line 17 and 26-28
+    private static Blockchain blockchain = new Blockchain();
     private static long blockchainLength;
     private static final Logger log = LoggerFactory.getLogger(Blockchain.class);
 
@@ -26,9 +27,6 @@ public class Blockchain {
     }
 
     public static Blockchain getInstance() {
-        if (blockchain == null) {
-            blockchain = new Blockchain();
-        }
         return blockchain;
     }
 
@@ -53,80 +51,50 @@ public class Blockchain {
             addBlocktoBlockchain(createGenesis());
             log.info("Requesting Blockchain");
             MessageSender.requestBlockchainHash();
+        }else if(blockchainLength == 1) {
+            MessageSender.requestBlockchainHash();
         }
     }
 
-    public static JSONObject getBlockchain(int from) {
+
+
+    public static JSONObject getBlockchainJSON(int from) throws SQLException {
         BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
-        ResultSet rs = null;
-        JSONObject convertedResultSet = null;
+        JSONObject blockchain = null;
         try {
-            rs = blockJDBCDAO.getBlockchain(from);
-            convertedResultSet = convertResultSetIntoJSON(rs);
+            blockchain = blockJDBCDAO.getBlockchain(from);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        return convertedResultSet;
+        }finally {
 
+        }
+        return blockchain;
     }
 
-    public static JSONObject convertResultSetIntoJSON(ResultSet resultSet) throws Exception {
-        JSONObject result = new JSONObject();
-        int count = 0;
-
-        JSONArray jsonArray = new JSONArray();
-        while (resultSet.next()) {
-            count++;
-            int total_rows = resultSet.getMetaData().getColumnCount();
-            JSONObject obj = new JSONObject();
-
-            for (int i = 0; i < total_rows; i++) {
-                String columnName = resultSet.getMetaData().getColumnLabel(i + 1).toLowerCase();
-                Object columnValue = resultSet.getObject(i + 1);
-                // if value in DB is null, then we set it to default value
-                if (columnValue == null){
-                    columnValue = "null";
-                }
-                /*
-                Next if block is a hack. In case when in db we have values like price and price1 there's a bug in jdbc -
-                both this names are getting stored as price in ResulSet. Therefore when we store second column value,
-                we overwrite original value of price. To avoid that, i simply add 1 to be consistent with DB.
-                 */
-                if (obj.has(columnName)){
-                    columnName += "1";
-                }
-                obj.put(columnName, columnValue);
-            }
-            jsonArray.put(obj);
-        }
-        result.put("blockchainSize", count);
-        result.put("blockchain", jsonArray.toString());
-        return result;
-    }
-
-
-    //TODO implement actual logic
     public static String getPreviousHash() {
-//        BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
-//        String previousHash = null;
-//        previousHash = Blockchain.getPreviousHash();
+        BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
+        String previousHash = null;
+        try {
+            previousHash = blockJDBCDAO.getPreviousHash();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        return "previousHash";
+        return previousHash;
     }
 
-    //TODO implement actual logic
     public static long getRecentBlockNumber() {
 
-//        BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
-//        long recentBlockNumber = 0;
-//        try {
-//            recentBlockNumber = blockJDBCDAO.getRecentBlockNumber();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-        return 104;
+        BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
+        long recentBlockNumber = 0;
+        try {
+            recentBlockNumber = blockJDBCDAO.getRecentBlockNumber();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recentBlockNumber;
     }
 
     public long getBlockchainLength() {

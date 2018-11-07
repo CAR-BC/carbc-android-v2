@@ -1,6 +1,7 @@
 package core.consensus;
 
 import chainUtil.ChainUtil;
+import chainUtil.KeyGenerator;
 import controller.Controller;
 import core.blockchain.Block;
 import core.blockchain.BlockInfo;
@@ -65,36 +66,53 @@ public class Consensus {
         }
     }
 
-    public synchronized void handleNonApprovedBlock(Block block) {
+    public synchronized void handleNonApprovedBlock(Block block) throws SQLException {
         if (!isDuplicateBlock(block)) {
-            if(ChainUtil.signatureVerification(block.getBlockBody().getTransaction().getSender(),
-                    block.getBlockHeader().getSignature(),block.getBlockHeader().getHash())) {
-                nonApprovedBlocks.add(block);
+            if (ChainUtil.signatureVerification(block.getBlockBody().getTransaction().getSender(),
+                    block.getBlockHeader().getSignature(), block.getBlockHeader().getHash())) {
+
+                log.info("signature verified for block: ", block.getBlockHeader().getBlockNumber());
+
                 boolean isPresent = false;
-                for (Block b : this.nonApprovedBlocks) {
-                    if (b.getBlockHeader().getPreviousHash().equals(block.getBlockHeader().getPreviousHash())) {
-                        isPresent = true;
-                        break;
+                if (getNonApprovedBlocks().size() > 0) {
+                    for (Block b : this.getNonApprovedBlocks()) {
+                        if (b.getBlockHeader().getPreviousHash().equals(block.getBlockHeader().getPreviousHash())) {
+                            isPresent = true;
+                            break;
+                        }
                     }
                 }
+
+//                getNonApprovedBlocks().add(block);
+//                addBlockToNonApprovedBlocks(block);
+                this.nonApprovedBlocks.add(block);
+                //TODO: should notify the ui
+//                WebSocketMessageHandler.testUpdate(nonApprovedBlocks);
+
+
                 if (!isPresent) {
                     TimeKeeper timeKeeper = new TimeKeeper(block.getBlockHeader().getPreviousHash());
                     timeKeeper.start();
                 }
+
                 AgreementCollector agreementCollector = new AgreementCollector(block);
-                System.out.println("agreementcolletor ID: "+agreementCollector.getAgreementCollectorId());
+                System.out.println("agreementcolletor ID: " + agreementCollector.getAgreementCollectorId());
                 agreementCollectors.add(agreementCollector);
-                agreementCollector.start();
+                if (agreementCollector.succeed) {
+                    String blockHash = block.getBlockHeader().getHash();
+                    String digitalSignature = ChainUtil.digitalSignature(block.getBlockHeader().getHash());
+                    String signedBlock = digitalSignature;
+                    Agreement agreement = new Agreement(digitalSignature, signedBlock, blockHash,
+                            KeyGenerator.getInstance().getPublicKeyAsString());
+
+                    Consensus.getInstance().handleAgreement(agreement);
+                }
+
                 log.info("agreement Collector added, size: {}", agreementCollectors.size());
-                //TODO: there is a problem here. Regardless of the block validity we anyway append the agreement collector to the arraylist. so whats the point of doing block validity below??
 
                 //now need to check the relevant party is registered as with desired roles
                 //if want, we can check the validity of the block creator/transaction creator
 
-//                BlockValidity blockValidity = new BlockValidity(block);
-//                if (blockValidity.isSecondaryPartyValid()) {
-//                    //pop up notification to confirm
-//                }
             }
 
         }
@@ -104,7 +122,9 @@ public class Consensus {
         System.out.println("Inside checkAgreementsForBlock method");
 
         ArrayList<Block> qualifiedBlocks = new ArrayList<>();
-        for (Block b : this.nonApprovedBlocks) {
+        for (Block b : this.getNonApprovedBlocks()) {
+            System.out.println("inside for loop");
+
             if (b.getBlockHeader().getPreviousHash().equals(preBlockHash)) {
                 String blockHash = b.getBlockHeader().getHash();
                 AgreementCollector agreementCollector = getAgreementCollector(blockHash);
@@ -118,7 +138,7 @@ public class Consensus {
                             //rating calculations
                             agreementCollector.getRating().setAgreementCount(agreementCount);
                             double rating = agreementCollector.getRating().calRating(agreementCollector.
-                                    getMandatoryArraySize(),agreementCollector.getSecondaryArraySize());
+                                    getMandatoryArraySize(), agreementCollector.getSecondaryArraySize());
                             b.getBlockHeader().setRating(rating);
                             this.agreementCollectors.remove(agreementCollector);
                         }
@@ -132,21 +152,26 @@ public class Consensus {
     }
 
     public Block selectQualifiedBlock(ArrayList<Block> qualifiedBlocks) throws SQLException, ParseException {
+        System.out.println("inside consensus/selectQualifiedBlock");
+
         Block qualifiedBlock = null;
 
         if (qualifiedBlocks.size() != 0) {
+            System.out.println("inside if block; qualifiedBlocks.size() != 0");
             qualifiedBlock = qualifiedBlocks.get(0);
 
             Timestamp blockTimestamp = ChainUtil.convertStringToTimestamp(qualifiedBlock.getBlockHeader().getBlockTime());
 
-            synchronized (nonApprovedBlocks) {
+            synchronized (getNonApprovedBlocks()) {
                 for (Block b : qualifiedBlocks) {
                     if (blockTimestamp.after(ChainUtil.convertStringToTimestamp(b.getBlockHeader().getBlockTime()))) {
-                        this.nonApprovedBlocks.remove(qualifiedBlock);
+//                        this.getNonApprovedBlocks().remove(qualifiedBlock);
+                        removeBlockFromNonApprovedBlocks(qualifiedBlock);
                         qualifiedBlock = b;
                         blockTimestamp = ChainUtil.convertStringToTimestamp(b.getBlockHeader().getBlockTime());
                     } else {
-                        this.nonApprovedBlocks.remove(b);
+//                        this.getNonApprovedBlocks().remove(b);
+                        removeBlockFromNonApprovedBlocks(b);
                     }
                 }
             }
@@ -159,9 +184,12 @@ public class Consensus {
     }
 
     public void addBlockToBlockchain(ArrayList<Block> qualifiedBlocks) throws SQLException, ParseException {
+        System.out.println("inside Consensus/addBlockToBlockchain()");
         Block block = selectQualifiedBlock(qualifiedBlocks);
 
         if (block != null) {
+            System.out.println("if (block != null)");
+
             BlockInfo blockInfo = new BlockInfo();
             blockInfo.setPreviousHash(block.getBlockHeader().getPreviousHash());
             blockInfo.setHash(block.getBlockHeader().getHash());
@@ -172,6 +200,7 @@ public class Consensus {
             blockInfo.setEvent(block.getBlockBody().getTransaction().getEvent());
             blockInfo.setData(block.getBlockBody().getTransaction().getData().toString());
             blockInfo.setAddress(block.getBlockBody().getTransaction().getAddress());
+            blockInfo.setValidity(true);
 
             Identity identity = null;
             if (block.getBlockBody().getTransaction().getTransactionId().substring(0, 1).equals("I")) {
@@ -181,12 +210,12 @@ public class Consensus {
                     String publicKey = body.getString("publicKey");
                     String role = body.getString("role");
                     String name = body.getString("name");
-                    identity = new Identity(block.getBlockHeader().getHash(), publicKey, role, name);
+                    String location = body.getString("location");
+
+                    identity = new Identity(block.getBlockHeader().getHash(), publicKey, role, name, location);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
             //TODO: need to check that this is the right block to add based on the previous hash
             BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
@@ -241,11 +270,11 @@ public class Consensus {
     public void handleReceivedAdditionalData(String blockHash, String additionalData) {
         Block block = getBlockByBlockHash(blockHash);
         try {
-            if(block != null) {
+            if (block != null) {
                 String data = block.getBlockBody().getTransaction().getData();
                 JSONObject jsonData = new JSONObject(data);
                 String additionalDataField = jsonData.getString("additionalData");
-                if(additionalDataField.equals(ChainUtil.getHash(additionalData))) {
+                if (additionalDataField.equals(ChainUtil.getHash(additionalData))) {
                     jsonData.put("additionalData", additionalData);
                     block.getBlockBody().getTransaction().setData(jsonData.toString());
                     Controller controller = new Controller();
@@ -261,8 +290,8 @@ public class Consensus {
     }
 
     public Block getBlockByBlockHash(String blockHash) {
-        for(Block block: nonApprovedBlocks) {
-            if(blockHash.equals(block.getBlockHeader().getHash())) {
+        for (Block block : nonApprovedBlocks) {
+            if (blockHash.equals(block.getBlockHeader().getHash())) {
                 return block;
             }
         }
@@ -276,6 +305,22 @@ public class Consensus {
 
     public ArrayList<Block> getBlocksToBeAdded() {
         return approvedBlocks;
+    }
+
+    public ArrayList<Block> getNonApprovedBlocks() {
+        return nonApprovedBlocks;
+    }
+
+    public void addBlockToNonApprovedBlocks(Block nonApprovedBlock) {
+        this.nonApprovedBlocks.add(nonApprovedBlock);
+//        setChanged();
+//        notifyObservers();
+    }
+
+    public void removeBlockFromNonApprovedBlocks(Block nonApprovedBlock) {
+        this.nonApprovedBlocks.remove(nonApprovedBlock);
+//        setChanged();
+//        notifyObservers();
     }
 
 }
