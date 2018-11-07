@@ -60,7 +60,8 @@ public class BlockJDBCDAO implements AsyncResponse {
                     "&sender=" + blockInfo.getSender() +
                     "&event=" + blockInfo.getEvent() +
                     "&data=" + blockInfo.getData() +
-                    "&address=" + blockInfo.getAddress(), "GET", "BlockInfo", blockInfo);
+                    "&address=" + blockInfo.getAddress(),
+                    "GET", "BlockInfo", blockInfo);
             while (jsonArray == null) {
                 try {
                     Thread.sleep(1000);
@@ -264,7 +265,7 @@ public class BlockJDBCDAO implements AsyncResponse {
         return blockchainSize;
     }
 
-    public JSONObject getVehicleInfoByEvent(String vehicleId, String event) throws SQLException, JSONException {
+        public JSONObject getVehicleInfoByEvent(String vehicleId, String event) throws SQLException, JSONException {
         apiCaller.delegate = this;
         try {
 
@@ -329,7 +330,7 @@ public class BlockJDBCDAO implements AsyncResponse {
 
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url+"findRecentblocknumber", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -372,7 +373,7 @@ public class BlockJDBCDAO implements AsyncResponse {
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url+"findprevioushash", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
