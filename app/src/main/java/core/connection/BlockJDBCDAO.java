@@ -2,6 +2,7 @@ package core.connection;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.hardware.camera2.params.BlackLevelPattern;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -47,7 +48,19 @@ public class BlockJDBCDAO implements AsyncResponse {
         }
 
         try {
-            apiCaller.execute(base_url+"insertInToBlockchainTable.php", "GET", "BlockInfo", blockInfo);
+            int validity = 0;
+            if(blockInfo.isValidity()) {
+                validity = 1;
+            }
+            apiCaller.execute(base_url+"insertblock"+
+                    "?previous_hash=" +blockInfo.getPreviousHash() +
+                    "&block_hash=" + blockInfo.getHash() +
+                    "&block_timestamp="+ blockInfo.getBlockTime() + "&block_number=" + validity +
+                    "&transaction_id=" + blockInfo.getTransactionId() +
+                    "&sender=" + blockInfo.getSender() +
+                    "&event=" + blockInfo.getEvent() +
+                    "&data=" + blockInfo.getData() +
+                    "&address=" + blockInfo.getAddress(), "GET", "BlockInfo", blockInfo);
             while (jsonArray == null) {
                 try {
                     Thread.sleep(1000);
@@ -86,8 +99,19 @@ public class BlockJDBCDAO implements AsyncResponse {
                 blockInfo.setData(block.getString("data"));
 
                 try {
-                    apiCaller.execute(base_url+"insertInToBlockchainTable.php", "GET", "BlockInfo", blockInfo);
-                    while (jsonArray == null) {
+                    int validity = 0;
+                    if(blockInfo.isValidity()) {
+                        validity = 1;
+                    }
+                    apiCaller.execute(base_url+"insertblock"+
+                            "?previous_hash=" +blockInfo.getPreviousHash() +
+                            "&block_hash=" + blockInfo.getHash() +
+                            "&block_timestamp="+ blockInfo.getBlockTime() + "&block_number=" + validity +
+                            "&transaction_id=" + blockInfo.getTransactionId() +
+                            "&sender=" + blockInfo.getSender() +
+                            "&event=" + blockInfo.getEvent() +
+                            "&data=" + blockInfo.getData() +
+                            "&address=" + blockInfo.getAddress(), "GET", "BlockInfo", blockInfo);                    while (jsonArray == null) {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
