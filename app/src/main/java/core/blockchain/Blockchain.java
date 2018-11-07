@@ -5,6 +5,7 @@ import core.connection.BlockJDBCDAO;
 import core.consensus.Consensus;
 import network.communicationHandler.MessageSender;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +81,8 @@ public class Blockchain {
             previousHash = blockJDBCDAO.getPreviousHash();
         } catch (Exception e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         return previousHash;
@@ -92,6 +95,8 @@ public class Blockchain {
         try {
             recentBlockNumber = blockJDBCDAO.getRecentBlockNumber();
         } catch (Exception e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return recentBlockNumber;

@@ -1,8 +1,12 @@
 package core.connection;
 
+import HelperInterface.AsyncResponse;
 import chainUtil.ChainUtil;
 import core.blockchain.Block;
 import core.blockchain.BlockInfo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +16,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class HistoryDAO {
+import static core.connection.BlockJDBCDAO.base_url;
+
+public class HistoryDAO implements AsyncResponse {
     private final Logger log = LoggerFactory.getLogger(HistoryDAO.class);
 
+    JSONArray jsonArray;
+
+    APICaller apiCaller = new APICaller();
+
+
     public boolean saveBlockWithAdditionalData(Block block, String data) throws SQLException {
+        apiCaller.delegate = this;
 
         if (block != null) {
             BlockInfo blockInfo = new BlockInfo();
@@ -29,113 +41,87 @@ public class HistoryDAO {
             blockInfo.setData(block.getBlockBody().getTransaction().getData().toString());
             blockInfo.setAddress(block.getBlockBody().getTransaction().getAddress());
 
-            Connection connection = null;
-            PreparedStatement ptmt = null;
-
-            String query = "";
-
             try {
-                String queryString = "INSERT INTO `History`(`previous_hash`, " +
-                        "`block_hash`, `block_timestamp`, `block_number`, `validity`," +
-                        " `transaction_id`, `sender`, `event`, `data`, `address`, `additional_data`) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-
-                connection = ConnectionFactory.getInstance().getConnection();
-                ptmt = connection.prepareStatement(queryString);
-
-                ptmt.setString(1, blockInfo.getPreviousHash());
-                ptmt.setString(2, blockInfo.getHash());
-                ptmt.setTimestamp(3, blockInfo.getBlockTime());
-                ptmt.setLong(4, blockInfo.getBlockNumber());
-                ptmt.setBoolean(5, blockInfo.isValidity());
-                ptmt.setString(6, blockInfo.getTransactionId());
-                ptmt.setString(7, blockInfo.getSender());
-                ptmt.setString(8, blockInfo.getEvent());
-                ptmt.setString(9, blockInfo.getData());
-                ptmt.setString(10, blockInfo.getAddress());
-                ptmt.setString(11, data.toString());
-                ptmt.executeUpdate();
-
-                log.info("Block Added to History");
-
-            } catch (SQLException e) {
+                int validity = 0;
+                if (blockInfo.isValidity()) {
+                    validity = 1;
+                }
+                apiCaller.execute(base_url + "inserthistory" +
+                        "?previous_hash=" + blockInfo.getPreviousHash() +
+                        "&block_hash=" + blockInfo.getHash() +
+                        "&block_timestamp=" + blockInfo.getBlockTime() + "&block_number=" + validity +
+                        "&transaction_id=" + blockInfo.getTransactionId() +
+                        "&sender=" + blockInfo.getSender() +
+                        "&event=" + blockInfo.getEvent() +
+                        "&data=" + blockInfo.getData() +
+                        "&address=" + blockInfo.getAddress(), "GET", "BlockInfo", blockInfo);
+                while (jsonArray == null) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
-                return false;
-            } finally {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-                return true;
             }
+            return true;
         }
         return false;
+
     }
 
-    public JSONObject getBlockData(String blockHash) throws SQLException {
-        String queryString = "SELECT `event`, `address` FROM `Blockchain` " +
-                "WHERE `block_hash` = ? AND `validity` = `T`";
 
-        PreparedStatement ptmt = null;
-        Connection connection = null;
-        ResultSet result = null;
-        JSONObject jsonObject = new JSONObject();
+    public JSONObject getBlockData(String blockHash) throws SQLException, JSONException {
+        apiCaller.delegate = this;
 
         try {
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, blockHash);
-            result = ptmt.executeQuery();
 
-            if(result.next()){
-                String event = result.getString("event");
-                String address = result.getString("address");
+            apiCaller.execute(base_url + "blockinfo?block_number=", "GET", "v", "g");
 
-                jsonObject.put("event", event);
-                jsonObject.put("address", address);
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (result != null)
-                result.close();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
-            return jsonObject;
+
         }
+
+        return jsonArray.getJSONObject(0);
     }
 
-    public String getAdditionalData(String blockHash) throws SQLException {
-        String queryString = "SELECT `additional_data` FROM `History` WHERE `block_hash` = ?";
 
-        PreparedStatement ptmt = null;
-        Connection connection = null;
-        ResultSet result = null;
-        String additonalData = null;
+    public String getAdditionalData(String blockHash) throws SQLException, JSONException {
+
+        apiCaller.delegate = this;
+
         try {
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, blockHash);
-            result = ptmt.executeQuery();
-            result.next();
-            additonalData = result.getString("additional_data");
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+            apiCaller.execute(base_url + "blockinfo?block_number=", "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (result != null)
-                result.close();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
-            return additonalData;
+
         }
+        return jsonArray.getString(0);
+    }
+
+    @Override
+    public JSONArray processFinish(JSONArray output) {
+        System.out.println("process finish executed");
+        this.jsonArray = output;
+        return output;
     }
 }
+

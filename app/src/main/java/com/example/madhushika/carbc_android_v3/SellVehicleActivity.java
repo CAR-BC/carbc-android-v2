@@ -1,6 +1,7 @@
 package com.example.madhushika.carbc_android_v3;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,6 +50,14 @@ public class SellVehicleActivity extends AppCompatActivity {
             }
         });
 
+        Intent i = getIntent();
+        vehicleNumber = (TextView) findViewById(R.id.vehicle_number);
+
+        vehicleNumber.setText(i.getExtras().getString("vid"));
+
+        final String vid = i.getExtras().getString("vid");
+
+
         Button done = (Button) findViewById(R.id.done_btn);
         Button cancel = (Button) findViewById(R.id.cancel_btn);
 
@@ -68,26 +77,6 @@ public class SellVehicleActivity extends AppCompatActivity {
                             dialog.dismiss();
                             //call blockchain method
 
-                            BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
-                            BlockInfo blockInfo = new BlockInfo();
-                            blockInfo.setAddress("address");
-                            blockInfo.setBlockNumber(256);
-                            // blockInfo.setBlockTime();
-                            blockInfo.setData("data");
-                            blockInfo.setHash("hash5");
-                            blockInfo.setSender("sender");
-                            blockInfo.setEvent("event");
-                            blockInfo.setValidity(true);
-                            blockInfo.setPreviousHash("previous hash");
-                            blockInfo.setTransactionId("I22222");
-
-                            Identity identity = new Identity("hash4","pub key","role","name");
-
-                            try {
-                                blockJDBCDAO.addBlockToBlockchain(blockInfo,identity);
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            }
 
                             finish();
                         }
@@ -95,17 +84,7 @@ public class SellVehicleActivity extends AppCompatActivity {
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            // User cancelled the dialog
-                            //new APICaller().execute("http://192.168.8.102/carbc/getPreviousHash.php","GET","v","f");
-                            BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
-                            try {
-                                JSONObject jsonObject = blockJDBCDAO.getBlockchain(1);
-                                //blockJDBCDAO.getBlockchain(1);
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+
                             System.out.println();
                         }
                     });
