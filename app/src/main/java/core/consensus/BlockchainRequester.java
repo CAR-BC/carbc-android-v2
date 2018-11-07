@@ -3,10 +3,16 @@ package core.consensus;
 import chainUtil.ChainUtil;
 import core.blockchain.Block;
 import core.blockchain.Blockchain;
+import core.blockchain.TimeKeeperForBC;
 import core.connection.BlockJDBCDAO;
 import network.Neighbour;
+import network.communicationHandler.Handler;
 import network.communicationHandler.MessageSender;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -21,6 +27,7 @@ public class BlockchainRequester {
     private ArrayList<BlockchainReceiver> blockchainReceiveDetails;
     private int blockchainRequest;
     private String requestedBlockchainHash;
+    private final Logger log = LoggerFactory.getLogger(Handler.class);
 
     private BlockchainRequester() {
         blockchainShareDetails = new ArrayList<>();
@@ -36,30 +43,37 @@ public class BlockchainRequester {
     }
 
     //blockchain request methods
-    public synchronized void handleBlockchainHashRequest(Neighbour blockchainRequeseter) {
+    public synchronized void handleBlockchainHashRequest(Neighbour blockchainRequeseter) throws SQLException {
         long blockChainLength = Blockchain.getRecentBlockNumber();
         if (blockChainLength > 1) {
             sendSignedBlockChain(blockchainRequeseter);
+        } else {
+            log.info("Only Genesis Block Exist");
         }
     }
 
-    public synchronized void sendSignedBlockChain(Neighbour blockchainRequeseter) {
-        BlockchainShare blockchainShare = new BlockchainShare(blockchainRequeseter);
-        String blockchainHash = ChainUtil.getHash(Blockchain.getBlockchain(0).toString());
-        blockchainShareDetails.add(blockchainShare);
-        String signedBlockchainHash = ChainUtil.getInstance().digitalSignature(blockchainHash);
-        MessageSender.sendSignedBlockChain(blockchainRequeseter, signedBlockchainHash, blockchainHash);
+    public synchronized void sendSignedBlockChain(Neighbour blockchainRequester) throws SQLException {
+        try{
+            BlockchainShare blockchainShare = new BlockchainShare(blockchainRequester);
+            String blockchainHash = ChainUtil.getHash(Blockchain.getBlockchainJSON(1).getJSONArray("blockchain").toString());
+            System.out.println(Blockchain.getBlockchainJSON(1).getJSONArray("blockchain").toString());
+            blockchainShareDetails.add(blockchainShare);
+            String signedBlockchainHash = ChainUtil.digitalSignature(blockchainHash);
+            MessageSender.sendSignedBlockChain(blockchainRequester, signedBlockchainHash, blockchainHash);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     //no need of synchronizing
     public void sendBlockchain(String ip, int listeningPort) throws Exception {
-        JSONObject blockchainInfo = Blockchain.getBlockchain(0);
+        JSONObject blockchainInfo = Blockchain.getBlockchainJSON(1);
         MessageSender.sendBlockchainToPeer(
                 ip,
                 listeningPort,
-                blockchainInfo.getString("blockchain"),
-                blockchainInfo.getInt("count"));
+                blockchainInfo.getJSONArray("blockchain"),
+                blockchainInfo.getInt("blockchainLength"));
     }
 
     //no need of synchronizing
@@ -74,33 +88,30 @@ public class BlockchainRequester {
     }
 
     public synchronized void handleReceivedSignedBlockchain(Neighbour peer, String signedBlockchain, String blockchainHash) {
-        if (ChainUtil.getInstance().signatureVerification(peer.getPublicKey(), signedBlockchain, blockchainHash)) {
+        if (ChainUtil.signatureVerification(peer.getPublicKey(), signedBlockchain, blockchainHash)) {
             BlockchainReceiver blockchainReceiver = new BlockchainReceiver(peer, signedBlockchain, blockchainHash);
             blockchainReceiveDetails.add(blockchainReceiver);
-            blockchainRequest -= 1;
-            if (blockchainRequest == 0) {
-                requestBlockchain();
-            }
+//            blockchainRequest -= 1;
+//            if (blockchainRequest == 0) {
+//                requestBlockchain();
+//            }
         }
     }
 
-    public synchronized void addReceivedBlockchain(String publicKey, JSONObject blockchain, int blockchainLength) throws SQLException, ParseException {
-//        LinkedList<Block> blockchainArray = new LinkedList<>();
-//        for(int i = 0; i< blockchainLength; i++) {
-//            blockchainArray.add(RequestHandler.getInstance().JSONStringToBlock(blockchain.getString(String.valueOf(i))));
-//        }
-//
-//        String blockchainHash = ChainUtil.getInstance().getBlockChainHash(blockchainArray);
-//        if(requestedBlockchainHash.equals(blockchainHash)) {
-//            addBlockchain(blockchainArray);
-//        }
-    }
-
-    public void addBlockchain(LinkedList<Block> blockchain) throws SQLException, ParseException {
-//        //add to blockchain
-//        for(int i = 1; i< blockchain.size(); i++ ) {
-//            Blockchain.getInstance().addBlock(blockchain.get(i));
-//        }
+    public synchronized void addReceivedBlockchain(String publicKey, JSONArray blockchain) {
+        String receivedBlockchainHash = ChainUtil.getHash(blockchain.toString());
+        BlockchainReceiver blockchainReceiver = getBlockchainReceiverfromPK(receivedBlockchainHash);
+        if (blockchainReceiver != null) {
+            String blockchainHash = blockchainReceiver.getBlockchainHash();
+            if (receivedBlockchainHash.equals(blockchainHash)) {
+                try{
+                    BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
+                    blockJDBCDAO.saveBlockchain(blockchain);
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public int getBlockchainRequest() {
@@ -109,6 +120,8 @@ public class BlockchainRequester {
 
     public synchronized void setBlockchainRequest(int blockchainRequest) {
         this.blockchainRequest = blockchainRequest;
+        TimeKeeperForBC timeKeeperForBC = new TimeKeeperForBC();
+        timeKeeperForBC.start();
     }
 
     public synchronized String findCorrectBlockchain() {
@@ -120,7 +133,6 @@ public class BlockchainRequester {
                 counter.put(blockchainReceiver.getId(), 1);
             }
         }
-        System.out.println(counter);
         int max = 0;
         String publicKey = "";
         for (String key : counter.keySet()) {

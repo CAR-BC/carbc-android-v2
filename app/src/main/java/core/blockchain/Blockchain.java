@@ -79,7 +79,7 @@ public class Blockchain {
         String previousHash = null;
         try {
             previousHash = blockJDBCDAO.getPreviousHash();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -94,7 +94,7 @@ public class Blockchain {
         long recentBlockNumber = 0;
         try {
             recentBlockNumber = blockJDBCDAO.getRecentBlockNumber();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();

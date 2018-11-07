@@ -12,6 +12,7 @@ import network.Neighbour;
 import network.Node;
 import network.Protocol.*;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -139,7 +140,7 @@ public class MessageSender {
 
     }
 
-    public static void sendBlockchainToPeer(String ip, int listeningPort, String jsonBlockchain, int blockchainLength) {
+    public static void sendBlockchainToPeer(String ip, int listeningPort, JSONArray jsonBlockchain, int blockchainLength) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("blockchain", jsonBlockchain);
