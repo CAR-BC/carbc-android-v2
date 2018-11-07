@@ -1,6 +1,7 @@
 package com.example.madhushika.carbc_android_v3;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class LeasingActivity extends AppCompatActivity {
     private EditText leasingNumber;
     private EditText leasingInfo;
     //private EditText leasingAmount;
+    TextView vehicleNumber;
 
 
     @Override
@@ -38,7 +40,15 @@ public class LeasingActivity extends AppCompatActivity {
         Button done = (Button) findViewById(R.id.done_btn);
         Button cancel = (Button) findViewById(R.id.cancel_btn);
 
-        vid = (TextView) findViewById(R.id.vehicle_number);
+        Intent i = getIntent();
+        vehicleNumber = (TextView) findViewById(R.id.vehicle_number);
+
+        vehicleNumber.setText(i.getExtras().getString("vid"));
+
+        final String vid = i.getExtras().getString("vid");
+
+
+//        vid = (TextView) findViewById(R.id.vehicle_number);
         leasingCompany = (EditText) findViewById(R.id.Leasing_leasing_company);
         leasingNumber = (EditText) findViewById(R.id.lease_no);
         leasingInfo = (EditText) findViewById(R.id.leasing_info);
@@ -60,7 +70,7 @@ public class LeasingActivity extends AppCompatActivity {
 
                             JSONObject object = new JSONObject();
                             try {
-                                object.put("Vehicle id", vid.getText().toString());
+                                object.put("Vehicle id", vid);
                                 object.put("leasing company", leasingCompany.getText().toString());
                                 object.put("leasing number", leasingNumber.getText().toString());
                                 // object.put("leasing amount",leasingAmount.getText().toString());

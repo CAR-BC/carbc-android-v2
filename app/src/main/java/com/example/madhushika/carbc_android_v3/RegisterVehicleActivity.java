@@ -38,6 +38,8 @@ public class RegisterVehicleActivity extends AppCompatActivity {
             }
         });
 
+
+
         Button done = (Button) findViewById(R.id.done_btn);
         Button cancel = (Button) findViewById(R.id.cancel_btn);
 

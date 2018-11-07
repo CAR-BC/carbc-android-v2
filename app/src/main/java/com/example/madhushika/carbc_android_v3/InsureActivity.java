@@ -1,6 +1,7 @@
 package com.example.madhushika.carbc_android_v3;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class InsureActivity extends AppCompatActivity {
     private EditText insuranceCompany;
     private EditText insuranceNo;
     private EditText insuranceInfo;
+    private TextView vehicleNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +36,18 @@ public class InsureActivity extends AppCompatActivity {
             }
         });
 
+        Intent i = getIntent();
+        vehicleNumber = (TextView) findViewById(R.id.vehicle_number);
+
+        vehicleNumber.setText(i.getExtras().getString("vid"));
+
+        final String vid = i.getExtras().getString("vid");
+
+
         Button done = (Button) findViewById(R.id.done_btn);
         Button cancel = (Button) findViewById(R.id.cancel_btn);
 
-        vid = (TextView) findViewById(R.id.vehicle_number);
+        //vid = (TextView) findViewById(R.id.vehicle_number);
         insuranceCompany = (EditText) findViewById(R.id.insure_insurance_company);
         insuranceNo = (EditText) findViewById(R.id.insure_insurance_no);
         insuranceInfo = (EditText) findViewById(R.id.insure_insurance_info);
@@ -60,7 +70,7 @@ public class InsureActivity extends AppCompatActivity {
                             JSONObject object = new JSONObject();
 
                             try {
-                                object.put("vehicle number", vid.getText().toString());
+                                object.put("vehicle number", vid);
                                 object.put("insurance company", insuranceCompany.getText().toString());
                                 object.put("insurance number", insuranceNo.getText().toString());
                                 object.put("insurance Info", insuranceInfo.getText().toString());
