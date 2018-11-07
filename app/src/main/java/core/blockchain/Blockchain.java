@@ -82,7 +82,6 @@ public class Blockchain {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return previousHash;
     }
 

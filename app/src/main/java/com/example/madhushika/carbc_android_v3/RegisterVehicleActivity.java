@@ -13,10 +13,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import chainUtil.KeyGenerator;
+import controller.Controller;
+
 public class RegisterVehicleActivity extends AppCompatActivity {
-    private EditText vehicleNumber;
+    //private EditText vehicleNumber;
     private EditText registrationNumber;
-    private EditText currentOwner;
+    //private EditText currentOwner;
     private EditText engineNumber;
     private EditText vehicleClass;
     private EditText condition;
@@ -43,9 +49,9 @@ public class RegisterVehicleActivity extends AppCompatActivity {
         Button done = (Button) findViewById(R.id.done_btn);
         Button cancel = (Button) findViewById(R.id.cancel_btn);
 
-        vehicleNumber = (EditText)findViewById(R.id.reg_vehicle_id);
+       // vehicleNumber = (EditText)findViewById(R.id.reg_vehicle_id);
         registrationNumber = (EditText) findViewById(R.id.registration_number);
-        currentOwner = (EditText) findViewById(R.id.current_owner);
+        //currentOwner = (EditText) findViewById(R.id.current_owner);
         engineNumber = (EditText) findViewById(R.id.engine_number);
         vehicleClass = (EditText) findViewById(R.id.vehicle_class);
         condition = (EditText) findViewById(R.id.condition);
@@ -56,8 +62,8 @@ public class RegisterVehicleActivity extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!vehicleNumber.getText().toString().isEmpty() && !registrationNumber.getText().toString().isEmpty() &&
-                        !currentOwner.getText().toString().isEmpty() && !engineNumber.getText().toString().isEmpty()
+                if (!registrationNumber.getText().toString().isEmpty() &&
+                        !engineNumber.getText().toString().isEmpty()
                 && !vehicleClass.getText().toString().isEmpty() && !condition.getText().toString().isEmpty()
                         && !make.getText().toString().isEmpty() && !model.getText().toString().isEmpty() &&
                         !manufacturingYear.getText().toString().isEmpty()){
@@ -70,6 +76,25 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                         //call blockchain method
+                        Controller controller = new Controller();
+
+                        JSONObject object  = new JSONObject();
+                        try {
+                            object.put("current_owner",KeyGenerator.getInstance().getPublicKeyAsString());
+                            object.put("engine_number",engineNumber.getText().toString());
+                            object.put("vehicle_class",vehicleClass.getText().toString());
+                            object.put("condition_and_note",condition.getText().toString());
+                            object.put("make",make.getText().toString());
+                            object.put("model",model.getText().toString());
+                            object.put("year_of_manufacture",manufacturingYear.getText().toString());
+                            object.put("registration_number",registrationNumber.getText().toString());
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        controller.sendTransaction("RegisterVehicle", null, object);
 
                         finish();
                     }
