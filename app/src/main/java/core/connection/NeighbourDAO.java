@@ -55,7 +55,8 @@ public class NeighbourDAO implements AsyncResponse {
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url+"insertpeerdetails" +
+                    "?block_number=", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
