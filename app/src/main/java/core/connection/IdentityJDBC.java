@@ -1,6 +1,8 @@
 package core.connection;
 
 import chainUtil.KeyGenerator;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.sql.Connection;
@@ -28,13 +30,13 @@ public class IdentityJDBC {
                 String publicKey = resultSet.getString("public_key");
                 String role = resultSet.getString("role");
                 String name = resultSet.getString("name");
+                String location = resultSet.getString("location");
 
                 identity.put("publicKey", publicKey);
                 identity.put("role", role);
                 identity.put("name", name);
+                identity.put("location", location);
 
-//                String data = resultSet.getString("data");
-//                identity = new JSONObject(data);
                 return identity;
 
             }
@@ -57,17 +59,60 @@ public class IdentityJDBC {
 
     //get an identity of a person by address
     public JSONObject getIdentityByAddress(String address) throws SQLException {
-        String query = "SELECT public_key, role, name FROM `Identity` WHERE `address` = ?";
+        String query = "SELECT public_key, role, name, location FROM `Identity` WHERE `public_key` = ?";
         return getIdentity(query, address);
     }
 
     //get an identity of a person by address
     public JSONObject getIdentityByRole(String role) throws SQLException {
-        String query = "SELECT public_key, role, name FROM `Identity` WHERE `role` = ?";
+        String query = "SELECT public_key, role, name, location FROM `Identity` WHERE `role` = ?";
         return getIdentity(query, role);
     }
 
     public String getPeerPublicKey(String peerID) {
         return KeyGenerator.getInstance().getPublicKeyAsString();
+    }
+
+    public JSONArray getPeersByLocation(String location) throws SQLException {
+        String query = "SELECT public_key, role, name, location FROM `Identity` WHERE `location` LIKE %?%";
+
+        JSONArray nodes = new JSONArray();
+        JSONObject identity = new JSONObject();
+
+        try {
+            connection = ConnectionFactory.getInstance().getConnection();
+            ptmt = connection.prepareStatement(query);
+            ptmt.setString(1, location);
+            resultSet = ptmt.executeQuery();
+
+            while (resultSet.next()){
+                String publicKey = resultSet.getString("public_key");
+                String role = resultSet.getString("role");
+                String name = resultSet.getString("name");
+                String address = resultSet.getString("location");
+
+                identity.put("publicKey", publicKey);
+                identity.put("role", role);
+                identity.put("name", name);
+                identity.put("location", address);
+
+                nodes.put(identity);
+                identity = new JSONObject();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (resultSet != null)
+                resultSet.close();
+            if (ptmt != null)
+                ptmt.close();
+            if (connection != null)
+                connection.close();
+            return nodes;
+        }
+
     }
 }

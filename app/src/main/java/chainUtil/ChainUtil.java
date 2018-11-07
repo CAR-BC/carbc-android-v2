@@ -242,4 +242,15 @@ public class ChainUtil {
     public static String getNodeIdUsingPk(String publicKey) {
         return publicKey.substring(publicKey.length()-40);
     }
+
+    public static Timestamp convertStringToTimestamp2(String time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date parsedDate = null;
+        try {
+            parsedDate = dateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new java.sql.Timestamp(parsedDate.getTime());
+    }
 }

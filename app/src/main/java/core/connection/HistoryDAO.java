@@ -72,6 +72,44 @@ public class HistoryDAO {
         return false;
     }
 
+    public JSONObject getBlockData(String blockHash) throws SQLException {
+        String queryString = "SELECT `event`, `address` FROM `Blockchain` " +
+                "WHERE `block_hash` = ? AND `validity` = `T`";
+
+        PreparedStatement ptmt = null;
+        Connection connection = null;
+        ResultSet result = null;
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            connection = ConnectionFactory.getInstance().getConnection();
+            ptmt = connection.prepareStatement(queryString);
+            ptmt.setString(1, blockHash);
+            result = ptmt.executeQuery();
+
+            if(result.next()){
+                String event = result.getString("event");
+                String address = result.getString("address");
+
+                jsonObject.put("event", event);
+                jsonObject.put("address", address);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (result != null)
+                result.close();
+            if (ptmt != null)
+                ptmt.close();
+            if (connection != null)
+                connection.close();
+            return jsonObject;
+        }
+    }
+
     public String getAdditionalData(String blockHash) throws SQLException {
         String queryString = "SELECT `additional_data` FROM `History` WHERE `block_hash` = ?";
 

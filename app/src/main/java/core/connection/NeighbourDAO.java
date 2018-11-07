@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class NeighbourDAO {
 
@@ -61,6 +63,68 @@ public class NeighbourDAO {
             log.info("Peer details updated successfully: {}", nodeID);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public Neighbour getPeer(String nodeID) throws SQLException {
+        String query = "SELECT node_id, ip, port FROM `PeerDetails` WHERE `node_id` = ?";
+        ResultSet resultSet = null;
+        Neighbour neighbour = null;
+        try {
+            connection = ConnectionFactory.getInstance().getConnection();
+            ptmt = connection.prepareStatement(query);
+            ptmt.setString(1, nodeID);
+            resultSet = ptmt.executeQuery();
+
+
+            if (resultSet.next()){
+                String node_id = resultSet.getString("node_id");
+                String ip = resultSet.getString("ip");
+                int port = resultSet.getInt("port");
+
+                neighbour = new Neighbour(node_id, ip, port);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (resultSet != null)
+                resultSet.close();
+            if (ptmt != null)
+                ptmt.close();
+            if (connection != null)
+                connection.close();
+            return neighbour;
+        }
+    }
+
+    public ArrayList<Neighbour> getPeers() throws SQLException {
+        String query = "SELECT * FROM `PeerDetails`";
+        ResultSet resultSet = null;
+        ArrayList<Neighbour> neighbours = new ArrayList<>();
+        try {
+            connection = ConnectionFactory.getInstance().getConnection();
+            ptmt = connection.prepareStatement(query);
+            resultSet = ptmt.executeQuery();
+
+            while (resultSet.next()) {
+                String node_id = resultSet.getString("node_id");
+                String ip = resultSet.getString("ip");
+                int port = resultSet.getInt("port");
+                neighbours.add(new Neighbour(node_id, ip, port));
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if (resultSet != null)
+                resultSet.close();
+            if (ptmt != null)
+                ptmt.close();
+            if (connection != null)
+                connection.close();
+            return neighbours;
         }
     }
 }
