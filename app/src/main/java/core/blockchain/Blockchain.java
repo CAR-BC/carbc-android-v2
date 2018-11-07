@@ -81,10 +81,7 @@ public class Blockchain {
             previousHash = blockJDBCDAO.getPreviousHash();
         } catch (Exception e) {
             e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
-
         return previousHash;
     }
 
@@ -95,8 +92,6 @@ public class Blockchain {
         try {
             recentBlockNumber = blockJDBCDAO.getRecentBlockNumber();
         } catch (Exception e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
             e.printStackTrace();
         }
         return recentBlockNumber;
