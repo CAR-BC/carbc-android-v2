@@ -148,7 +148,8 @@ public class RegisterActivity extends AppCompatActivity {
                     editor.putString("id",id);
                     editor.putString("role",roleGiven);
 
-                    //create block and broadcast or according to  role do whatever like
+                    //TODO: create key pair
+
                     editor.commit();
                 }
                 else {

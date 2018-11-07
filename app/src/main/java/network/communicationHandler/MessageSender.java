@@ -48,6 +48,7 @@ public class MessageSender {
 //        RequestMessage requestIPMessage = RequestIPMessageCreator.createRequestIPMessage(jsonObject);
             RequestMessage requestIPMessage = MessageCreator.createSpecificMessage(jsonObject, "Register", "0");
             requestIPMessage.addHeader("keepActive", "false");
+            log.info("talking to bootsrap node");
             Node.getInstance().sendMessageToPeer("192.168.8.102", 49154,requestIPMessage);
         } catch (JSONException e) {
             e.printStackTrace();
