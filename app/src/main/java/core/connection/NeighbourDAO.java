@@ -56,7 +56,10 @@ public class NeighbourDAO implements AsyncResponse {
         try {
 
             apiCaller.execute(base_url+"insertpeerdetails" +
-                    "?block_number=", "GET", "v", "g");
+                    "?node_id=" + nodeID +
+                    "&ip=" + ip +
+                    "&port=" + port
+                    , "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -79,7 +82,7 @@ public class NeighbourDAO implements AsyncResponse {
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url+"blockinfo" + "?block_number=", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -99,7 +102,7 @@ public class NeighbourDAO implements AsyncResponse {
         Neighbour neighbour = null;
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url+"findpeer?node_id=" + nodeID, "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -128,7 +131,7 @@ public class NeighbourDAO implements AsyncResponse {
         ArrayList<Neighbour> neighbours = new ArrayList<>();
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url+"findallpeers", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
