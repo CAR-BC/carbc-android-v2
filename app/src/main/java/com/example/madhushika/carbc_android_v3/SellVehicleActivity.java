@@ -12,7 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.sql.SQLException;
 
 import chainUtil.ChainUtil;
 import chainUtil.KeyGenerator;
@@ -20,7 +23,11 @@ import controller.Controller;
 import core.blockchain.Block;
 import core.blockchain.BlockBody;
 import core.blockchain.BlockHeader;
+import core.blockchain.BlockInfo;
 import core.blockchain.Transaction;
+import core.connection.APICaller;
+import core.connection.BlockJDBCDAO;
+import core.connection.Identity;
 import network.Node;
 import network.communicationHandler.MessageSender;
 
@@ -51,7 +58,7 @@ public class SellVehicleActivity extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!vehicleNumber.getText().toString().isEmpty() && !previousOwner.getText().toString().isEmpty()) {
+                if ( !previousOwner.getText().toString().isEmpty()) {
                     
                     AlertDialog.Builder builder = new AlertDialog.Builder(SellVehicleActivity.this);
                     builder.setTitle("Add a Transaction");
@@ -61,6 +68,27 @@ public class SellVehicleActivity extends AppCompatActivity {
                             dialog.dismiss();
                             //call blockchain method
 
+                            BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
+                            BlockInfo blockInfo = new BlockInfo();
+                            blockInfo.setAddress("address");
+                            blockInfo.setBlockNumber(256);
+                            // blockInfo.setBlockTime();
+                            blockInfo.setData("data");
+                            blockInfo.setHash("hash5");
+                            blockInfo.setSender("sender");
+                            blockInfo.setEvent("event");
+                            blockInfo.setValidity(true);
+                            blockInfo.setPreviousHash("previous hash");
+                            blockInfo.setTransactionId("I22222");
+
+                            Identity identity = new Identity("hash4","pub key","role","name");
+
+                            try {
+                                blockJDBCDAO.addBlockToBlockchain(blockInfo,identity);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+
                             finish();
                         }
                     });
@@ -68,6 +96,17 @@ public class SellVehicleActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
                             // User cancelled the dialog
+                            //new APICaller().execute("http://192.168.8.102/carbc/getPreviousHash.php","GET","v","f");
+                            BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
+                            try {
+                                JSONObject jsonObject = blockJDBCDAO.getBlockchain(1);
+                                //blockJDBCDAO.getBlockchain(1);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            System.out.println();
                         }
                     });
 

@@ -163,9 +163,9 @@ public class ChainUtil {
 
     public JSONObject getBlockchain(int from) throws Exception {
         BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
-        ResultSet rs = blockJDBCDAO.getBlockchain(from);
-        return convertResultSetIntoJSON(rs);
-
+        //ResultSet rs = blockJDBCDAO.getBlockchain(from);
+        //return convertResultSetIntoJSON(rs);
+ return blockJDBCDAO.getBlockchain(from);
     }
 
     public static JSONObject getJsonBlock(Block block) {

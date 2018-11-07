@@ -1,106 +1,105 @@
 package core.connection;
 
-import chainUtil.ChainUtil;
-import core.blockchain.Block;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import HelperInterface.AsyncResponse;
 import core.blockchain.BlockInfo;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BlockJDBCDAO {
+
+public class BlockJDBCDAO implements AsyncResponse {
+    private ProgressDialog pDialog;
+    Context context;
+    BlockInfo blockInfo;
+    Identity identity;
+    long blockNumber;
+    JSONArray jsonObject;
+    JSONObject object;
+
+    ResultSet resultSet = null;
+
+    APICaller apiCaller = new APICaller();
+
 
     public boolean addBlockToBlockchain(BlockInfo blockInfo, Identity identity) throws SQLException {
-        Connection connection = null;
-        PreparedStatement ptmt = null;
-        ResultSet resultSet = null;
 
         String transactionId = blockInfo.getTransactionId();
         String transactionType = transactionId.substring(0, 1);
-        String query = "";
+
 
         if (transactionType.equals("I")){
-            query = "INSERT INTO `Identity`(`block_hash`, `role`, `name`) " +
-                    "VALUES (?,?,?,?)";
+            new APICaller().execute("http://192.168.8.100/carbc/insertInToIdentityTable.php","POST","Identity",identity);
+            while (jsonObject == null){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("block added to identity table");
         }
 
         try {
-            String queryString = "INSERT INTO `Blockchain`(`previous_hash`, " +
-                    "`block_hash`, `block_timestamp`, `block_number`, `validity`," +
-                    " `transaction_id`, `sender`, `event`, `data`, `address`) " +
-                    "VALUES (?,?,?,?,?,?,?,?,?,?)";
-
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(queryString);
-
-            ptmt.setString(1, blockInfo.getPreviousHash());
-            ptmt.setString(2, blockInfo.getHash());
-            ptmt.setTimestamp(3, blockInfo.getBlockTime());
-            ptmt.setLong(4, blockInfo.getBlockNumber());
-            ptmt.setBoolean(5, blockInfo.isValidity());
-            ptmt.setString(6, blockInfo.getTransactionId());
-            ptmt.setString(7, blockInfo.getSender());
-            ptmt.setString(8, blockInfo.getEvent());
-            ptmt.setString(9, blockInfo.getData());
-            ptmt.setString(10, blockInfo.getAddress());
-            ptmt.executeUpdate();
-
-            PreparedStatement psmt = connection.prepareStatement(query);
-            psmt.setString(1, identity.getBlock_hash());
-            psmt.setString(2, identity.getPublic_key());
-            psmt.setString(3, identity.getRole());
-            psmt.setString(4, identity.getName());
-            psmt.executeUpdate();
-
+            new APICaller().execute("http://192.168.8.100/carbc/insertInToBlockchainTable.php","POST","BlockInfo",blockInfo);
+            while (jsonObject == null){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             System.out.println("Block is Added Successfully");
 
-        } catch (SQLException e) {
+
+        }
+        catch (Exception e){
             e.printStackTrace();
-            return false;
-        } finally {
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
+        }
+        finally {
+
             return true;
         }
 
     }
 
 
-    public ResultSet getBlockchain(long blockNumber) throws SQLException {
-        Connection connection = null;
-        PreparedStatement ptmt = null;
-        ResultSet resultSet = null;
+    public JSONObject getBlockchain(long blockNumber) throws SQLException, JSONException {
+        this.blockNumber = blockNumber;
 
-        String queryString = "SELECT `previous_hash`, `block_hash`, `block_timestamp`, " +
-                "`block_number`, `transaction_id`, `sender`, `event`, `data`, `address` " +
-                "FROM `Blockchain` WHERE `block_number` >= ? AND `validity` = 1";
-        String blockchain = "";
+        apiCaller.delegate = this;
 
+        apiCaller.execute("http://192.168.8.102:8080/blockinfo?block_number="+blockNumber, "GET", "v", "g");
+
+        while (jsonObject == null){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
+        System.out.println(jsonObject);
         try {
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setLong(1, blockNumber);
-            resultSet = ptmt.executeQuery();
-
-//            if (resultSet.next()){
-//                blockchain = ChainUtil.getInstance().getBlockchainAsJsonString(resultSet);
-//            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            //new GetBlockchain().execute();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (resultSet != null)
-                resultSet.close();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
-            return resultSet;
+
+            return jsonObject.getJSONObject(0);
+            //return obj;
         }
     }
-
 
 
     //get an identity related transactions
@@ -110,6 +109,7 @@ public class BlockJDBCDAO {
         ResultSet resultSet = null;
 
         String query = "SELECT `data` FROM `Blockchain` WHERE `address` LIKE 'I%'";
+
         String queryForIdentity = "INSERT INTO `Identity`(`block_hash`, `role`, `name`) VALUES (?,?,?)";
         JSONObject identity = null;
 
@@ -219,8 +219,42 @@ public class BlockJDBCDAO {
     }
 
 
+    @Override
+    public JSONArray processFinish(JSONArray output) {
+        System.out.println("process finish executed");
+        this.jsonObject = output;
+        return output;
+    }
 
-//    public long getBlockchainLength() {
-//
-//    }
+    public String getPreviousHash() throws SQLException {
+        String queryString = "SELECT `block_hash` FROM Blockchain WHERE `validity` = 1 ORDER BY id DESC LIMIT 1";
+        Connection connection = null;
+        PreparedStatement ptmt = null;
+        ResultSet result = null;
+        String previousHash = null;
+
+        try {
+            connection = ConnectionFactory.getInstance().getConnection();
+            ptmt = connection.prepareStatement(queryString);
+            result = ptmt.executeQuery();
+            if(result.next()) {
+                previousHash = result.getString("block_hash");
+            }else {
+                previousHash = null;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (result != null)
+                result.close();
+            if (ptmt != null)
+                ptmt.close();
+            if (connection != null)
+                connection.close();
+            return previousHash;
+        }
+    }
 }
