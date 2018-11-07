@@ -148,6 +148,7 @@ public class BlockJDBCDAO implements AsyncResponse {
         }
 
         JSONObject object = new JSONObject();
+        //should change this
         return object;
     }
 
@@ -261,47 +262,26 @@ public class BlockJDBCDAO implements AsyncResponse {
         return blockchainSize;
     }
 
-    public JSONObject getVehicleInfoByEvent(String vehicleId, String event) throws SQLException {
-        Connection connection = null;
-        PreparedStatement ptmt = null;
-        ResultSet resultSet = null;
-        JSONObject vehicleInfo = new JSONObject();
-
-        String queryString = "SELECT `previous_hash`, `block_hash`, `block_timestamp`, " +
-                "`block_number`, `transaction_id`, `sender`, `event`, `data`, `address` " +
-                "FROM `Blockchain` WHERE `transaction_id` LIKE ? AND `address` = ? AND " +
-                "`event` = ? AND `validity` = 1 ORDER BY `block_number` DESC LIMIT 1";
+    public JSONObject getVehicleInfoByEvent(String vehicleId, String event) throws SQLException, JSONException {
 
         try {
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, "V%");
-            ptmt.setString(2, vehicleId);
-            ptmt.setString(3, event);
-            resultSet = ptmt.executeQuery();
 
-            if (resultSet.next()) {
-                vehicleInfo.put("sender", resultSet.getString("sender"));
-                vehicleInfo.put("event", resultSet.getString("event"));
-                vehicleInfo.put("data", resultSet.getString("data"));
+            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
 
-                System.out.println(vehicleInfo);
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (resultSet != null)
-                resultSet.close();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
-            return vehicleInfo;
         }
-    }
+
+            return jsonArray.getJSONObject(0);
+        }
+
 
     public ResultSet getCompleteVehicleInfo(String vehicleId) throws SQLException {
 //        Connection connection = null;
@@ -340,68 +320,38 @@ public class BlockJDBCDAO implements AsyncResponse {
 //        }
     }
 
-    public long getRecentBlockNumber() throws SQLException {
+    public long getRecentBlockNumber() throws SQLException, JSONException {
         String queryString = "SELECT `block_number` FROM Blockchain ORDER BY id DESC LIMIT 1";
-        Connection connection = null;
-        PreparedStatement ptmt = null;
-        ResultSet result = null;
+
         long blockNumber = 0;
 
         try {
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            result = ptmt.executeQuery();
-            if (result.next()) {
-                blockNumber = result.getLong("block_number");
-            } else {
-                blockNumber = 0;
-            }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (result != null)
-                result.close();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
-            return blockNumber;
         }
-    }
+            return (long) jsonArray.get(0);
+        }
+
 
     public JSONObject getPreviousBlockData() throws SQLException {
         String queryString = "SELECT `block_hash`,`block_number`, `block_timestamp` FROM Blockchain WHERE `validity` = 1 ORDER BY id DESC LIMIT 1";
-        Connection connection = null;
-        PreparedStatement ptmt = null;
-        ResultSet result = null;
+
         JSONObject previousBlock = new JSONObject();
 
-        try {
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            result = ptmt.executeQuery();
-            if (result.next()) {
-                previousBlock.put("blockHash", result.getString("block_hash"));
-                previousBlock.put("blockNumber", result.getString("block_number"));
-            }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (result != null)
-                result.close();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
             return previousBlock;
         }
-    }
+    
 
     public String getPreviousHash() throws SQLException {
         String queryString = "SELECT `block_hash` FROM Blockchain WHERE `validity` = 1 ORDER BY id DESC LIMIT 1";
