@@ -54,8 +54,19 @@ public class BuyVehicleActivity extends AppCompatActivity {
                             //call blockchain method
                             JSONObject object = new JSONObject();
                             try {
-                                object.put("Vehicle id", vid.getText().toString());
-                                object.put("previous owner", owner.getText().toString());
+                                JSONObject secondaryParty = new JSONObject();
+                                JSONObject newOwner = new JSONObject();
+                                newOwner.put("name", "Ashan");
+                                newOwner.put("publicKey", "mykey");
+                                secondaryParty.put("SecondaryParty", newOwner);
+                                JSONObject thirdParty = new JSONObject();
+
+                                object.put("registrationNumber", vid.getText().toString());
+                                object.put("preOwner", owner.getText().toString());
+                                object.put("vehicleId", "vehicleId");
+                                object.put("SecondaryParty", secondaryParty);
+                                object.put("ThirdParty", thirdParty);
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

@@ -76,6 +76,23 @@ public class SellVehicleActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
                             //call blockchain method
+                            JSONObject object = new JSONObject();
+                            JSONObject secondaryParty = new JSONObject();
+                            JSONObject newOwner = new JSONObject();
+                            try {
+                                newOwner.put("name", "Ashan");
+                                //newOwner.put("publicKey", owner.getText().toString());
+                                secondaryParty.put("SecondaryParty", "myKey");
+                                JSONObject thirdParty = new JSONObject();
+
+                               // object.put("registrationNumber", vid.getText().toString());
+                                object.put("preOwner", "myKey");
+                                object.put("vehicleId", "vehicleId");
+                                object.put("SecondaryParty", secondaryParty);
+                                object.put("ThirdParty", thirdParty);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
 
                             finish();
