@@ -111,7 +111,8 @@ public class BlockJDBCDAO implements AsyncResponse {
                             "&sender=" + blockInfo.getSender() +
                             "&event=" + blockInfo.getEvent() +
                             "&data=" + blockInfo.getData() +
-                            "&address=" + blockInfo.getAddress(), "GET", "BlockInfo", blockInfo);                    while (jsonArray == null) {
+                            "&address=" + blockInfo.getAddress(), "GET", "BlockInfo", blockInfo);
+                    while (jsonArray == null) {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
@@ -322,7 +323,7 @@ public class BlockJDBCDAO implements AsyncResponse {
     }
 
     public long getRecentBlockNumber() throws SQLException, JSONException {
-        String queryString = "SELECT `block_number` FROM Blockchain ORDER BY id DESC LIMIT 1";
+       // String queryString = "SELECT `block_number` FROM Blockchain ORDER BY id DESC LIMIT 1";
         apiCaller.delegate = this;
         long blockNumber = 0;
 
@@ -367,7 +368,7 @@ public class BlockJDBCDAO implements AsyncResponse {
         }
 
     public String getPreviousHash() throws SQLException, JSONException {
-        String queryString = "SELECT `block_hash` FROM Blockchain WHERE `validity` = 1 ORDER BY id DESC LIMIT 1";
+
         apiCaller.delegate = this;
         try {
 

@@ -1,6 +1,11 @@
 package core.connection;
 
+import HelperInterface.AsyncResponse;
 import network.Neighbour;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,11 +15,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class NeighbourDAO {
+import static core.connection.BlockJDBCDAO.base_url;
+
+public class NeighbourDAO implements AsyncResponse {
 
     private final Logger log = LoggerFactory.getLogger(NeighbourDAO.class);
     Connection connection ;
     PreparedStatement ptmt;
+    JSONArray jsonArray;
+
+    APICaller apiCaller = new APICaller();
+
 
     public NeighbourDAO() {
         connection = ConnectionFactory.getInstance().getConnection();
@@ -22,23 +33,38 @@ public class NeighbourDAO {
 
     public void saveNeighbours(String nodeID, String ip, int port, String publicKey) {
 
+        apiCaller.delegate = this;
+        try {
+
+            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     public void saveNeighboursToDB(String nodeID, String ip, int port) {
-        String queryString = "INSERT INTO `PeerDetails`(`node_id`,`ip`,`port`) VALUES(?,?,?)";
+        apiCaller.delegate = this;
         try {
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1,nodeID);
-            ptmt.setString(2, ip);
-            ptmt.setInt(3, port);
-            ptmt.execute();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
-            log.info("Peer added to database successfully: {}", nodeID);
-        } catch (SQLException e) {
+
+            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -48,83 +74,91 @@ public class NeighbourDAO {
     }
 
     public void updatePeer(String nodeID, String ip, int port ) {
-        String queryString = "UPDATE `PeerDetails` SET `ip` = ?, `port` = ? WHERE  `node_id` = ?";
+
+        apiCaller.delegate = this;
         try {
 
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, ip);
-            ptmt.setInt(2, port);
-            ptmt.setString(3, nodeID);
-            ptmt.executeUpdate();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
-            log.info("Peer details updated successfully: {}", nodeID);
-        } catch (SQLException e) {
+            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public Neighbour getPeer(String nodeID) throws SQLException {
-        String query = "SELECT node_id, ip, port FROM `PeerDetails` WHERE `node_id` = ?";
-        ResultSet resultSet = null;
+
+        apiCaller.delegate = this;
         Neighbour neighbour = null;
         try {
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(query);
-            ptmt.setString(1, nodeID);
-            resultSet = ptmt.executeQuery();
 
+            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
 
-            if (resultSet.next()){
-                String node_id = resultSet.getString("node_id");
-                String ip = resultSet.getString("ip");
-                int port = resultSet.getInt("port");
-
-                neighbour = new Neighbour(node_id, ip, port);
-
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (resultSet != null)
-                resultSet.close();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
+
+        }
+        try {
+            JSONObject object = jsonArray.getJSONObject(0);
+            neighbour = new Neighbour(object.getString("node_id"),object.getString("ip"), (Integer) object.get("port"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
             return neighbour;
         }
-    }
+
 
     public ArrayList<Neighbour> getPeers() throws SQLException {
-        String query = "SELECT * FROM `PeerDetails`";
-        ResultSet resultSet = null;
+
         ArrayList<Neighbour> neighbours = new ArrayList<>();
         try {
-            connection = ConnectionFactory.getInstance().getConnection();
-            ptmt = connection.prepareStatement(query);
-            resultSet = ptmt.executeQuery();
 
-            while (resultSet.next()) {
-                String node_id = resultSet.getString("node_id");
-                String ip = resultSet.getString("ip");
-                int port = resultSet.getInt("port");
-                neighbours.add(new Neighbour(node_id, ip, port));
+            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (resultSet != null)
-                resultSet.close();
-            if (ptmt != null)
-                ptmt.close();
-            if (connection != null)
-                connection.close();
+
+        }
+
+        for (int i = 0; i<jsonArray.length();i++) {
+            JSONObject object = null;
+            try {
+                object = jsonArray.getJSONObject(0);
+                Neighbour neighbour = new Neighbour(object.getString("node_id"),object.getString("ip"), (Integer) object.get("port"));
+                neighbours.add(neighbour);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
             return neighbours;
         }
+
+
+    @Override
+    public JSONArray processFinish(JSONArray output) {
+        System.out.println("process finish executed");
+        this.jsonArray = output;
+        return output;
     }
 }
