@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,16 +53,30 @@ public class BlockJDBCDAO implements AsyncResponse {
             if(blockInfo.isValidity()) {
                 validity = 1;
             }
-            apiCaller.execute(base_url+"insertblock"+
-                    "?previous_hash=" +blockInfo.getPreviousHash() +
-                    "&block_hash=" + blockInfo.getHash() +
-                    "&block_timestamp="+ blockInfo.getBlockTime() + "&block_number=" + validity +
-                    "&transaction_id=" + blockInfo.getTransactionId() +
-                    "&sender=" + blockInfo.getSender() +
-                    "&event=" + blockInfo.getEvent() +
-                    "&data=" + blockInfo.getData() +
-                    "&address=" + blockInfo.getAddress(),
-                    "GET", "BlockInfo", blockInfo);
+//            apiCaller.execute(base_url+"insertblock"+
+//                    "?previous_hash=" +blockInfo.getPreviousHash() +
+//                    "&block_hash=" + blockInfo.getHash() +
+//                    "&block_timestamp="+ blockInfo.getBlockTime() + "&block_number=" + validity +
+//                    "&transaction_id=" + blockInfo.getTransactionId() +
+//                    "&sender=" + blockInfo.getSender() +
+//                    "&event=" + blockInfo.getEvent() +
+//                    "&data=" + blockInfo.getData() +
+//                    "&address=" + blockInfo.getAddress(),
+//                    "GET", "BlockInfo", blockInfo);
+
+            apiCaller.execute(base_url + "insertblock" +
+                    "?previous_hash=" + URLEncoder.encode(blockInfo.getPreviousHash(),"UTF-8") +
+                    "&block_hash=" + URLEncoder.encode(blockInfo.getHash(),"UTF-8") +
+                    "&block_timestamp=" + URLEncoder.encode(blockInfo.getBlockTimeAsString(),"UTF-8").replace("+","%20") +
+                    "&block_number=" + URLEncoder.encode(String.valueOf(blockInfo.getBlockNumber()),"UTF-8") +
+                    "&validity=" + URLEncoder.encode(String.valueOf(validity),"UTF-8") +
+                    "&transaction_id=" + URLEncoder.encode(blockInfo.getTransactionId(),"UTF-8") +
+                    "&sender=" + URLEncoder.encode(blockInfo.getSender(),"UTF-8") +
+                    "&event=" + URLEncoder.encode(blockInfo.getEvent(),"UTF-8") +
+                    "&data=" + URLEncoder.encode(blockInfo.getData(),"UTF-8") +
+                    "&address=" + URLEncoder.encode(blockInfo.getAddress(),"UTF-8"
+                    ) , "GET", "BlockInfo", blockInfo);
+
             while (jsonArray == null) {
                 try {
                     Thread.sleep(1000);
@@ -339,10 +354,11 @@ public class BlockJDBCDAO implements AsyncResponse {
                     e.printStackTrace();
                 }
             }
+            System.out.println(jsonArray);
         } catch (Exception e) {
             e.printStackTrace();
         }
-            return (long) jsonArray.get(0);
+            return jsonArray.getInt(0);
         }
 
 

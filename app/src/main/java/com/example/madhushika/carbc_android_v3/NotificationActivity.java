@@ -1,5 +1,8 @@
 package com.example.madhushika.carbc_android_v3;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,11 +14,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import Objects.BlockInfo;
+import Objects.ServiceType;
+import core.blockchain.Block;
+import core.blockchain.BlockHeader;
+import core.consensus.Consensus;
 
 public class NotificationActivity extends AppCompatActivity {
-
+    private ListView notification;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,25 +43,31 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
-        ListView notification = (ListView) findViewById(R.id.list_view_notification);
+    }
 
-        BlockInfo b = new BlockInfo("NW-6342", "Serviced at ASB Motors", "12/08/2018");
-        BlockInfo b2 = new BlockInfo("WP-4852", "Changed tires", "15/08/2018");
-        BlockInfo b3 = new BlockInfo("EP-6342", "Serviced at ACD Motors", "02/08/2018");
-        final BlockInfo[] blockInfoList = new BlockInfo[3];
-        blockInfoList[0] = b;
-        blockInfoList[1] = b2;
-        blockInfoList[2] = b3;
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String str = intent.getStringExtra("newBlockReceived");
+            if (str.equals("newBlockAdded")){
+                ArrayList <Block> blocks = Consensus.getInstance().getNonApprovedBlocks();
+                setArrayAdapterToNotificationList(blocks);
+            }
+        }
+    };
+
+    private void setArrayAdapterToNotificationList(final ArrayList<Block> notificationList){
+        notification = (ListView) findViewById(R.id.list_view_notification);
 
         notification.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
-                return blockInfoList.length;
+                return notificationList.size();
             }
 
             @Override
             public Object getItem(int position) {
-                return blockInfoList[position];
+                return notificationList.get(position);
             }
 
             @Override
@@ -58,7 +77,7 @@ public class NotificationActivity extends AppCompatActivity {
 
             @Override
             public View getView(int position, View convertView, ViewGroup viewGroup) {
-                BlockInfo blockInfo = blockInfoList[position];
+                final Block block = notificationList.get(position);
                 View cellUser = null;
 
                 if (convertView == null) {
@@ -100,14 +119,15 @@ public class NotificationActivity extends AppCompatActivity {
                     request_more = ph.more_btn;
                 }
 
-                vehicle_id.setText(blockInfo.getVid());
-                vehicle_description.setText(blockInfo.getDescr());
-                init_date.setText(blockInfo.getInit_date());
+                vehicle_id.setText(block.getBlockBody().getTransaction().getAddress());
+                vehicle_description.setText(block.getBlockBody().getTransaction().getEvent());
+                init_date.setText(block.getBlockBody().getTransaction().getTime());
 
                 confirm_tr.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //fill
+                        Consensus.getInstance().sendAgreementForBlock(block.getBlockHeader().getHash());
+                        Toast.makeText(NotificationActivity.this, "Sent your confirmation", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -134,5 +154,11 @@ public class NotificationActivity extends AppCompatActivity {
         public TextView initiate_date;
         public Button more_btn;
         public Button confirm_tx;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
     }
 }

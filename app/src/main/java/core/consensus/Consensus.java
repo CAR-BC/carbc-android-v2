@@ -1,5 +1,9 @@
 package core.consensus;
 
+import android.content.Intent;
+
+import com.example.madhushika.carbc_android_v3.MyApp;
+
 import chainUtil.ChainUtil;
 import chainUtil.KeyGenerator;
 import controller.Controller;
@@ -88,7 +92,11 @@ public class Consensus {
                 this.nonApprovedBlocks.add(block);
                 //TODO: should notify the ui
 //                WebSocketMessageHandler.testUpdate(nonApprovedBlocks);
-
+                //broadcast json
+                Intent intent = new Intent("newBlockReceived");
+                intent.putExtra("newBlockReceived", "newBlockAdded");
+                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                MyApp.getContext().sendBroadcast(intent);
 
                 if (!isPresent) {
                     TimeKeeper timeKeeper = new TimeKeeper(block.getBlockHeader().getPreviousHash());

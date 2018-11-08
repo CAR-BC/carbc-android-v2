@@ -80,6 +80,8 @@ public class AgreementCollector extends Thread {
 //                        succeed = RmvValidation.validateBlock(block);
 //                    }
 
+                        //TODO: invoke show notification
+
                         JSONObject obj = getIdentityJDBC().getIdentityByRole("RMV");
                         pubKey = obj.getString("publicKey");
                         getMandatoryValidators().add(pubKey);

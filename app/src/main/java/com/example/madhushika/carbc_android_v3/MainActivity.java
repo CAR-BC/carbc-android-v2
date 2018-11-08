@@ -1,6 +1,7 @@
 package com.example.madhushika.carbc_android_v3;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager manager;
     private FragmentTransaction transaction;
     private NewTransactionFragment newTransactionFragment;
+    private UnregisteredNewTransactionFragment unregisteredNewTransactionFragment;
 
     private static MainActivity activity;
 
@@ -77,17 +79,18 @@ public class MainActivity extends AppCompatActivity
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
 
-//        newTransactionFragment = (NewTransactionFragment) getFragmentManager().findFragmentById(R.);
-//        initiate fragment objects
-        newTransactionFragment = new NewTransactionFragment();
+        SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);
+        boolean ownershipStored = preferences.getBoolean("ownership", false);
 
+    //    if (ownershipStored){
+            newTransactionFragment = new NewTransactionFragment();
 //        open home fragment
-        transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
+            transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
+    //    }else {
+//            unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
+//            transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
 
-//        transaction.add(R.id.contentLayout, new StatusFragment(), "StatusFragment");
-//        transaction.add(R.id.contentLayout, new RemindersFragment(), "RemindersFragment");
-//        transaction.add(R.id.contentLayout, new InfoFragment(), "InfoFragment");
-//        transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "UnregisteredNewTransactionFragment");
+       // }
 
         transaction.commit();
 

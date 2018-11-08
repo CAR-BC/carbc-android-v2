@@ -3,6 +3,7 @@ package core.blockchain;
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class BlockInfo {
     //details from blockheader
@@ -54,6 +55,13 @@ public class BlockInfo {
 
     public Timestamp getBlockTime() {
         return block_timestamp;
+    }
+
+    public String getBlockTimeAsString(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String string  = dateFormat.format(block_timestamp);
+
+        return string;
     }
 
     public void setBlockTime(Timestamp blockTime) {
