@@ -11,11 +11,26 @@ public class NavigationHandler {
         FragmentTransaction transaction = manager.beginTransaction();
         switch (fragment) {
             case "addtransactionFragment":
-                if (manager.findFragmentByTag("addtransactionFragment") == null) {
-                    transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
+                if (MainActivity.vehicle_numbers.size() == 0) {
+                    if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") == null) {
+                        transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addUnregisteredNewTransactionFragment");
+                    } else {
+                        transaction.show(manager.findFragmentByTag("addUnregisteredNewTransactionFragment"));
+                        }
+                    if (manager.findFragmentByTag("addtransactionFragment") != null) {
+                        transaction.hide(manager.findFragmentByTag("addtransactionFragment"));
+                    }
                 } else {
-                    transaction.show(manager.findFragmentByTag("addtransactionFragment"));
+                    if (manager.findFragmentByTag("addtransactionFragment") == null) {
+                        transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
+                    } else {
+                        transaction.show(manager.findFragmentByTag("addtransactionFragment"));
+                    }
+                    if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") != null) {
+                        transaction.hide(manager.findFragmentByTag("addUnregisteredNewTransactionFragment"));
+                    }
                 }
+
                 if (manager.findFragmentByTag("SearchVehicleFragment") != null) {
                     transaction.hide(manager.findFragmentByTag("SearchVehicleFragment"));
                 }
@@ -31,9 +46,7 @@ public class NavigationHandler {
                 if (manager.findFragmentByTag("InfoFragment") != null) {
                     transaction.hide(manager.findFragmentByTag("InfoFragment"));
                 }
-                if (manager.findFragmentByTag("UnregisteredNewTransactionFragment") != null) {
-                    transaction.hide(manager.findFragmentByTag("UnregisteredNewTransactionFragment"));
-                }
+
                 break;
 
             case "UnregisteredNewTransactionFragment":
@@ -57,8 +70,8 @@ public class NavigationHandler {
                 if (manager.findFragmentByTag("InfoFragment") != null) {
                     transaction.hide(manager.findFragmentByTag("InfoFragment"));
                 }
-                if (manager.findFragmentByTag("UnregisteredNewTransactionFragment") != null) {
-                    transaction.hide(manager.findFragmentByTag("InfoFragment"));
+                if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") != null) {
+                    transaction.hide(manager.findFragmentByTag("addUnregisteredNewTransactionFragment"));
                 }
                 if (manager.findFragmentByTag("RemindersFragment") != null) {
                     transaction.hide(manager.findFragmentByTag("RemindersFragment"));
@@ -136,8 +149,8 @@ public class NavigationHandler {
                 if (manager.findFragmentByTag("InfoFragment") != null) {
                     transaction.hide(manager.findFragmentByTag("InfoFragment"));
                 }
-                if (manager.findFragmentByTag("UnregisteredNewTransactionFragment") != null) {
-                    transaction.hide(manager.findFragmentByTag("UnregisteredNewTransactionFragment"));
+                if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") != null) {
+                    transaction.hide(manager.findFragmentByTag("addUnregisteredNewTransactionFragment"));
                 }
                 break;
             case "RemindersFragment":
@@ -161,12 +174,10 @@ public class NavigationHandler {
                 if (manager.findFragmentByTag("InfoFragment") != null) {
                     transaction.hide(manager.findFragmentByTag("InfoFragment"));
                 }
-                if (manager.findFragmentByTag("UnregisteredNewTransactionFragment") != null) {
-                    transaction.hide(manager.findFragmentByTag("InfoFragment"));
+                if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") != null) {
+                    transaction.hide(manager.findFragmentByTag("addUnregisteredNewTransactionFragment"));
                 }
-                if (manager.findFragmentByTag("UnregisteredNewTransactionFragment") != null) {
-                    transaction.hide(manager.findFragmentByTag("UnregisteredNewTransactionFragment"));
-                }
+
 
                 break;
 
@@ -192,8 +203,8 @@ public class NavigationHandler {
                 if (manager.findFragmentByTag("SearchVehicleFragment") != null) {
                     transaction.hide(manager.findFragmentByTag("SearchVehicleFragment"));
                 }
-                if (manager.findFragmentByTag("UnregisteredNewTransactionFragment") != null) {
-                    transaction.hide(manager.findFragmentByTag("UnregisteredNewTransactionFragment"));
+                if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") != null) {
+                    transaction.hide(manager.findFragmentByTag("addUnregisteredNewTransactionFragment"));
                 }
 
                 break;

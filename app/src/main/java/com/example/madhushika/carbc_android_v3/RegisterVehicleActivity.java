@@ -1,6 +1,7 @@
 package com.example.madhushika.carbc_android_v3;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 import chainUtil.KeyGenerator;
 import controller.Controller;
@@ -88,12 +91,20 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                             object.put("model",model.getText().toString());
                             object.put("year_of_manufacture",manufacturingYear.getText().toString());
                             object.put("registration_number",registrationNumber.getText().toString());
-
+                            object.put("SecondaryParty",new JSONObject());
+                            object.put("ThirdParty",new JSONObject());
 
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);
+                        final SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean("ownership", true);
+                        editor.commit();
+
+
                         controller.sendTransaction("RegisterVehicle", null, object);
 
                         finish();

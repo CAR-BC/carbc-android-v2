@@ -1,14 +1,5 @@
 package core.connection;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.hardware.camera2.params.BlackLevelPattern;
-import android.os.AsyncTask;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-
 import HelperInterface.AsyncResponse;
 import chainUtil.ChainUtil;
 import core.blockchain.BlockInfo;
@@ -17,9 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class BlockJDBCDAO implements AsyncResponse {
@@ -37,7 +27,7 @@ public class BlockJDBCDAO implements AsyncResponse {
         apiCaller.delegate = this;
 
         if (transactionType.equals("I")) {
-            apiCaller.execute(base_url+"insertInToIdentityTable.php", "GET", "Identity", identity);
+            apiCaller.execute(base_url + "insertInToIdentityTable.php", "GET", "Identity", identity);
             while (jsonArray == null) {
                 try {
                     Thread.sleep(1000);
@@ -49,19 +39,23 @@ public class BlockJDBCDAO implements AsyncResponse {
 
         try {
             int validity = 0;
-            if(blockInfo.isValidity()) {
+            if (blockInfo.isValidity()) {
                 validity = 1;
             }
-            apiCaller.execute(base_url+"insertblock"+
-                    "?previous_hash=" +blockInfo.getPreviousHash() +
-                    "&block_hash=" + blockInfo.getHash() +
-                    "&block_timestamp="+ blockInfo.getBlockTime() + "&block_number=" + validity +
-                    "&transaction_id=" + blockInfo.getTransactionId() +
-                    "&sender=" + blockInfo.getSender() +
-                    "&event=" + blockInfo.getEvent() +
-                    "&data=" + blockInfo.getData() +
-                    "&address=" + blockInfo.getAddress(),
-                    "GET", "BlockInfo", blockInfo);
+
+            apiCaller.execute(base_url + "insertblock" +
+                    "?previous_hash=" + URLEncoder.encode(blockInfo.getPreviousHash(), "UTF-8") +
+                    "&block_hash=" + URLEncoder.encode(blockInfo.getHash(), "UTF-8") +
+                    "&block_timestamp=" + URLEncoder.encode(blockInfo.getBlockTimeAsString(), "UTF-8").replace("+", "%20") +
+                    "&block_number=" + URLEncoder.encode(String.valueOf(blockInfo.getBlockNumber()), "UTF-8") +
+                    "&validity=" + URLEncoder.encode(String.valueOf(validity), "UTF-8") +
+                    "&transaction_id=" + URLEncoder.encode(blockInfo.getTransactionId(), "UTF-8") +
+                    "&sender=" + URLEncoder.encode(blockInfo.getSender(), "UTF-8") +
+                    "&event=" + URLEncoder.encode(blockInfo.getEvent(), "UTF-8") +
+                    "&data=" + URLEncoder.encode(blockInfo.getData(), "UTF-8") +
+                    "&address=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8"
+            ), "GET", "BlockInfo", blockInfo);
+
             while (jsonArray == null) {
                 try {
                     Thread.sleep(1000);
@@ -101,13 +95,13 @@ public class BlockJDBCDAO implements AsyncResponse {
 
                 try {
                     int validity = 0;
-                    if(blockInfo.isValidity()) {
+                    if (blockInfo.isValidity()) {
                         validity = 1;
                     }
-                    apiCaller.execute(base_url+"insertblock"+
-                            "?previous_hash=" +blockInfo.getPreviousHash() +
+                    apiCaller.execute(base_url + "insertblock" +
+                            "?previous_hash=" + blockInfo.getPreviousHash() +
                             "&block_hash=" + blockInfo.getHash() +
-                            "&block_timestamp="+ blockInfo.getBlockTime() + "&block_number=" + validity +
+                            "&block_timestamp=" + blockInfo.getBlockTime() + "&block_number=" + validity +
                             "&transaction_id=" + blockInfo.getTransactionId() +
                             "&sender=" + blockInfo.getSender() +
                             "&event=" + blockInfo.getEvent() +
@@ -135,7 +129,7 @@ public class BlockJDBCDAO implements AsyncResponse {
 
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=" + blockNumber, "GET", "v", "g");
+            apiCaller.execute(base_url + "blockinfo?block_number=" + blockNumber, "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -148,6 +142,7 @@ public class BlockJDBCDAO implements AsyncResponse {
             e.printStackTrace();
 
         }
+
 
         JSONObject object = new JSONObject();
         //should change this
@@ -199,7 +194,7 @@ public class BlockJDBCDAO implements AsyncResponse {
 
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url + "blockinfo?block_number=", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -220,7 +215,7 @@ public class BlockJDBCDAO implements AsyncResponse {
                 Identity identity = new Identity(block.getString("block_hash"), block.getString("public_key"),
                         block.getString("name"), block.getString("role"), block.getString("location"));
                 try {
-                    apiCaller.execute(base_url+"insertInToIdentityTable.php", "POST", "Identity", identity);
+                    apiCaller.execute(base_url + "insertInToIdentityTable.php", "POST", "Identity", identity);
                     while (jsonArray == null) {
                         try {
                             Thread.sleep(1000);
@@ -237,7 +232,8 @@ public class BlockJDBCDAO implements AsyncResponse {
             }
         }
     }
-// *************************************************************
+
+    // *************************************************************
     public int getBLockchainSize() throws SQLException {
 
         int blockchainSize = 0;
@@ -245,7 +241,7 @@ public class BlockJDBCDAO implements AsyncResponse {
 
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url + "blockinfo?block_number=", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -265,11 +261,11 @@ public class BlockJDBCDAO implements AsyncResponse {
         return blockchainSize;
     }
 
-        public JSONObject getVehicleInfoByEvent(String vehicleId, String event) throws SQLException, JSONException {
+    public JSONObject getVehicleInfoByEvent(String vehicleId, String event) throws SQLException, JSONException {
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url + "blockinfo?block_number=", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -282,8 +278,8 @@ public class BlockJDBCDAO implements AsyncResponse {
             e.printStackTrace();
         }
 
-            return jsonArray.getJSONObject(0);
-        }
+        return jsonArray.getJSONObject(0);
+    }
 
 
     public ResultSet getCompleteVehicleInfo(String vehicleId) throws SQLException {
@@ -324,13 +320,13 @@ public class BlockJDBCDAO implements AsyncResponse {
     }
 
     public long getRecentBlockNumber() throws SQLException, JSONException {
-       // String queryString = "SELECT `block_number` FROM Blockchain ORDER BY id DESC LIMIT 1";
+        // String queryString = "SELECT `block_number` FROM Blockchain ORDER BY id DESC LIMIT 1";
         apiCaller.delegate = this;
         long blockNumber = 0;
 
         try {
 
-            apiCaller.execute(base_url+"findRecentblocknumber", "GET", "v", "g");
+            apiCaller.execute(base_url + "findRecentblocknumber", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -339,11 +335,12 @@ public class BlockJDBCDAO implements AsyncResponse {
                     e.printStackTrace();
                 }
             }
+            System.out.println(jsonArray);
         } catch (Exception e) {
             e.printStackTrace();
         }
-            return (long) jsonArray.get(0);
-        }
+        return jsonArray.getInt(0);
+    }
 
 
     public JSONObject getPreviousBlockData() throws SQLException, JSONException {
@@ -352,7 +349,7 @@ public class BlockJDBCDAO implements AsyncResponse {
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url + "blockinfo?block_number=", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -365,15 +362,15 @@ public class BlockJDBCDAO implements AsyncResponse {
             e.printStackTrace();
         }
 
-            return jsonArray.getJSONObject(0);
-        }
+        return jsonArray.getJSONObject(0);
+    }
 
     public String getPreviousHash() throws SQLException, JSONException {
 
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"findprevioushash", "GET", "v", "g");
+            apiCaller.execute(base_url + "findprevioushash", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -385,7 +382,74 @@ public class BlockJDBCDAO implements AsyncResponse {
         } catch (Exception e) {
             e.printStackTrace();
         }
-            return jsonArray.getString(0);
+        return jsonArray.getString(0);
+    }
+
+
+    public JSONObject getRegistrationInfoByRegistrationNumber(String registrationNumber) {
+
+        JSONObject vehicleInfo = new JSONObject();
+
+        apiCaller.delegate = this;
+        try {
+
+            apiCaller.execute(base_url + "searchvehicleregistrationdata" + "?registration_number=" +registrationNumber, "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JSONObject object = jsonArray.getJSONObject(0);
+            JSONObject data = new JSONObject(object.getString("data"));
+
+            vehicleInfo.put("current_owner", object.getString("current_owner"));
+            vehicleInfo.put("engine_number", data.getString("engine_number"));
+            vehicleInfo.put("vehicle_class", data.getString("vehicle_class"));
+            vehicleInfo.put("condition_and_note", data.getString("condition_and_note"));
+            vehicleInfo.put("make", data.getString("make"));
+            vehicleInfo.put("model", data.getString("model"));
+            vehicleInfo.put("year_of_manufacture", data.getString("year_of_manufacture"));
+            vehicleInfo.put("registration_number", data.getString("registration_number"));
+            vehicleInfo.put("rating", object.getDouble("rating"));
+            vehicleInfo.put("address", object.getDouble("address"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(vehicleInfo);
+
+
+        return vehicleInfo;
+    }
+
+    public JSONArray getVehicleInfoByRegistrationNumber(String registrationNumber)  {
+
+        apiCaller.delegate = this;
+        try {
+
+            apiCaller.execute(base_url + "searchvehicledata" + "?registration_number=" +registrationNumber, "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+            return jsonArray;
         }
 
 
@@ -393,7 +457,10 @@ public class BlockJDBCDAO implements AsyncResponse {
     @Override
     public JSONArray processFinish(JSONArray output) {
         System.out.println("process finish executed");
+        jsonArray = new JSONArray();
+
         this.jsonArray = output;
-        return output;
+
+        return jsonArray;
     }
 }

@@ -19,7 +19,8 @@ public class BlockHeader {
     public BlockHeader(){}
 
     public BlockHeader(String hash){
-        this.previousHash = Blockchain.getPreviousHash();
+        //this.previousHash = Blockchain.getPreviousHash();
+        this.previousHash = "previoushash";
         this.blockTime = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
         this.hash = hash;
         this.blockNumber = Blockchain.getRecentBlockNumber() + 1;

@@ -125,7 +125,6 @@ public class APICaller extends AsyncTask<Object,String,JSONArray> {
 
                     JSONArray jsono = new JSONArray(data);
                     System.out.println(jsono.toString());
-                    JSONObject object = new JSONObject();
                     delegate.processFinish(jsono);
                     return jsono;
                 }

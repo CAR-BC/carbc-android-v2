@@ -27,10 +27,10 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
         Controller controller = new Controller();
         controller.startNode();
         MessageSender.requestIP();
-        KeyGenerator.getInstance().generateKeyPair();
 
         SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);
         boolean login_statusStored = preferences.getBoolean("login_status", false);
+        boolean ownershipStored = preferences.getBoolean("ownership", false);
 
         if (login_statusStored){
             Intent intent = new Intent(LaunchingEmptyActivity.this, MainActivity.class);

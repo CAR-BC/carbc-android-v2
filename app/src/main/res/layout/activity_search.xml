@@ -91,13 +91,13 @@
                     android:layout_width="0dp"
                     android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:text="Registration No "
+                    android:text="Engine Number "
                     android:textStyle="bold"
                     android:textSize="20dp"
                     android:layout_margin="5dp"/>
 
                 <TextView
-                    android:id="@+id/search_reg_no_txt"
+                    android:id="@+id/search_engine_no_txt"
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="20dp"
@@ -114,13 +114,59 @@
                     android:layout_width="0dp"
                     android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:text="Type "
+                    android:text="Class"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     android:layout_margin="5dp"/>
 
                 <TextView
-                    android:id="@+id/search_type_txt"
+                    android:id="@+id/search_class_txt"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="20dp"
+                    android:layout_margin="5dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:text="Condition "
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"/>
+
+                <TextView
+                    android:id="@+id/search_condition_txt"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="20dp"
+                    android:layout_margin="5dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:text="make "
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:layout_margin="5dp"/>
+
+                <TextView
+                    android:id="@+id/search_make_txt"
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="20dp"
@@ -160,13 +206,13 @@
                     android:layout_width="0dp"
                     android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:text="Fuel Type "
+                    android:text="Year"
                     android:textStyle="bold"
                     android:textSize="20dp"
                     android:layout_margin="5dp"/>
 
                 <TextView
-                    android:id="@+id/search_fuel_type_txt"
+                    android:id="@+id/search_year_txt"
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="20dp"
@@ -183,22 +229,24 @@
                     android:layout_width="0dp"
                     android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:text="Capacity "
+                    android:text="Rating"
                     android:textStyle="bold"
                     android:textSize="20dp"
                     android:layout_margin="5dp"/>
 
                 <TextView
-                    android:id="@+id/search_capacity_txt"
+                    android:id="@+id/search_rating_txt"
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="20dp"
                     android:layout_margin="5dp"/>
 
             </LinearLayout>
+
         </LinearLayout>
 
         <Button
+            android:id="@+id/req_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="50dp"
