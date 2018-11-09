@@ -5,10 +5,12 @@ package chainUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.security.KeyFactory;
@@ -43,7 +45,7 @@ public class KeyGenerator {
             e.printStackTrace();
         }
 
-    };
+    }
 
     public static KeyGenerator getInstance(){
         if(keyGenerator == null) {
@@ -65,21 +67,9 @@ public class KeyGenerator {
             PrivateKey privateKey = kp.getPrivate();
             log.info("PrivateKey Generated");
 
-
-
-//            keyGen = KeyPairGenerator.getInstance("DSA");
-//            SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
-//            keyGen.initialize(512, random);
-//            KeyPair pair = keyGen.generateKeyPair();
-//            PublicKey publicKey = pair.getPublic();
-//            log.info("PublicKey Generated");
-//            PrivateKey privateKey = pair.getPrivate();
-//            log.info("PrivateKey Generated");
-
             // Store Public Key.
             X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
-//            FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir") + "/src/main/resources" + "/public.key");
-            FileOutputStream fos = new FileOutputStream("android.resource:/key/public.key");
+            FileOutputStream fos = new FileOutputStream("sdcard/publicKey.key");
             log.info("PublicKey Stored");
             fos.write(x509EncodedKeySpec.getEncoded());
             fos.close();
@@ -88,11 +78,10 @@ public class KeyGenerator {
             PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(
                     privateKey.getEncoded());
             //change path to relative path
-//            fos = new FileOutputStream(System.getProperty("user.dir") + "/src/main/resources" + "/private.key");
-            fos = new FileOutputStream("@keys/private.key");
+            fos = new FileOutputStream("sdcard/privateKey.key");
             fos.write(pkcs8EncodedKeySpec.getEncoded());
             fos.close();
-//            log.info("PrivateKey Stored");
+            log.info("PrivateKey Stored");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -106,20 +95,19 @@ public class KeyGenerator {
 
     private PublicKey loadPublicKey() {
         // Read Public Key.
-        System.out.println(getResourcesFilePath("public.key"));
-        File filePublicKey = new File(getResourcesFilePath("public.key"));
+        File filePublicKey = new File("sdcard/publicKey.key");
         FileInputStream fis = null;
         KeyFactory keyFactory = null;
         X509EncodedKeySpec publicKeySpec = null;
         PublicKey publicKey = null;
         try {
-            fis = new FileInputStream(getResourcesFilePath("public.key"));
+            fis = new FileInputStream("sdcard/publicKey.key");
             byte[] encodedPublicKey = new byte[(int) filePublicKey.length()];
             fis.read(encodedPublicKey);
             fis.close();
 
             //load public key
-            keyFactory = KeyFactory.getInstance("RSA");
+            keyFactory = KeyFactory.getInstance("DSA");
             publicKeySpec = new X509EncodedKeySpec(encodedPublicKey);
             publicKey = keyFactory.generatePublic(publicKeySpec);
         } catch (FileNotFoundException e) {
@@ -137,20 +125,20 @@ public class KeyGenerator {
 
     private PrivateKey loadPrivateKey() {
         // Read Private Key.
-        File filePrivateKey = new File(getResourcesFilePath("private.key"));
+        File filePrivateKey = new File("sdcard/privateKey.key");
         FileInputStream fis = null;
         KeyFactory keyFactory = null;
         PKCS8EncodedKeySpec privateKeySpec = null;
         PrivateKey privateKey = null;
 
         try {
-            fis = new FileInputStream(getResourcesFilePath("private.key"));
+            fis = new FileInputStream("sdcard/privateKey.key");
             byte[] encodedPrivateKey = new byte[(int) filePrivateKey.length()];
             fis.read(encodedPrivateKey);
             fis.close();
 
             //load private key
-            keyFactory = KeyFactory.getInstance("RSA");
+            keyFactory = KeyFactory.getInstance("DSA");
             privateKeySpec = new PKCS8EncodedKeySpec(encodedPrivateKey);
             privateKey = keyFactory.generatePrivate(privateKeySpec);
 
@@ -168,11 +156,12 @@ public class KeyGenerator {
     }
 
     public PublicKey getPublicKey() {
-//        if (getResourcesFilePath("public.key") == null) {
-//            log.info("inside getPublicKey if statement");
-//            generateKeyPair();
-//        }
-        return publicKey;
+        File pk = new File("sdcard/public.key");
+        if (pk == null) {
+            log.info("inside getPublicKey if statement");
+            generateKeyPair();
+        }
+        return loadPublicKey();
     }
 
     public PublicKey getPublicKey(String hexvalue) {
@@ -194,15 +183,12 @@ public class KeyGenerator {
     }
 
     public PrivateKey getPrivateKey() {
-//        if (getResourcesFilePath("private.key") == null) {
-//            generateKeyPair();
-//        }
-        return privateKey;
+        File sk = new File("sdcard/private.key");
+        if (sk == null) {
+            generateKeyPair();
+        }
+        return loadPrivateKey();
     }
-
-//    public void saveFile() {
-//        File path = new File(getFilesDir(),"myfolder");
-//    }
 
     public String getResourcesFilePath(String fileName) {
         URL url = getClass().getClassLoader().getResource(fileName);
@@ -220,5 +206,85 @@ public class KeyGenerator {
 
     public String getPublicKeyAsString() {
         return getEncodedPublicKeyString(getPublicKey());
+    }
+
+    public void genKeyPairandSave() {
+        log.info("inside genkey pair");
+        KeyPair kp = null;
+        try {
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
+            kpg.initialize(1024);
+            kp = kpg.generateKeyPair();
+            publicKey = kp.getPublic();
+            privateKey = kp.getPrivate();
+
+            X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
+            FileOutputStream fos = new FileOutputStream("sdcard/publicKey.key");
+            log.info("PublicKey Stored");
+            fos.write(x509EncodedKeySpec.getEncoded());
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void getPUbkeyformfile() {
+        File filePublicKey = new File("sdcard/publicKey.key");
+        FileInputStream fis = null;
+        KeyFactory keyFactory = null;
+        X509EncodedKeySpec publicKeySpec = null;
+        PublicKey publicKey = null;
+        try {
+            fis = new FileInputStream("sdcard/public.key");
+            byte[] encodedPublicKey = new byte[(int) filePublicKey.length()];
+            fis.read(encodedPublicKey);
+            fis.close();
+
+            //load public key
+            keyFactory = KeyFactory.getInstance("DSA");
+            publicKeySpec = new X509EncodedKeySpec(encodedPublicKey);
+            publicKey = keyFactory.generatePublic(publicKeySpec);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("PublicKey" + publicKey);
+    }
+
+    public static void writeToFile(String text, String fileName)
+    {
+        File logFile = new File("sdcard/log"+fileName+".txt");
+        if (!logFile.exists())
+        {
+            try
+            {
+                logFile.createNewFile();
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        try
+        {
+            //BufferedWriter for performance, true to set append to file flag
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append(text);
+            buf.newLine();
+            buf.close();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
