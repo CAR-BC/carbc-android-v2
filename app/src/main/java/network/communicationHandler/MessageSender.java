@@ -238,7 +238,7 @@ public class MessageSender {
             jsonObject.put("peerID", peerID);
             jsonObject.put("listeningPort",Node.getInstance().getNodeConfig().getListenerPort());
             RequestMessage peerDetailsRequestMessage = MessageCreator.createMessage(jsonObject, "RequestPeerDetails");
-            Node.getInstance().sendMessageToPeer("192.168.8.102", 49154, peerDetailsRequestMessage);
+            Node.getInstance().sendMessageToPeer("192.168.8.101", 49154, peerDetailsRequestMessage);
             log.info("Peer Details Requested");
         } catch (JSONException e) {
             e.printStackTrace();
