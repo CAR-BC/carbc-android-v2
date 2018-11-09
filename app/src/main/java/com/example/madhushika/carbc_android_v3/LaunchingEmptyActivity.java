@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import Objects.ReminderItem;
+import chainUtil.KeyGenerator;
 import controller.Controller;
 import network.communicationHandler.MessageSender;
 //import controller.Controller;
@@ -26,6 +27,7 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
         Controller controller = new Controller();
         controller.startNode();
         MessageSender.requestIP();
+        KeyGenerator.getInstance().generateKeyPair();
 
         SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);
         boolean login_statusStored = preferences.getBoolean("login_status", false);
