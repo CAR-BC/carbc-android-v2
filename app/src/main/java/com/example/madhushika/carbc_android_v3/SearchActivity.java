@@ -25,7 +25,9 @@ import org.json.JSONObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.EventListener;
 
+import Objects.EventData;
 import core.blockchain.Block;
 import core.connection.BlockJDBCDAO;
 import core.consensus.Consensus;
@@ -107,7 +109,7 @@ public class SearchActivity extends AppCompatActivity {
                 //request data from backend
                 JSONArray vehicledata = blockJDBCDAO.getVehicleInfoByRegistrationNumber(reg_no.getText().toString());
                 System.out.println(vehicledata);
-                if (vehicledata.length()>0){
+                if (vehicledata.length() > 0) {
                     setArrayAdapterToMoreInfoList(vehicledata);
                 }
 
@@ -149,7 +151,7 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     jsonObject = moreInfo.getJSONObject(position);
                     System.out.println("++++++++++++++++++jsonObject+++++++++++++++++++++++");
-                    System.out.println(String .valueOf(position)+jsonObject  );
+                    System.out.println(String.valueOf(position) + jsonObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -190,12 +192,11 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
                 try {
-                    System.out.println("************************************************");
-                    System.out.println(jsonObject.getString("data"));
                     JSONObject data = new JSONObject(jsonObject.getString("data"));
                     eventData.setText(jsonObject.getString("event"));
                     init_date.setText(data.getString("serviced_date"));
                     rating.setText(jsonObject.getString("rating"));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -204,6 +205,26 @@ public class SearchActivity extends AppCompatActivity {
                 return cellUser;
             }
         });
+    }
+
+    private ArrayList<EventData> getEventDataArray(JSONArray eventDataJSONArray) {
+
+        for (int i = 0; i < eventDataJSONArray.length(); i++) {
+            try {
+                JSONObject object = eventDataJSONArray.getJSONObject(i);
+                JSONObject data = new JSONObject(object.getString("data"));
+                String event = object.getString("event");
+                String date = data.getString("serviced_date");
+                String rating = object.getString("rating");
+
+                
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return null;
     }
 
     private class Placeholder {
