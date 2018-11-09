@@ -183,11 +183,15 @@ public class KeyGenerator {
     }
 
     public PrivateKey getPrivateKey() {
-        File sk = new File("sdcard/private.key");
-        if (sk == null) {
+        PrivateKey privateKey = null;
+        try{
+            FileInputStream pk = new FileInputStream("sdcard/privateKey.key");
+        }catch (FileNotFoundException e) {
             generateKeyPair();
+        }finally {
+            privateKey = loadPrivateKey();
         }
-        return loadPrivateKey();
+        return privateKey;
     }
 
     public String getResourcesFilePath(String fileName) {
