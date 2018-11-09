@@ -458,9 +458,7 @@ public class BlockJDBCDAO implements AsyncResponse {
     public JSONArray processFinish(JSONArray output) {
         System.out.println("process finish executed");
         jsonArray = new JSONArray();
-
         this.jsonArray = output;
-
         return jsonArray;
     }
 }
