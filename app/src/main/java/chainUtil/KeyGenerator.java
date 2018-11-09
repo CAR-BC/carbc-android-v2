@@ -185,7 +185,7 @@ public class KeyGenerator {
     public PrivateKey getPrivateKey() {
         PrivateKey privateKey = null;
         try{
-            FileInputStream pk = new FileInputStream("sdcard/private.key");
+            FileInputStream pk = new FileInputStream("sdcard/privateKey.key");
         }catch (FileNotFoundException e) {
             generateKeyPair();
         }finally {
