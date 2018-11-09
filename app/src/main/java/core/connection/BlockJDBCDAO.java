@@ -1,5 +1,7 @@
 package core.connection;
 
+import android.os.AsyncTask;
+
 import HelperInterface.AsyncResponse;
 import chainUtil.ChainUtil;
 import core.blockchain.BlockInfo;
@@ -13,8 +15,8 @@ import java.sql.*;
 
 
 public class BlockJDBCDAO implements AsyncResponse {
-    APICaller apiCaller = new APICaller();
-    final static String base_url = "http://192.168.8.102:8080/";
+    public static APICaller apiCaller = new APICaller();
+    final static String base_url = "http://192.168.8.101:8080/";
 
     JSONArray jsonArray;
 
@@ -393,7 +395,7 @@ public class BlockJDBCDAO implements AsyncResponse {
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url + "searchvehicleregistrationdata" + "?registration_number=" +registrationNumber, "GET", "v", "g");
+            apiCaller.execute(base_url + "searchvehicleregistrationdata" + "?registration_number=" + registrationNumber, "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -419,7 +421,7 @@ public class BlockJDBCDAO implements AsyncResponse {
             vehicleInfo.put("year_of_manufacture", data.getString("year_of_manufacture"));
             vehicleInfo.put("registration_number", data.getString("registration_number"));
             vehicleInfo.put("rating", object.getDouble("rating"));
-            vehicleInfo.put("address", object.getDouble("address"));
+            vehicleInfo.put("address", object.getString("address"));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -431,12 +433,12 @@ public class BlockJDBCDAO implements AsyncResponse {
         return vehicleInfo;
     }
 
-    public JSONArray getVehicleInfoByRegistrationNumber(String registrationNumber)  {
+    public JSONArray getVehicleInfoByRegistrationNumber(String registrationNumber) {
 
         apiCaller.delegate = this;
         try {
-
-            apiCaller.execute(base_url + "searchvehicledata" + "?registration_number=" +registrationNumber, "GET", "v", "g");
+            apiCaller.execute(base_url + "searchvehicledata" + "?registration_number=" + registrationNumber, "GET", "v", "g");
+//            apiCaller.execute(base_url + "searchvehicledata" + "?registration_number=" +registrationNumber, "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -448,10 +450,10 @@ public class BlockJDBCDAO implements AsyncResponse {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-            return jsonArray;
-        }
-
+        JSONArray array = jsonArray;
+        System.out.println(jsonArray);
+        return array;
+    }
 
 
     @Override
@@ -459,6 +461,8 @@ public class BlockJDBCDAO implements AsyncResponse {
         System.out.println("process finish executed");
         jsonArray = new JSONArray();
         this.jsonArray = output;
+        System.out.println(jsonArray);
+
         return jsonArray;
     }
 }

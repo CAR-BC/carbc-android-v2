@@ -84,14 +84,14 @@ public class MainActivity extends AppCompatActivity
 
         BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
 
-
-        if (vehicle_numbers.size()==0){
-            unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
-            transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
-        }else {
+//TODO: don't uncomment this part
+//        if (vehicle_numbers.size()==0){
+//            unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
+//            transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
+//        }else {
             newTransactionFragment = new NewTransactionFragment();
             transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
-        }
+//        }
 
         transaction.commit();
 
