@@ -26,8 +26,9 @@ public class Controller {
     private final Logger log = LoggerFactory.getLogger(Controller.class);
 
 
-    public void requestTransactionDataTest(String type, String vehicleID, String date, String peerID) {
-        DataCollector.getInstance().requestTransactionData(type, vehicleID, date, peerID);
+    public void requestTransactionDataTest(String type, String vehicleID, String date, String peerPK) {
+        String peerId = ChainUtil.getNodeIdUsingPk(peerPK);
+        DataCollector.getInstance().requestTransactionData(type, vehicleID, date, peerId);
     }
 
     public void sendTransaction(String event, String vehicleID, JSONObject data) {
