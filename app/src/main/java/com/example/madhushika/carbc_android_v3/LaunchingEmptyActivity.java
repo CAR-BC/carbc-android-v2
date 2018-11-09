@@ -31,8 +31,13 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
         Controller controller = new Controller();
         controller.startNode();
         MessageSender.requestIP();
+
+       // KeyGenerator.getInstance().generateKeyPair();
+       // System.out.println("publickey: " + KeyGenerator.getInstance().getPublicKeyAsString());
+
 //        KeyGenerator.getInstance().generateKeyPair();
 //        System.out.println("publickey: " + KeyGenerator.getInstance().getPublicKeyAsString());
+
 
 
         SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);

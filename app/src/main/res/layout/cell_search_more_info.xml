@@ -32,7 +32,6 @@
                     android:id="@+id/cell_my_vehicle_status_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Car wash"
                     android:textSize="20dp"/>
             </LinearLayout>
 
@@ -51,7 +50,6 @@
                     android:id="@+id/cell_my_vehicle_status_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="15/05/2018"
                     android:textSize="20dp"/>
             </LinearLayout>
 
@@ -70,7 +68,6 @@
                     android:id="@+id/cell_my_vehicle_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="15/05/2018"
                     android:textSize="20dp"/>
             </LinearLayout>
 

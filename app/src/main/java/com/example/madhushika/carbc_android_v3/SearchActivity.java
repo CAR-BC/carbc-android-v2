@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -63,7 +64,6 @@ public class SearchActivity extends AppCompatActivity {
         final BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
 
 
-
         ImageView backBtn = (ImageView) findViewById(R.id.back_button);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +72,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-    //    registerReceiver(broadcastReceiver, new IntentFilter("SearchActivity"));
+        //    registerReceiver(broadcastReceiver, new IntentFilter("SearchActivity"));
 
 
         ImageView searchBtn = (ImageView) findViewById(R.id.search_btn);
@@ -106,14 +106,19 @@ public class SearchActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //request data from backend
                 JSONArray vehicledata = blockJDBCDAO.getVehicleInfoByRegistrationNumber(reg_no.getText().toString());
-                setArrayAdapterToMoreInfoList(vehicledata);
+                System.out.println(vehicledata);
+                if (vehicledata.length()>0){
+                    setArrayAdapterToMoreInfoList(vehicledata);
+                }
+
             }
         });
     }
 
-    private void setArrayAdapterToMoreInfoList(final JSONArray moreInfo){
+    private void setArrayAdapterToMoreInfoList(final JSONArray moreInfo) {
         moreInfoList = (ListView) findViewById(R.id.info_list);
 
+        System.out.println(moreInfo);
         moreInfoList.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
@@ -124,7 +129,9 @@ public class SearchActivity extends AppCompatActivity {
             public Object getItem(int position) {
                 JSONObject obj = null;
                 try {
-                   obj = moreInfo.getJSONObject(position);
+                    obj = moreInfo.getJSONObject(position);
+                    System.out.println(obj);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -140,7 +147,9 @@ public class SearchActivity extends AppCompatActivity {
             public View getView(int position, View convertView, ViewGroup viewGroup) {
                 JSONObject jsonObject = null;
                 try {
-                    jsonObject  = moreInfo.getJSONObject(position);
+                    jsonObject = moreInfo.getJSONObject(position);
+                    System.out.println("++++++++++++++++++jsonObject+++++++++++++++++++++++");
+                    System.out.println(String .valueOf(position)+jsonObject  );
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -163,7 +172,7 @@ public class SearchActivity extends AppCompatActivity {
                 if (ph == null) {
                     eventData = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_event);
                     init_date = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_date);
-                    rating = (TextView)cellUser.findViewById(R.id.cell_my_vehicle_rating);
+                    rating = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_rating);
 
 
                     ph = new Placeholder();
@@ -181,9 +190,11 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
                 try {
-                    JSONObject data = jsonObject.getJSONObject("data");
+                    System.out.println("************************************************");
+                    System.out.println(jsonObject.getString("data"));
+                    JSONObject data = new JSONObject(jsonObject.getString("data"));
                     eventData.setText(jsonObject.getString("event"));
-                    init_date.setText(data.getString("block_timestamp"));
+                    init_date.setText(data.getString("serviced_date"));
                     rating.setText(jsonObject.getString("rating"));
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -202,6 +213,7 @@ public class SearchActivity extends AppCompatActivity {
         public TextView rating;
 
     }
+
     public void hideActionBar() {
         //Hide the action bar only if it exists
         if (getSupportActionBar() != null) {

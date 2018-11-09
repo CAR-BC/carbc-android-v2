@@ -70,7 +70,7 @@ public class IdentityJDBC implements AsyncResponse {
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=" , "GET", "v", "g");
+            apiCaller.execute(base_url+"findidentitybyaddress?address=" + location, "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {

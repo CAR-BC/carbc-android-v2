@@ -124,8 +124,11 @@ public class APICaller extends AsyncTask<Object,String,JSONArray> {
                     String data = EntityUtils.toString(entity);
 
                     JSONArray jsono = new JSONArray(data);
+                    System.out.println("+++++++++by asynctask++++++++++++++++");
                     System.out.println(jsono.toString());
                     delegate.processFinish(jsono);
+                    System.out.println("+++++++++by asynctask after delegate++++++++++++++++");
+
                     return jsono;
                 }
             }
@@ -149,7 +152,7 @@ public class APICaller extends AsyncTask<Object,String,JSONArray> {
     protected void onPostExecute(JSONArray o) {
         System.out.println("before deligate////////////////////////////////////////////////////////");
         super.onPostExecute(o);
-        delegate.processFinish(o);
+        //delegate.processFinish(o);
         System.out.println("ater deligate////////////////////////////////////////////////////////////////////////");
     }
 }

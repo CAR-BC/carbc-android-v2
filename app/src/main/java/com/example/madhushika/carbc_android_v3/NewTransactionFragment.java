@@ -46,6 +46,8 @@ public class NewTransactionFragment extends Fragment {
     }
 
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,6 +64,11 @@ public class NewTransactionFragment extends Fragment {
         leasing = (CardView) view.findViewById(R.id.tr_leasing_vehicle);
         leasePayment =(CardView) view.findViewById(R.id.tr_leasing_payment_vehicle);
         emissionTesting = (CardView) view.findViewById(R.id.tr_emision_vehicle);
+
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("AC-2156");
+        arrayList.add("DF-3561");
+        setDataToSpinner(arrayList);
 
         buyVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,11 +177,11 @@ public class NewTransactionFragment extends Fragment {
         activity = Activity;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        getActivity().unregisterReceiver(broadcastReceiver);
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        getActivity().unregisterReceiver(broadcastReceiver);
+//    }
 
 
 }

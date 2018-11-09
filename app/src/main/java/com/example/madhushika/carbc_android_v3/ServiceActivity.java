@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -29,6 +30,8 @@ import Objects.ServiceType;
 import Objects.SparePartData;
 
 import controller.Controller;
+import core.connection.BlockJDBCDAO;
+import core.connection.IdentityJDBC;
 
 public class ServiceActivity extends AppCompatActivity {
     private ListView listView;
@@ -37,13 +40,13 @@ public class ServiceActivity extends AppCompatActivity {
     private TextView vehicleNumber;
     private JSONObject serviceDataJSON;
     private JSONObject serviceStationJson;
+    Controller controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
         hideActionBar();
-
 
         ImageView backBtn = (ImageView) findViewById(R.id.back_button);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -55,26 +58,25 @@ public class ServiceActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         vehicleNumber = (TextView) findViewById(R.id.vehicle_number);
-
         vehicleNumber.setText(i.getExtras().getString("vid"));
 
         String vid = i.getExtras().getString("vid");
-
-
+        JSONArray locationList = null;
         //get location and request nearby service stations
 
+        IdentityJDBC identityJDBC = new IdentityJDBC();
+        try {
+            locationList = identityJDBC.getPeersByLocation("Moratuwa");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
+        ArrayList<ServiceStation> locationArray = getServiceStation(locationList);
+        setArrayAdaptersToLocationList(locationArray);
 
-        //getServiceStation(received json)
+        controller = new Controller();
 
-        //setArrayAdaptersToLocationList
-        final Controller controller = new Controller();
-
-        controller.requestTransactionDataTest("repair&service","23456","2018/05/21", "pqr567");
         registerReceiver(broadcastReceiver, new IntentFilter("ReceivedTransactionData"));
-
-
-
 
         //catch the response and stop activity indicator
         //getServiceTypes(response)
@@ -87,7 +89,6 @@ public class ServiceActivity extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(ServiceActivity.this);
                 builder.setTitle("Add a Transaction");
                 builder.setMessage("Do you really need to add this transaction? ");
@@ -318,10 +319,10 @@ public class ServiceActivity extends AppCompatActivity {
     }
 
 
-    private ArrayList<ServiceStation> getServiceStation(JSONObject object) {
+    private ArrayList<ServiceStation> getServiceStation(JSONArray serviceStationJSonArray) {
         ArrayList<ServiceStation> serviceStations = new ArrayList<>();
         try {
-            JSONArray serviceStationJSonArray = object.getJSONArray("data");
+            //JSONArray serviceStationJSonArray = object.getJSONArray("data");
 
             for (int i = 0; i < serviceStationJSonArray.length(); i++) {
                 JSONObject station = serviceStationJSonArray.getJSONObject(i);
@@ -331,7 +332,9 @@ public class ServiceActivity extends AppCompatActivity {
                 String publicKey = station.getString("publicKey");
                 String role = station.getString("role");
                 ServiceStation serviceStation = new ServiceStation(name,address,publicKey,role);
+                serviceStations.add(serviceStation);
             }
+            System.out.println();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -402,7 +405,10 @@ public class ServiceActivity extends AppCompatActivity {
                 select.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        serviceStationJson = new JSONObject((Map) serviceStation);
+
+                        controller.requestTransactionDataTest("repair&service","23456","2018/05/21", serviceStation.getPublicKey());
+
+                        //serviceStationJson = new JSONObject((Map) serviceStation);
                     }
                 });
 
