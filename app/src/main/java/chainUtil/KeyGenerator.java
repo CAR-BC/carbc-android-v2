@@ -4,13 +4,10 @@ package chainUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.security.KeyFactory;
@@ -156,12 +153,15 @@ public class KeyGenerator {
     }
 
     public PublicKey getPublicKey() {
-        File pk = new File("sdcard/public.key");
-        if (pk == null) {
-            log.info("inside getPublicKey if statement");
+        PublicKey publicKey = null;
+        try{
+            FileInputStream pk = new FileInputStream("sdcard/publicKey.key");
+        }catch (FileNotFoundException e) {
             generateKeyPair();
+        }finally {
+            publicKey = loadPublicKey();
         }
-        return loadPublicKey();
+        return publicKey;
     }
 
     public PublicKey getPublicKey(String hexvalue) {
@@ -258,33 +258,4 @@ public class KeyGenerator {
         System.out.println("PublicKey" + publicKey);
     }
 
-    public static void writeToFile(String text, String fileName)
-    {
-        File logFile = new File("sdcard/log"+fileName+".txt");
-        if (!logFile.exists())
-        {
-            try
-            {
-                logFile.createNewFile();
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        try
-        {
-            //BufferedWriter for performance, true to set append to file flag
-            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
-            buf.append(text);
-            buf.newLine();
-            buf.close();
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 }
