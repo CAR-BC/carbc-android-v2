@@ -95,7 +95,6 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                             object.put("ThirdParty",new JSONObject());
 
 
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

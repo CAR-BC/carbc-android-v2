@@ -1,6 +1,9 @@
 package com.example.madhushika.carbc_android_v3;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +22,10 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
+
+import core.connection.BlockJDBCDAO;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -26,6 +33,8 @@ public class MainActivity extends AppCompatActivity
     private FragmentTransaction transaction;
     private NewTransactionFragment newTransactionFragment;
     private UnregisteredNewTransactionFragment unregisteredNewTransactionFragment;
+
+    static ArrayList<String>  vehicle_numbers = new ArrayList<>();
 
     private static MainActivity activity;
 
@@ -35,15 +44,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity
 
         ImageButton notifBtn = (ImageButton) findViewById(R.id.notificationBtn);
         ImageButton searchBtn = (ImageButton) findViewById(R.id.searchBtn);
+
+      //  registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
+
 
         notifBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,28 +82,24 @@ public class MainActivity extends AppCompatActivity
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
 
-        SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);
-        boolean ownershipStored = preferences.getBoolean("ownership", false);
+        BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
 
-    //    if (ownershipStored){
+
+        if (vehicle_numbers.size()==0){
+            unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
+            transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
+        }else {
             newTransactionFragment = new NewTransactionFragment();
-//        open home fragment
             transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
-    //    }else {
-//            unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
-//            transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
-
-       // }
+        }
 
         transaction.commit();
 
         NewTransactionFragment.setActivity(activity);
-
-
         NavigationHandler.setManager(manager);
-
-
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -147,7 +146,6 @@ public class MainActivity extends AppCompatActivity
 //            NavigationHandler.navigateTo("SearchVehicleFragment");
             Intent i = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(i);
-
 
         } else if (id == R.id.navigation_notifications) {
             //NavigationHandler.navigateTo("NotificationFragment");

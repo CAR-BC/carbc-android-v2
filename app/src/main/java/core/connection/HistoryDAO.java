@@ -126,8 +126,13 @@ public class HistoryDAO implements AsyncResponse {
     @Override
     public JSONArray processFinish(JSONArray output) {
         System.out.println("process finish executed");
-        this.jsonArray = output;
-        return output;
+        if (output.length()==0){
+            this.jsonArray.put("nullResultFound");
+        }
+        else {
+            this.jsonArray = output;
+        }
+        return jsonArray;
     }
 }
 

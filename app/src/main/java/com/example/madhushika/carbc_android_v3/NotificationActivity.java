@@ -3,6 +3,7 @@ package com.example.madhushika.carbc_android_v3;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -42,6 +43,9 @@ public class NotificationActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        registerReceiver(broadcastReceiver, new IntentFilter("NotificationActivity"));
+
 
     }
 

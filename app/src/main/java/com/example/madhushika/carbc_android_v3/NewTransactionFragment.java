@@ -151,7 +151,7 @@ public class NewTransactionFragment extends Fragment {
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String str = intent.getStringExtra("nyVehicles");
+            String str = intent.getStringExtra("myVehicles");
             ArrayList<String> arrayList = new ArrayList<>();
             setDataToSpinner(arrayList);
 
@@ -173,7 +173,7 @@ public class NewTransactionFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        activity.unregisterReceiver(broadcastReceiver);
+        getActivity().unregisterReceiver(broadcastReceiver);
     }
 
 
