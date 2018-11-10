@@ -2,8 +2,10 @@ package core.connection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import HelperInterface.AsyncResponse;
 
@@ -11,16 +13,17 @@ import static core.connection.BlockJDBCDAO.base_url;
 
 public class VehicleJDBCDAO implements AsyncResponse {
     JSONArray jsonArray;
+    public static HashMap<String, String> vehicleNumbersWithRegistrationNumbers;
 
 
-    public ArrayList<String> getRegistrationNumbers(String current_owner){
+    public ArrayList<String> getRegistrationNumbers(String current_owner) {
         APICaller apiCaller = new APICaller();
         jsonArray = null;
         apiCaller.delegate = this;
         ArrayList<String> arrayList = new ArrayList<>();
-
+        vehicleNumbersWithRegistrationNumbers = new HashMap<>();
         try {
-            apiCaller.execute(base_url + "findmyvehiclenumbers?current_owner="+ current_owner, "GET", "v", "g");
+            apiCaller.execute(base_url + "findmyvehiclenumbers?current_owner=" + current_owner, "GET", "v", "g");
             while (jsonArray == null) {
                 try {
                     Thread.sleep(1000);
@@ -32,10 +35,13 @@ public class VehicleJDBCDAO implements AsyncResponse {
             e.printStackTrace();
         }
         try {
-            if (jsonArray.getBoolean(0)){
+            if (jsonArray.getBoolean(0)) {
                 JSONArray array = jsonArray.getJSONArray(1);
-                for (int i = 0; i<array.length();i++){
-                    arrayList.add(array.getString(i));
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject object = array.getJSONObject(i);
+                    arrayList.add(object.getString("registration_number"));
+                    vehicleNumbersWithRegistrationNumbers.put(object.getString("registration_number")
+                            ,object.getString("vehicle_id"));
                 }
             }
         } catch (JSONException e) {
@@ -44,7 +50,7 @@ public class VehicleJDBCDAO implements AsyncResponse {
         return arrayList;
     }
 
-    public void addDataToVehicle(){
+    public void addDataToVehicle() {
 
     }
 

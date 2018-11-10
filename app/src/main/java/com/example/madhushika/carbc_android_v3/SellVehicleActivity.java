@@ -29,6 +29,7 @@ import core.blockchain.Transaction;
 import core.connection.APICaller;
 import core.connection.BlockJDBCDAO;
 import core.connection.Identity;
+import core.connection.VehicleJDBCDAO;
 import network.Node;
 import network.communicationHandler.MessageSender;
 
@@ -66,7 +67,7 @@ public class SellVehicleActivity extends AppCompatActivity {
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if ( !previousOwner.getText().toString().isEmpty()) {
                     
                     AlertDialog.Builder builder = new AlertDialog.Builder(SellVehicleActivity.this);
@@ -81,23 +82,26 @@ public class SellVehicleActivity extends AppCompatActivity {
                             JSONObject newOwner = new JSONObject();
                             try {
                                 newOwner.put("name", "Ashan");
-                                //newOwner.put("publicKey", owner.getText().toString());
-                                secondaryParty.put("SecondaryParty", "myKey");
+                                newOwner.put("publicKey", previousOwner.getText().toString());
+                                secondaryParty.put("SecondaryParty", previousOwner.getText().toString());
                                 JSONObject thirdParty = new JSONObject();
-
-                               // object.put("registrationNumber", vid.getText().toString());
-                                object.put("preOwner", "myKey");
-                                object.put("vehicleId", "vehicleId");
+                                object.put("preOwner", KeyGenerator.getInstance().getPublicKeyAsString());
+                                object.put("vehicleId", vid);
                                 object.put("SecondaryParty", secondaryParty);
                                 object.put("ThirdParty", thirdParty);
+
+                                Controller controller = new Controller();
+                                controller.sendTransaction("ExchangeOwnership",
+                                        VehicleJDBCDAO.vehicleNumbersWithRegistrationNumbers.get(vid), object);
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
 
-
                             finish();
                         }
                     });
+
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();

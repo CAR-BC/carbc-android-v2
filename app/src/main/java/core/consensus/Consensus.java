@@ -104,7 +104,7 @@ public class Consensus {
                 }
 
                 AgreementCollector agreementCollector = new AgreementCollector(block);
-                System.out.println("agreementcolletor ID: "+agreementCollector.getAgreementCollectorId());
+                System.out.println("agreement colletor ID: "+agreementCollector.getAgreementCollectorId());
                 agreementCollectors.add(agreementCollector);
                 if (agreementCollector.succeed){
                     String blockHash = block.getBlockHeader().getHash();

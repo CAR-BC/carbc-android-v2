@@ -146,10 +146,26 @@ public class AgreementCollector extends Thread {
                                     System.out.println("I am a spare part provider");
                                     show = false;
                                     //show notification in notification icon 2
+
+                                    MainActivity.criticalNotificationList.add(block);
+                                    Intent intent = new Intent("MainActivity");
+                                    intent.putExtra("newCriticalBlockReceived", "newCriticalBlock");
+                                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                    System.out.println("+++++++++++newCriticalBlockReceived++++++++++");
+                                    MyApp.getContext().sendBroadcast(intent);
                                 }
                             }
                             if (show){
                                 //show notification in notification icon 1
+
+                                MainActivity.notificationList.add(block);
+                                Intent intent = new Intent("MainActivity");
+                                intent.putExtra("newNomApprovedBlockReceived", "newBlock");
+                                System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
+
+                                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                MyApp.getContext().sendBroadcast(intent);
+
                             }
                         }
                         break;

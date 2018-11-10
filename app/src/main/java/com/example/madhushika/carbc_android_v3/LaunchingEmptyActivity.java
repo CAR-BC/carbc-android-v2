@@ -44,6 +44,8 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
         VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
         MainActivity.vehicle_numbers = new ArrayList<>();
         MainActivity.vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
+        MainActivity.notificationList = new ArrayList<>();
+        MainActivity.criticalNotificationList = new ArrayList<>();
 
         SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);
         boolean login_statusStored = preferences.getBoolean("login_status", false);
