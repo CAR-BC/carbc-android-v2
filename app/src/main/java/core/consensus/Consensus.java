@@ -72,13 +72,13 @@ public class Consensus {
 
     public synchronized void handleNonApprovedBlock(Block block) throws SQLException {
         if (!isDuplicateBlock(block)) {
-            if (ChainUtil.signatureVerification(block.getBlockBody().getTransaction().getSender(),
-                    block.getBlockHeader().getSignature(), block.getBlockHeader().getHash())) {
+            if(ChainUtil.signatureVerification(block.getBlockBody().getTransaction().getSender(),
+                    block.getBlockHeader().getSignature(),block.getBlockHeader().getHash())) {
 
                 log.info("signature verified for block: ", block.getBlockHeader().getBlockNumber());
 
                 boolean isPresent = false;
-                if (getNonApprovedBlocks().size() > 0) {
+                if(getNonApprovedBlocks().size()>0) {
                     for (Block b : this.getNonApprovedBlocks()) {
                         if (b.getBlockHeader().getPreviousHash().equals(block.getBlockHeader().getPreviousHash())) {
                             isPresent = true;
@@ -92,11 +92,8 @@ public class Consensus {
                 this.nonApprovedBlocks.add(block);
                 //TODO: should notify the ui
 //                WebSocketMessageHandler.testUpdate(nonApprovedBlocks);
-                //broadcast json
-                Intent intent = new Intent("newBlockReceived");
-                intent.putExtra("newBlockReceived", "newBlockAdded");
-                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                MyApp.getContext().sendBroadcast(intent);
+
+
 
                 if (!isPresent) {
                     TimeKeeper timeKeeper = new TimeKeeper(block.getBlockHeader().getPreviousHash());
@@ -104,9 +101,9 @@ public class Consensus {
                 }
 
                 AgreementCollector agreementCollector = new AgreementCollector(block);
-                System.out.println("agreementcolletor ID: " + agreementCollector.getAgreementCollectorId());
+                System.out.println("agreementcolletor ID: "+agreementCollector.getAgreementCollectorId());
                 agreementCollectors.add(agreementCollector);
-                if (agreementCollector.succeed) {
+                if (agreementCollector.succeed){
                     String blockHash = block.getBlockHeader().getHash();
                     String digitalSignature = ChainUtil.digitalSignature(block.getBlockHeader().getHash());
                     String signedBlock = digitalSignature;
@@ -134,22 +131,23 @@ public class Consensus {
             System.out.println("inside for loop");
 
             if (b.getBlockHeader().getPreviousHash().equals(preBlockHash)) {
+                System.out.println("b.getBlockHeader().getPreviousHash().equals(preBlockHash)");
                 String blockHash = b.getBlockHeader().getHash();
                 AgreementCollector agreementCollector = getAgreementCollector(blockHash);
 
                 synchronized (agreementCollectors) {
                     if (agreementCollector.getMandatoryValidators().size() == 0) {
-                        System.out.println("inside if (agreementCollector.getMandatoryValidators().size() == 0)");
+                        System.out.println("agreementCollector.getMandatoryValidators().size() == 0");
                         int agreementCount = agreementCollector.getAgreements().size();
                         if (agreementCount >= agreementCollector.getThreshold()) {
-                            System.out.println("adding to qualified blocks");
                             qualifiedBlocks.add(b);
 
                             //rating calculations
                             agreementCollector.getRating().setAgreementCount(agreementCount);
                             double rating = agreementCollector.getRating().calRating(agreementCollector.
-                                    getMandatoryArraySize(), agreementCollector.getSecondaryArraySize());
+                                    getMandatoryArraySize(),agreementCollector.getSecondaryArraySize());
                             b.getBlockHeader().setRating(rating);
+                            System.out.println("Rating of the block: " +b.getBlockHeader().getRating());
                             this.agreementCollectors.remove(agreementCollector);
                         }
                     } else {
@@ -211,6 +209,7 @@ public class Consensus {
             blockInfo.setData(block.getBlockBody().getTransaction().getData().toString());
             blockInfo.setAddress(block.getBlockBody().getTransaction().getAddress());
             blockInfo.setValidity(true);
+            blockInfo.setRating(block.getBlockHeader().getRating());
 
             Identity identity = null;
             if (block.getBlockBody().getTransaction().getTransactionId().substring(0, 1).equals("I")) {
