@@ -2,6 +2,7 @@ package core.consensus;
 
 import android.content.Intent;
 
+import com.example.madhushika.carbc_android_v3.MainActivity;
 import com.example.madhushika.carbc_android_v3.MyApp;
 import com.example.madhushika.carbc_android_v3.NotificationActivity;
 
@@ -89,6 +90,11 @@ public class AgreementCollector extends Thread {
                             boolean isAuthorized = false;
                             if (ownershipExchange.isAuthorizedToSeller()){
                                 //show notification to me
+                                MainActivity.notificationList.add(block);
+                                Intent intent = new Intent("newBlockReceived");
+                                intent.putExtra("newNomApprovedBlockReceived", "newBlock");
+                                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                MyApp.getContext().sendBroadcast(intent);
                                 isAuthorized = true;
                             }
 
@@ -98,10 +104,14 @@ public class AgreementCollector extends Thread {
                             if(pubKey.equals(KeyGenerator.getInstance().getPublicKeyAsString())) {
 
                                 if (isAuthorized){
+                                    MainActivity.criticalNotificationList.add(block);
+                                    Intent intent = new Intent("newCriticalBlockReceived");
+                                    intent.putExtra("newCriticalBlockReceived", "newCriticalBlock");
+                                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                    MyApp.getContext().sendBroadcast(intent);
                                     //show agreement notification ui
                                 }
                             }
-
                             JSONObject obj = getIdentityJDBC().getIdentityByRole("RMV");
                             pubKey = obj.getString("publicKey");
                             getMandatoryValidators().add(pubKey);
@@ -116,6 +126,7 @@ public class AgreementCollector extends Thread {
                     case "ServiceRepair":
                         pubKey = secondaryParties.getJSONObject("serviceStation").getString("publicKey");
                         getMandatoryValidators().add(pubKey);
+
 
                         JSONArray sparePartProvider = thirdParties.getJSONArray("SparePartProvider");
                         for (int i = 0; i < sparePartProvider.length(); i++) {
@@ -158,7 +169,7 @@ public class AgreementCollector extends Thread {
                             //show notification to me
                         }
 
-                        NotificationActivity.nonAprovedBlocks.add(block);
+                       // NotificationActivity.nonAprovedBlocks.add(block);
                         JSONObject object = getIdentityJDBC().getIdentityByRole("RMV");
                         pubKey = object.getString("publicKey");
                         getMandatoryValidators().add(pubKey);
