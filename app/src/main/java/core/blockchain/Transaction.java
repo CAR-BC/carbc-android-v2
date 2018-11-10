@@ -80,6 +80,6 @@ public class Transaction {
     public void setAddress() {
         Random random = new Random(System.currentTimeMillis());
         int number = 10000 + Math.abs(random.nextInt(90000));
-        this.address = "V -"+ number;
+        this.address = "V-"+ number;
     }
 }
