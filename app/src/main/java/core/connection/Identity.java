@@ -5,6 +5,11 @@ public class Identity {
     private String public_key;
     private String role;
     private String name;
+
+    public String getLocation() {
+        return location;
+    }
+
     private String location;
 
     public Identity(String block_hash, String public_key, String role, String name, String location){

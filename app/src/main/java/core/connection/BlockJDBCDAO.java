@@ -1,9 +1,14 @@
 package core.connection;
 
+import android.app.Application;
 import android.os.AsyncTask;
+
+import com.example.madhushika.carbc_android_v3.MainActivity;
+import com.example.madhushika.carbc_android_v3.NavigationHandler;
 
 import HelperInterface.AsyncResponse;
 import chainUtil.ChainUtil;
+import chainUtil.KeyGenerator;
 import core.blockchain.BlockInfo;
 
 import org.json.JSONArray;
@@ -21,18 +26,25 @@ public class BlockJDBCDAO implements AsyncResponse {
 
     public boolean addBlockToBlockchain(BlockInfo blockInfo, Identity identity) throws SQLException {
         System.out.println("inside BlockJDBCDAO/addBlockToBlockchain()");
-
         String transactionId = blockInfo.getTransactionId();
         String transactionType = transactionId.substring(0, 1);
+
         APICaller apiCaller = new APICaller();
         APICaller apiCaller1 = new APICaller();
+        APICaller apiCaller2 = new APICaller();
+        APICaller apiCaller3 = new APICaller();
 
         apiCaller.delegate = this;
         apiCaller1.delegate = this;
-
+        apiCaller2.delegate = this;
+        apiCaller3.delegate = this;
 
         if (transactionType.equals("I")) {
-            apiCaller.execute(base_url + "insertInToIdentityTable.php", "GET", "Identity", identity);
+            apiCaller.execute(base_url + "insertidentity?block_hash=" + identity.getBlock_hash() +
+                    "&public_key" + identity.getPublic_key() +
+                    "&role=" + identity.getRole() +
+                    "&name=" + identity.getName()+
+                    "location" + identity.getLocation(), "GET", "Identity", identity);
             while (jsonArray == null) {
                 try {
                     Thread.sleep(1000);
@@ -41,13 +53,11 @@ public class BlockJDBCDAO implements AsyncResponse {
                 }
             }
         }
-
         try {
             int validity = 0;
             if (blockInfo.isValidity()) {
                 validity = 1;
             }
-
             apiCaller1.execute(base_url + "insertblock" +
                     "?previous_hash=" + URLEncoder.encode(blockInfo.getPreviousHash(), "UTF-8") +
                     "&block_hash=" + URLEncoder.encode(blockInfo.getHash(), "UTF-8") +
@@ -58,7 +68,8 @@ public class BlockJDBCDAO implements AsyncResponse {
                     "&sender=" + URLEncoder.encode(blockInfo.getSender(), "UTF-8") +
                     "&event=" + URLEncoder.encode(blockInfo.getEvent(), "UTF-8") +
                     "&data=" + URLEncoder.encode(blockInfo.getData(), "UTF-8") +
-                    "&address=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8"
+                    "&address=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8" )+
+                    "&rating=" + URLEncoder.encode(String.valueOf(blockInfo.getRating()), "UTF-8"
             ), "GET", "BlockInfo", blockInfo);
 
             while (jsonArray == null) {
@@ -67,6 +78,40 @@ public class BlockJDBCDAO implements AsyncResponse {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+
+            if (blockInfo.getEvent().equals("ExchangeOwnership")){
+                String data = blockInfo.getData();
+                JSONObject object = new JSONObject(data);
+                apiCaller2.execute(base_url + "updatevehicle?current_owner=" + URLEncoder.encode(object.getJSONObject("SecondaryParty").getJSONObject("NewOwner").getString("publicKey"), "UTF-8")+
+                        "&vehicle_id=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8" ) , "GET", "Identity", identity);
+                while (jsonArray == null) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            if(blockInfo.getEvent().equals("RegisterVehicle")){
+                String data = blockInfo.getData();
+                JSONObject object = new JSONObject(data);
+                apiCaller3.execute(base_url + "insertintovehicle?registration_number=" + URLEncoder.encode(object.getString("registrationNumber"), "UTF-8" )+
+                        "&vehicle_id=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8" ) +
+                                "&current_owner=" + URLEncoder.encode(object.getString("currentOwner"), "UTF-8" ), "GET", "Identity", "v");
+                while (jsonArray == null) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
+                MainActivity.vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
+
+                NavigationHandler.navigateTo("addtransactionFragment");
             }
 
         } catch (Exception e) {
@@ -230,7 +275,11 @@ public class BlockJDBCDAO implements AsyncResponse {
                 Identity identity = new Identity(block.getString("block_hash"), block.getString("public_key"),
                         block.getString("name"), block.getString("role"), block.getString("location"));
                 try {
-                    apiCaller1.execute(base_url + "insertInToIdentityTable.php", "POST", "Identity", identity);
+                    apiCaller1.execute(base_url + "insertidentity?block_hash=" + identity.getBlock_hash() +
+                            "&public_key" + identity.getPublic_key() +
+                            "&role=" + identity.getRole() +
+                            "&name=" + identity.getName()+
+                            "location" + identity.getLocation(), "GET", "Identity", identity);
                     while (jsonArray == null) {
                         try {
                             Thread.sleep(1000);

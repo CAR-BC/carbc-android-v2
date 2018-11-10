@@ -79,6 +79,8 @@ public class Consensus {
 
                 boolean isPresent = false;
                 if(getNonApprovedBlocks().size()>0) {
+                    System.out.println("if(getNonApprovedBlocks().size()>0)");
+
                     for (Block b : this.getNonApprovedBlocks()) {
                         if (b.getBlockHeader().getPreviousHash().equals(block.getBlockHeader().getPreviousHash())) {
                             isPresent = true;
@@ -89,13 +91,14 @@ public class Consensus {
 
 //                getNonApprovedBlocks().add(block);
 //                addBlockToNonApprovedBlocks(block);
+                System.out.println("this.nonApprovedBlocks size = " + this.nonApprovedBlocks.size());
                 this.nonApprovedBlocks.add(block);
+                System.out.println("this.nonApprovedBlocks size = " + this.nonApprovedBlocks.size());
                 //TODO: should notify the ui
 //                WebSocketMessageHandler.testUpdate(nonApprovedBlocks);
 
-
-
                 if (!isPresent) {
+                    System.out.println("timer on");
                     TimeKeeper timeKeeper = new TimeKeeper(block.getBlockHeader().getPreviousHash());
                     timeKeeper.start();
                 }

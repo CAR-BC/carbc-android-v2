@@ -46,9 +46,6 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
         Button done = (Button) findViewById(R.id.done_btn);
         Button cancel = (Button) findViewById(R.id.cancel_btn);
 
@@ -83,17 +80,16 @@ public class RegisterVehicleActivity extends AppCompatActivity {
 
                         JSONObject object  = new JSONObject();
                         try {
-                            object.put("current_owner",KeyGenerator.getInstance().getPublicKeyAsString());
-                            object.put("engine_number",engineNumber.getText().toString());
-                            object.put("vehicle_class",vehicleClass.getText().toString());
-                            object.put("condition_and_note",condition.getText().toString());
+                            object.put("currentOwner",KeyGenerator.getInstance().getPublicKeyAsString());
+                            object.put("engineNumber",engineNumber.getText().toString());
+                            object.put("vehicleClass",vehicleClass.getText().toString());
+                            object.put("conditionAndNote",condition.getText().toString());
                             object.put("make",make.getText().toString());
                             object.put("model",model.getText().toString());
-                            object.put("year_of_manufacture",manufacturingYear.getText().toString());
-                            object.put("registration_number",registrationNumber.getText().toString());
+                            object.put("yearOfManufacture",manufacturingYear.getText().toString());
+                            object.put("registrationNumber",registrationNumber.getText().toString());
                             object.put("SecondaryParty",new JSONObject());
                             object.put("ThirdParty",new JSONObject());
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -106,7 +102,6 @@ public class RegisterVehicleActivity extends AppCompatActivity {
 
 
                         controller.sendTransaction("RegisterVehicle", null, object);
-
                         finish();
                     }
                 });

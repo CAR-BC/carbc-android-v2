@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "335407113264",
+    "firebase_url": "https://carbc-217717.firebaseio.com",
+    "project_id": "carbc-217717",
+    "storage_bucket": "carbc-217717.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335407113264:android:01fe30d5b027123a",
+        "android_client_info": {
+          "package_name": "com.example.madhushika.carbc_android_v3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "335407113264-oj4q8peqvopvflft6glaist2tdo6el9e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4ngErRVovjqho1mFTm2-JN1oEB3zWs-o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -30,6 +30,8 @@ import core.consensus.Consensus;
 
 public class NotificationActivity extends AppCompatActivity {
     private ListView notification;
+
+    public static ArrayList <Block> nonAprovedBlocks = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +47,7 @@ public class NotificationActivity extends AppCompatActivity {
         });
 
         registerReceiver(broadcastReceiver, new IntentFilter("NotificationActivity"));
-
-
+        setArrayAdapterToNotificationList(nonAprovedBlocks);
     }
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -54,8 +55,8 @@ public class NotificationActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String str = intent.getStringExtra("newBlockReceived");
             if (str.equals("newBlockAdded")){
-                ArrayList <Block> blocks = Consensus.getInstance().getNonApprovedBlocks();
-                setArrayAdapterToNotificationList(blocks);
+                nonAprovedBlocks = new ArrayList<>();
+                setArrayAdapterToNotificationList(nonAprovedBlocks);
             }
         }
     };

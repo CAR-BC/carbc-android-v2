@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +44,8 @@ public class ServiceActivity extends AppCompatActivity {
     private JSONArray sparePartSellerList = new JSONArray();
     Controller controller;
     ArrayList<ServiceStation> stations;
+    JSONArray locationList;
+    ArrayList<ServiceStation> locationArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +66,7 @@ public class ServiceActivity extends AppCompatActivity {
         vehicleNumber.setText(i.getExtras().getString("vid"));
 
         String vid = i.getExtras().getString("vid");
-        JSONArray locationList = null;
+        locationList = null;
         //get location and request nearby service stations
 
         IdentityJDBC identityJDBC = new IdentityJDBC();
@@ -73,7 +76,11 @@ public class ServiceActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ArrayList<ServiceStation> locationArray = getServiceStation(locationList);
+        if (locationList.isNull(0)){
+            Toast.makeText(ServiceActivity.this,"Please select correct service station.",Toast.LENGTH_LONG).show();
+
+        }
+        locationArray = getServiceStation(locationList);
         setArrayAdaptersToLocationList(locationArray);
 
         controller = new Controller();
@@ -436,6 +443,11 @@ public class ServiceActivity extends AppCompatActivity {
                         controller.requestTransactionDataTest("ServiceRepair","23456","2018/05/21", serviceStation.getPublicKey());
 //                        stations.add(serviceStation);
                         //serviceStationJson = new JSONObject((Map) serviceStation);
+
+                        locationArray = new ArrayList<>();
+
+                        locationArray.add(serviceStation);
+                        notifyDataSetChanged();
                     }
                 });
 

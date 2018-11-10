@@ -65,11 +65,12 @@ public class NewTransactionFragment extends Fragment {
         leasePayment =(CardView) view.findViewById(R.id.tr_leasing_payment_vehicle);
         emissionTesting = (CardView) view.findViewById(R.id.tr_emision_vehicle);
 
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("23456");
-        arrayList.add("DF-3561");
-        setDataToSpinner(arrayList);
+//        ArrayList<String> arrayList = new ArrayList<>();
+//        arrayList.add("23456");
+//        arrayList.add("DF-3561");
+//        setDataToSpinner(arrayList);
 
+        setDataToSpinner(MainActivity.vehicle_numbers);
         buyVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
