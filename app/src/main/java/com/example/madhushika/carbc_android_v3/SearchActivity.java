@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,6 +68,8 @@ public class SearchActivity extends AppCompatActivity {
 
 
         ImageView backBtn = (ImageView) findViewById(R.id.back_button);
+
+        final Button reqBtn = (Button) findViewById(R.id.req_more);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,33 +79,60 @@ public class SearchActivity extends AppCompatActivity {
 
         //    registerReceiver(broadcastReceiver, new IntentFilter("SearchActivity"));
 
-
+        reqBtn.setEnabled(false);
         ImageView searchBtn = (ImageView) findViewById(R.id.search_btn);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //search from server and fill the view
-
+                reqBtn.setEnabled(false);
+                JSONArray array = new JSONArray();
+                setArrayAdapterToMoreInfoList(array);
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(reg_no.getWindowToken(), 0);
                 JSONObject data = blockJDBCDAO.getRegistrationInfoByRegistrationNumber(reg_no.getText().toString());
 
                 try {
-                    owner.setText(data.getString("current_owner"));
-                    engine_no.setText(data.getString("engine_number"));
-                    vehicle_class.setText(data.getString("vehicle_class"));
-                    vmodel.setText(data.getString("model"));
-                    year.setText(data.getString("year_of_manufacture"));
-                    condition.setText(data.getString("condition_and_note"));
-                    make.setText(data.getString("make"));
-                    rating.setText(data.getString("rating"));
+                    if (data.getBoolean("status")){
+                        try {
+                            JSONObject vehicleData = data.getJSONObject("data");
+                            owner.setText(vehicleData.getString("current_owner"));
+                            engine_no.setText(vehicleData.getString("engine_number"));
+                            vehicle_class.setText(vehicleData.getString("vehicle_class"));
+                            vmodel.setText(vehicleData.getString("model"));
+                            year.setText(vehicleData.getString("year_of_manufacture"));
+                            condition.setText(vehicleData.getString("condition_and_note"));
+                            make.setText(vehicleData.getString("make"));
+                            rating.setText(vehicleData.getString("rating"));
 
+                            reqBtn.setEnabled(true);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                        owner.setText("N/A");
+                        engine_no.setText("N/A");
+                        vehicle_class.setText("N/A");
+                        vmodel.setText("N/A");
+                        year.setText("N/A");
+                        condition.setText("N/A");
+                        make.setText("N/A");
+                        rating.setText("N/A");
+                        Toast.makeText(SearchActivity.this,"No such vehicle in the system",Toast.LENGTH_LONG).show();
+                        reqBtn.setEnabled(false);
 
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
         });
 
-        Button reqBtn = (Button) findViewById(R.id.req_more);
+
+
+
         reqBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +142,6 @@ public class SearchActivity extends AppCompatActivity {
                 if (vehicledata.length() > 0) {
                     setArrayAdapterToMoreInfoList(vehicledata);
                 }
-
             }
         });
     }
@@ -217,7 +246,6 @@ public class SearchActivity extends AppCompatActivity {
                 String date = data.getString("serviced_date");
                 String rating = object.getString("rating");
 
-                
 
             } catch (JSONException e) {
                 e.printStackTrace();

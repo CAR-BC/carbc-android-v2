@@ -20,11 +20,9 @@ import static core.connection.BlockJDBCDAO.base_url;
 public class NeighbourDAO implements AsyncResponse {
 
     private final Logger log = LoggerFactory.getLogger(NeighbourDAO.class);
-    Connection connection ;
+    Connection connection;
     PreparedStatement ptmt;
     JSONArray jsonArray;
-
-    APICaller apiCaller = new APICaller();
 
 
     public NeighbourDAO() {
@@ -32,11 +30,13 @@ public class NeighbourDAO implements AsyncResponse {
     }
 
     public void saveNeighbours(String nodeID, String ip, int port, String publicKey) {
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
 
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"blockinfo?block_number=", "GET", "v", "g");
+            apiCaller.execute(base_url + "blockinfo?block_number=", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -52,13 +52,16 @@ public class NeighbourDAO implements AsyncResponse {
     }
 
     public void saveNeighboursToDB(String nodeID, String ip, int port) {
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
+
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"insertpeerdetails" +
-                    "?node_id=" + nodeID +
-                    "&ip=" + ip +
-                    "&port=" + port
+            apiCaller.execute(base_url + "insertpeerdetails" +
+                            "?node_id=" + nodeID +
+                            "&ip=" + ip +
+                            "&port=" + port
                     , "GET", "v", "g");
 
             while (jsonArray == null) {
@@ -77,15 +80,17 @@ public class NeighbourDAO implements AsyncResponse {
         saveNeighboursToDB(neighbour.getPeerID(), neighbour.getIp(), neighbour.getPort());
     }
 
-    public void updatePeer(String nodeID, String ip, int port ) {
+    public void updatePeer(String nodeID, String ip, int port) {
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
 
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"updatepeerdetails" +
-                    "?node_id=" + nodeID +
-                    "&ip=" + ip +
-                    "&port=" + port
+            apiCaller.execute(base_url + "updatepeerdetails" +
+                            "?node_id=" + nodeID +
+                            "&ip=" + ip +
+                            "&port=" + port
                     , "GET", "v", "g");
 
             while (jsonArray == null) {
@@ -101,12 +106,14 @@ public class NeighbourDAO implements AsyncResponse {
     }
 
     public Neighbour getPeer(String nodeID) throws SQLException {
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
 
         apiCaller.delegate = this;
         Neighbour neighbour = null;
         try {
 
-            apiCaller.execute(base_url+"findpeer?node_id=" + nodeID, "GET", "v", "g");
+            apiCaller.execute(base_url + "findpeer?node_id=" + nodeID, "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -120,22 +127,29 @@ public class NeighbourDAO implements AsyncResponse {
 
         }
         try {
-            JSONObject object = jsonArray.getJSONObject(0);
-            neighbour = new Neighbour(object.getString("node_id"),object.getString("ip"), (Integer) object.get("port"));
+            if (jsonArray.getBoolean(0)) {
+                JSONArray array = jsonArray.getJSONArray(1);
+                JSONObject object = array.getJSONObject(0);
+                neighbour = new Neighbour(object.getString("node_id"), object.getString("ip"), (Integer) object.get("port"));
+
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-            return neighbour;
-        }
+        return neighbour;
+    }
 
 
     public ArrayList<Neighbour> getPeers() throws SQLException {
+        APICaller apiCaller = new APICaller();
+        JSONArray array = new JSONArray();
+        jsonArray = null;
 
         ArrayList<Neighbour> neighbours = new ArrayList<>();
         try {
 
-            apiCaller.execute(base_url+"findallpeers", "GET", "v", "g");
+            apiCaller.execute(base_url + "findallpeers", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -149,27 +163,33 @@ public class NeighbourDAO implements AsyncResponse {
 
         }
 
-        for (int i = 0; i<jsonArray.length();i++) {
-            JSONObject object = null;
-            try {
-                object = jsonArray.getJSONObject(0);
-                Neighbour neighbour = new Neighbour(object.getString("node_id"),object.getString("ip"), (Integer) object.get("port"));
-                neighbours.add(neighbour);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        try {
+            JSONArray newarray = jsonArray.getJSONArray(1);
+            array = newarray.getJSONArray(0);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = null;
+                try {
+                    object = array.getJSONObject(0);
+                    Neighbour neighbour = new Neighbour(object.getString("node_id"), object.getString("ip"), (Integer) object.get("port"));
+                    neighbours.add(neighbour);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-            return neighbours;
-        }
+
+        return neighbours;
+    }
 
 
     @Override
     public JSONArray processFinish(JSONArray output) {
         System.out.println("process finish executed");
-        if (output.length()==0){
+        if (output.length() == 0) {
             this.jsonArray.put("nullResultFound");
-        }
-        else {
+        } else {
             this.jsonArray = output;
         }
         return jsonArray;

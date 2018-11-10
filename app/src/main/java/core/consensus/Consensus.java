@@ -139,8 +139,10 @@ public class Consensus {
 
                 synchronized (agreementCollectors) {
                     if (agreementCollector.getMandatoryValidators().size() == 0) {
+                        System.out.println("inside if (agreementCollector.getMandatoryValidators().size() == 0)");
                         int agreementCount = agreementCollector.getAgreements().size();
                         if (agreementCount >= agreementCollector.getThreshold()) {
+                            System.out.println("adding to qualified blocks");
                             qualifiedBlocks.add(b);
 
                             //rating calculations

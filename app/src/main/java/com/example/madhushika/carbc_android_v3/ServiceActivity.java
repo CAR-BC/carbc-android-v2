@@ -40,7 +40,9 @@ public class ServiceActivity extends AppCompatActivity {
     private TextView vehicleNumber;
     private JSONObject serviceDataJSON;
     private JSONObject serviceStationJson;
+    private JSONArray sparePartSellerList = new JSONArray();
     Controller controller;
+    ArrayList<ServiceStation> stations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +100,16 @@ public class ServiceActivity extends AppCompatActivity {
                         //get json array and add
                         //call blockchain method
                         try {
-                            serviceDataJSON.put("secondaryParty", serviceStationJson);
+                            serviceDataJSON.put("SecondaryParty", serviceStationJson);
+
+                            JSONObject thirdParty = new JSONObject();
+                            thirdParty.put("SparePartProvider", sparePartSellerList);
+                            serviceDataJSON.put("ThirdParty", thirdParty);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        System.out.println(serviceDataJSON);
                         controller.sendTransaction("ServiceRepair","23456",serviceDataJSON);
                         finish();
                     }
@@ -180,14 +188,17 @@ public class ServiceActivity extends AppCompatActivity {
                 JSONArray spareParts = service.getJSONArray("serviceData");
                 ArrayList<SparePartData> sparePartsArray = new ArrayList<>();
 
-                for (int j = 0; j < spareParts.length(); j++) {
-                    JSONObject sparePart = spareParts.getJSONObject(j);
-                    String seller = sparePart.getString("seller");
-                    String sparePartName = sparePart.getString("sparePart");
+                if (spareParts.length()<0){
+                    for (int j = 0; j < spareParts.length(); j++) {
+                        JSONObject sparePart = spareParts.getJSONObject(j);
+                        sparePartSellerList.put(sparePart.getString("seller"));
+                        String seller = sparePart.getString("seller");
+                        String sparePartName = sparePart.getString("sparePart");
 
-                    SparePartData sparePartData = new SparePartData(seller, sparePartName);
+                        SparePartData sparePartData = new SparePartData(seller, sparePartName);
 
-                    sparePartsArray.add(sparePartData);
+                        sparePartsArray.add(sparePartData);
+                    }
                 }
 
                 ServiceType serviceType = new ServiceType(type, sparePartsArray);
@@ -380,7 +391,7 @@ public class ServiceActivity extends AppCompatActivity {
                 PlaceholderLocation ph = (PlaceholderLocation) cellUser.getTag();
                 final TextView name;
                 TextView address;
-                Button select;
+                final Button select;
 
                 if (ph == null) {
                     name = (TextView) cellUser.findViewById(R.id.service_location_txt);
@@ -406,8 +417,17 @@ public class ServiceActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        controller.requestTransactionDataTest("repair&service","23456","2018/05/21", serviceStation.getPublicKey());
-
+                        serviceStationJson = new JSONObject();
+                        JSONObject serviceStationElem = new JSONObject();
+                        try {
+                            serviceStationElem.put("name", serviceStation.getName());
+                            serviceStationElem.put("publicKey", serviceStation.getPublicKey());
+                            serviceStationJson.put("serviceStation", serviceStationElem);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        controller.requestTransactionDataTest("ServiceRepair","23456","2018/05/21", serviceStation.getPublicKey());
+//                        stations.add(serviceStation);
                         //serviceStationJson = new JSONObject((Map) serviceStation);
                     }
                 });
@@ -415,6 +435,14 @@ public class ServiceActivity extends AppCompatActivity {
                 return cellUser;
             }
         });
+    }
+
+    public JSONArray getSparePartSellerList() {
+        return sparePartSellerList;
+    }
+
+    public void setSparePartSellerList(JSONArray sparePartSellerList) {
+        this.sparePartSellerList = sparePartSellerList;
     }
 
 

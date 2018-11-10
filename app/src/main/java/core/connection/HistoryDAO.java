@@ -24,10 +24,12 @@ public class HistoryDAO implements AsyncResponse {
 
     JSONArray jsonArray;
 
-    APICaller apiCaller = new APICaller();
 
 
     public boolean saveBlockWithAdditionalData(Block block, String data) throws SQLException {
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
+
         apiCaller.delegate = this;
 
         if (block != null) {
@@ -60,7 +62,6 @@ public class HistoryDAO implements AsyncResponse {
                         "&data=" + URLEncoder.encode(blockInfo.getData(),"UTF-8") +
                         "&address=" + URLEncoder.encode(blockInfo.getAddress(),"UTF-8") , "GET", "BlockInfo", blockInfo);
 
-
                 while (jsonArray == null) {
                     try {
                         Thread.sleep(1000);
@@ -79,7 +80,10 @@ public class HistoryDAO implements AsyncResponse {
 
 
     public JSONObject getBlockData(String blockHash) throws SQLException, JSONException {
+        APICaller apiCaller = new APICaller();
+        JSONObject object = new JSONObject();
         apiCaller.delegate = this;
+        jsonArray = null;
 
         try {
 
@@ -97,11 +101,19 @@ public class HistoryDAO implements AsyncResponse {
 
         }
 
-        return jsonArray.getJSONObject(0);
+        if (jsonArray.getBoolean(0)){
+            JSONArray array = jsonArray.getJSONArray(1);
+            object = array.getJSONObject(0);
+        }
+
+        return object;
     }
 
 
     public String getAdditionalData(String blockHash) throws SQLException, JSONException {
+        APICaller apiCaller = new APICaller();
+        String data = "";
+        jsonArray = null;
 
         apiCaller.delegate = this;
 
@@ -118,9 +130,12 @@ public class HistoryDAO implements AsyncResponse {
             }
         } catch (Exception e) {
             e.printStackTrace();
-
         }
-        return jsonArray.getString(0);
+        if (jsonArray.getBoolean(0)){
+            JSONArray array = jsonArray.getJSONArray(1);
+            data = array.getString(0);
+        }
+        return data;
     }
 
     @Override
