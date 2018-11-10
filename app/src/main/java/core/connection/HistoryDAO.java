@@ -4,6 +4,7 @@ import HelperInterface.AsyncResponse;
 import chainUtil.ChainUtil;
 import core.blockchain.Block;
 import core.blockchain.BlockInfo;
+import network.Neighbour;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -148,6 +149,61 @@ public class HistoryDAO implements AsyncResponse {
             this.jsonArray = output;
         }
         return jsonArray;
+    }
+
+    public void setValidity(String blockhash) {
+
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
+        apiCaller.delegate = this;
+
+        try {
+            apiCaller.execute(base_url + "setvalidity" + "?block_hash=" + blockhash, "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public boolean checkExistence(String blockHash) throws SQLException {
+
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
+        apiCaller.delegate = this;
+        boolean exists = false;
+
+        try {
+            apiCaller.execute(base_url + "checkexistence" + "?block_hash=" + blockHash, "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (jsonArray.getBoolean(0)) {
+                JSONArray array = jsonArray.getJSONArray(1);
+                exists = array.getBoolean(0);
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return exists;
     }
 }
 

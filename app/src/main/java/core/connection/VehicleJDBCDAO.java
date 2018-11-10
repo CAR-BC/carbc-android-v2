@@ -48,6 +48,10 @@ public class VehicleJDBCDAO implements AsyncResponse {
 
     }
 
+    public boolean searchVehicleByRegistrationNumber(String registrationNumber) {
+        return true;
+    }
+
     @Override
     public JSONArray processFinish(JSONArray output) {
         System.out.println("process finish executed");

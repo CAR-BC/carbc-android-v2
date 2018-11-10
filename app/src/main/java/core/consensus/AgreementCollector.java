@@ -11,6 +11,8 @@ import config.EventConfigHolder;
 import core.blockchain.Block;
 import core.connection.BlockJDBCDAO;
 import core.connection.IdentityJDBC;
+import core.smartContract.OwnershipExchange;
+import core.smartContract.Registration;
 import network.communicationHandler.MessageSender;
 
 import org.json.JSONArray;
@@ -79,16 +81,37 @@ public class AgreementCollector extends Thread {
                 //TODO: need to check whether parties are real or not before adding to the arrays
                 switch (event) {
                     case "ExchangeOwnership":
-                        pubKey = secondaryParties.getJSONObject("NewOwner").getString("publicKey");
-                        getMandatoryValidators().add(pubKey);
+                        String vehicleId = block.getBlockBody().getTransaction().getAddress();
+                        String sender = block.getBlockBody().getTransaction().getSender();
+                        OwnershipExchange ownershipExchange = new OwnershipExchange(vehicleId, sender);
 
-                        //TODO: invoke show notification
+                        try{
+                            boolean isAuthorized = false;
+                            if (ownershipExchange.isAuthorizedToSeller()){
+                                //show notification to me
+                                isAuthorized = true;
+                            }
 
-                        JSONObject obj = getIdentityJDBC().getIdentityByRole("RMV");
-                        pubKey = obj.getString("publicKey");
-                        getMandatoryValidators().add(pubKey);
+                            pubKey = secondaryParties.getJSONObject("NewOwner").getString("publicKey");
+                            getMandatoryValidators().add(pubKey);
 
-                        break;
+                            if(pubKey.equals(KeyGenerator.getInstance().getPublicKeyAsString())) {
+
+                                if (isAuthorized){
+                                    //show agreement notification ui
+                                }
+                            }
+
+                            JSONObject obj = getIdentityJDBC().getIdentityByRole("RMV");
+                            pubKey = obj.getString("publicKey");
+                            getMandatoryValidators().add(pubKey);
+                            System.out.println("mandatory validators is = " + getMandatoryValidators().size());
+
+                        }catch (NullPointerException e){
+                            System.out.println("error occured in smart contract");
+                        }finally {
+                            break;
+                        }
 
                     case "ServiceRepair":
                         pubKey = secondaryParties.getJSONObject("serviceStation").getString("publicKey");
@@ -129,8 +152,11 @@ public class AgreementCollector extends Thread {
                         break;
 
                     case "RegisterVehicle":
-//                    pubKey = secondaryParties.getJSONObject("RMV")
+                        Registration registrationSmartContract = new Registration(blockData);
 //                            .getString("publicKey");
+                        if (registrationSmartContract.isAuthorized()){
+                            //show notification to me
+                        }
 
                         NotificationActivity.nonAprovedBlocks.add(block);
                         JSONObject object = getIdentityJDBC().getIdentityByRole("RMV");
@@ -192,48 +218,7 @@ public class AgreementCollector extends Thread {
 
     }
 
-//    public void setMandotaryAgreementsOld() {
-//        String event = this.block.getBlockBody().getTransaction().getEvent();
-//
-//        JSONObject eventDetail = EventConfigHolder.getInstance()
-//                .getEventJson()
-//                .getJSONObject(event);
-//
-//        JSONArray mandatoryValidatorArray = eventDetail
-//                .getJSONArray("mandatoryValidators");
-//        // InsuranceCompany, LeasingCompany, RMV, ServiceStation
-//
-//        JSONArray secondaryParties = eventDetail
-//                .getJSONObject("params")
-//                .getJSONArray("secondaryParty");
-//
-//        BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
-//
-//        for (int i = 0; i < mandatoryValidatorArray.length(); i++) {
-//            String validatorRole = mandatoryValidatorArray.getString(i);
-//            boolean isPresent = false;
-//
-//            for (int j = 0; j < secondaryParties.length(); j++) {
-//                JSONObject jsonObject = secondaryParties.getJSONObject(j);
-//                String role = jsonObject.getString("role");
-//
-//                if (role.equals(validatorRole)) {
-//                    String secondaryPartyAddress = jsonObject.getString("address");
-//
-//                    synchronized (this) {
-////                        mandatoryValidators.put(validatorRole, secondaryPartyAddress);
-//                    }
-//
-//                    isPresent = true;
-//                    break;
-//                }
-//            }
-//            if (!isPresent) {
-//
-//            }
-//        }
-//        //now need to check the relevant part is registered as a mandatory validator
-//    }
+
 
     private void sendBlockToNotification(){
         Intent intent = new Intent("ReceivedTransactionData");
