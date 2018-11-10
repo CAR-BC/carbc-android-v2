@@ -12,6 +12,7 @@ import core.blockchain.Block;
 import core.connection.BlockJDBCDAO;
 import core.connection.IdentityJDBC;
 import core.smartContract.OwnershipExchange;
+import core.smartContract.Registration;
 import network.communicationHandler.MessageSender;
 
 import org.json.JSONArray;
@@ -151,8 +152,11 @@ public class AgreementCollector extends Thread {
                         break;
 
                     case "RegisterVehicle":
-//                    pubKey = secondaryParties.getJSONObject("RMV")
+                        Registration registrationSmartContract = new Registration(blockData);
 //                            .getString("publicKey");
+                        if (registrationSmartContract.isAuthorized()){
+                            //show notification to me
+                        }
 
                         NotificationActivity.nonAprovedBlocks.add(block);
                         JSONObject object = getIdentityJDBC().getIdentityByRole("RMV");
