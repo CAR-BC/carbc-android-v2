@@ -334,7 +334,7 @@ public class BlockJDBCDAO implements AsyncResponse {
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url + "getVehicleDetails?event=" + URLEncoder.encode(event, "UTF-8") +
+            apiCaller.execute(base_url + "getVehicleinfo?event=" + URLEncoder.encode(event, "UTF-8") +
                     "&address=" + URLEncoder.encode(vehicleId, "UTF-8").replace("+","%20"), "GET", "v", "g");
 
             while (jsonArray == null) {
