@@ -12,11 +12,7 @@ public class NavigationHandler {
     public static void navigateTo(String fragment) {
 
         FragmentTransaction transaction = manager.beginTransaction();
-        VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
-
-        MainActivity.vehicle_numbers =  vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
-
-        switch (fragment) {
+    switch (fragment) {
             case "addtransactionFragment":
                 if (MainActivity.vehicle_numbers.size() == 0) {
                     if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") == null) {
