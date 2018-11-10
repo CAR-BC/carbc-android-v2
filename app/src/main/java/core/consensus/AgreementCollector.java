@@ -45,6 +45,7 @@ public class AgreementCollector extends Thread {
     private final Logger log = LoggerFactory.getLogger(AgreementCollector.class);
 
     boolean succeed = false;
+    private boolean existence = true;
 
 
     public AgreementCollector(Block block) throws SQLException {
@@ -80,7 +81,6 @@ public class AgreementCollector extends Thread {
                 String myPubKey = KeyGenerator.getInstance().getPublicKeyAsString();
 
 
-
                 //TODO: need to check whether parties are real or not before adding to the arrays
                 switch (event) {
                     case "ExchangeOwnership":
@@ -89,9 +89,9 @@ public class AgreementCollector extends Thread {
 
                         OwnershipExchange ownershipExchange = new OwnershipExchange(vehicleId, sender);
 
-                        try{
+                        try {
 
-                            if (ownershipExchange.isAuthorizedToSeller()){
+                            if (ownershipExchange.isAuthorizedToSeller()) {
 
                                 String newOwnerPubKey = secondaryParties.getJSONObject("NewOwner").getString("publicKey");
                                 getMandatoryValidators().add(newOwnerPubKey);
@@ -101,7 +101,7 @@ public class AgreementCollector extends Thread {
                                 getMandatoryValidators().add(RmvPubKey);
 
 
-                                if(newOwnerPubKey.equals(myPubKey)) {
+                                if (newOwnerPubKey.equals(myPubKey)) {
                                     //show notification icon 2
                                     MainActivity.criticalNotificationList.add(block);
                                     Intent intent = new Intent("newCriticalBlockReceived");
@@ -109,9 +109,9 @@ public class AgreementCollector extends Thread {
                                     intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                                     MyApp.getContext().sendBroadcast(intent);
 
-                                }else if(RmvPubKey.equals(myPubKey)) {
+                                } else if (RmvPubKey.equals(myPubKey)) {
                                     //show notification in service station
-                                }else{
+                                } else {
                                     //show notification icon 1
                                     MainActivity.notificationList.add(block);
                                     Intent intent = new Intent("newBlockReceived");
@@ -123,9 +123,9 @@ public class AgreementCollector extends Thread {
                             }
                             System.out.println("mandatory validators is = " + getMandatoryValidators().size());
 
-                        }catch (NullPointerException e){
+                        } catch (NullPointerException e) {
                             System.out.println("error occurred in smart contract");
-                        }finally {
+                        } finally {
                             break;
                         }
 
@@ -135,14 +135,14 @@ public class AgreementCollector extends Thread {
                         String serviceStationPubKey = secondaryParties.getJSONObject("serviceStation").getString("publicKey");
                         getMandatoryValidators().add(serviceStationPubKey);
 
-                        if (isMandatoryPartyValid("ServiceStation", serviceStationPubKey)){
+                        if (isMandatoryPartyValid("ServiceStation", serviceStationPubKey)) {
 
                             JSONArray sparePartProvider = thirdParties.getJSONArray("SparePartProvider");
-                            for (int i = 0; i < sparePartProvider.length(); i++){
+                            for (int i = 0; i < sparePartProvider.length(); i++) {
                                 String sparePartPubKey = sparePartProvider.getString(i);
                                 getSpecialValidators().add(sparePartPubKey);
 
-                                if(sparePartPubKey.equals(myPubKey)) {
+                                if (sparePartPubKey.equals(myPubKey)) {
                                     System.out.println("I am a spare part provider");
                                     show = false;
                                     //show notification in notification icon 2
@@ -155,7 +155,7 @@ public class AgreementCollector extends Thread {
                                     MyApp.getContext().sendBroadcast(intent);
                                 }
                             }
-                            if (show){
+                            if (show) {
                                 //show notification in notification icon 1
 
                                 MainActivity.notificationList.add(block);
@@ -201,11 +201,19 @@ public class AgreementCollector extends Thread {
                     case "RegisterVehicle":
                         Registration registrationSmartContract = new Registration(blockData);
 //                            .getString("publicKey");
-                        if (registrationSmartContract.isAuthorized()){
+                        if (registrationSmartContract.isAuthorized()) {
                             //show notification to me
+                            JSONObject object = getIdentityJDBC().getIdentityByRole("RMV");
+                            String rmvPubKey = object.getString("publicKey");
+                            if (isMandatoryPartyValid("RMV", rmvPubKey)) {
+                                getMandatoryValidators().add(object.getString("publicKey"));
+                            }
+                        } else {
+                            existence = false;
                         }
 
-                       // NotificationActivity.nonAprovedBlocks.add(block);
+
+                        // NotificationActivity.nonAprovedBlocks.add(block);
                         JSONObject object = getIdentityJDBC().getIdentityByRole("RMV");
                         pubKey = object.getString("publicKey");
                         getMandatoryValidators().add(pubKey);
@@ -251,14 +259,14 @@ public class AgreementCollector extends Thread {
 
     public boolean isMandatoryPartyValid(String role, String pubKey) {
         boolean result = false;
-        try{
+        try {
             IdentityJDBC identityJDBC = new IdentityJDBC();
             JSONObject jsonObject = identityJDBC.getIdentityByAddress(pubKey);
 
             if (role.equals(jsonObject.getString("role"))) {
                 result = true;
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
@@ -266,8 +274,7 @@ public class AgreementCollector extends Thread {
     }
 
 
-
-    private void sendBlockToNotification(){
+    private void sendBlockToNotification() {
         Intent intent = new Intent("ReceivedTransactionData");
         intent.putExtra("nonAprovrdBlock", (Serializable) block);
         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
@@ -389,5 +396,9 @@ public class AgreementCollector extends Thread {
 
     public int getSecondaryArraySize() {
         return specialValidators.size();
+    }
+
+    public boolean isExistence() {
+        return existence;
     }
 }

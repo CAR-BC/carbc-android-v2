@@ -40,6 +40,8 @@ public class VehicleJDBCDAO implements AsyncResponse {
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject object = array.getJSONObject(i);
                     arrayList.add(object.getString("registration_number"));
+                    System.out.println("??????????????????????????????");
+                    System.out.println(object.getString("registration_number"));
                     vehicleNumbersWithRegistrationNumbers.put(object.getString("registration_number")
                             ,object.getString("vehicle_id"));
                 }
