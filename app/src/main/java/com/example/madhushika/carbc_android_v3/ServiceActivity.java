@@ -159,7 +159,9 @@ public class ServiceActivity extends AppCompatActivity {
             try {
                 serviceDataJSON = new JSONObject(str);
                 ArrayList<ServiceType> arrayList = getServiceTypes(new JSONObject(str));
-                System.out.println(arrayList);
+                System.out.println("+++++++++++++++++++++++++++++++++++++++++");
+//                System.out.println(arrayList.get(1).getSpareParts());
+//                System.out.println(arrayList.get(0).getSpareParts().get(0));
                 setArrayAdaptersToServiceTypeList(arrayList);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -188,19 +190,24 @@ public class ServiceActivity extends AppCompatActivity {
                 JSONArray spareParts = service.getJSONArray("serviceData");
                 ArrayList<SparePartData> sparePartsArray = new ArrayList<>();
 
-                if (spareParts.length()<0){
+                if (spareParts.length()>0){
                     for (int j = 0; j < spareParts.length(); j++) {
                         JSONObject sparePart = spareParts.getJSONObject(j);
-                        sparePartSellerList.put(sparePart.getString("seller"));
-                        String seller = sparePart.getString("seller");
-                        String sparePartName = sparePart.getString("sparePart");
-
-                        SparePartData sparePartData = new SparePartData(seller, sparePartName);
-
-                        sparePartsArray.add(sparePartData);
+                        String seller = null;
+                        String sparePartName = null;
+                        if (sparePart.has("seller")){
+                            sparePartSellerList.put(sparePart.getString("seller"));
+                            seller = sparePart.getString("seller");
+                        }
+                        if (sparePart.has("sparePart")){
+                            sparePartName = sparePart.getString("sparePart");
+                        }
+                        if (seller!=null && sparePartName !=null){
+                            SparePartData sparePartData = new SparePartData(seller, sparePartName);
+                            sparePartsArray.add(sparePartData);
+                        }
                     }
                 }
-
                 ServiceType serviceType = new ServiceType(type, sparePartsArray);
                 serviceTypesArray.add(serviceType);
             }
