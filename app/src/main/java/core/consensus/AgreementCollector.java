@@ -76,6 +76,8 @@ public class AgreementCollector extends Thread {
                 String pubKey;
                 secondaryCount = thirdParties.length();
                 rating.setSpecialValidators(secondaryCount);
+                String myPubKey = KeyGenerator.getInstance().getPublicKeyAsString();
+
 
 
                 //TODO: need to check whether parties are real or not before adding to the arrays
@@ -83,44 +85,58 @@ public class AgreementCollector extends Thread {
                     case "ExchangeOwnership":
                         String vehicleId = block.getBlockBody().getTransaction().getAddress();
                         String sender = block.getBlockBody().getTransaction().getSender();
+
                         OwnershipExchange ownershipExchange = new OwnershipExchange(vehicleId, sender);
 
                         try{
-                            boolean isAuthorized = false;
                             if (ownershipExchange.isAuthorizedToSeller()){
-                                //show notification to me
-                                isAuthorized = true;
-                            }
 
-                            pubKey = secondaryParties.getJSONObject("NewOwner").getString("publicKey");
-                            getMandatoryValidators().add(pubKey);
+                                String newOwnerPubKey = secondaryParties.getJSONObject("NewOwner").getString("publicKey");
+                                getMandatoryValidators().add(newOwnerPubKey);
 
-                            if(pubKey.equals(KeyGenerator.getInstance().getPublicKeyAsString())) {
+                                JSONObject obj = getIdentityJDBC().getIdentityByRole("RMV");
+                                String RmvPubKey = obj.getString("publicKey");
+                                getMandatoryValidators().add(RmvPubKey);
 
-                                if (isAuthorized){
-                                    //show agreement notification ui
+                                if(newOwnerPubKey.equals(myPubKey)) {
+                                    //show notification icon 2
+                                }else{
+                                    //show notification icon 1
                                 }
-                            }
 
-                            JSONObject obj = getIdentityJDBC().getIdentityByRole("RMV");
-                            pubKey = obj.getString("publicKey");
-                            getMandatoryValidators().add(pubKey);
+                            }
                             System.out.println("mandatory validators is = " + getMandatoryValidators().size());
 
                         }catch (NullPointerException e){
-                            System.out.println("error occured in smart contract");
+                            System.out.println("error occurred in smart contract");
                         }finally {
                             break;
                         }
 
-                    case "ServiceRepair":
-                        pubKey = secondaryParties.getJSONObject("serviceStation").getString("publicKey");
-                        getMandatoryValidators().add(pubKey);
 
-                        JSONArray sparePartProvider = thirdParties.getJSONArray("SparePartProvider");
-                        for (int i = 0; i < sparePartProvider.length(); i++) {
-                            getSpecialValidators().add(sparePartProvider.getString(i));
+                    case "ServiceRepair":
+                        boolean show = true;
+                        String serviceStationPubKey = secondaryParties.getJSONObject("serviceStation").getString("publicKey");
+                        getMandatoryValidators().add(serviceStationPubKey);
+
+                        if (isMandatoryPartyValid("ServiceStation", serviceStationPubKey)){
+
+                            JSONArray sparePartProvider = thirdParties.getJSONArray("SparePartProvider");
+                            for (int i = 0; i < sparePartProvider.length(); i++){
+                                String sparePartPubKey = sparePartProvider.getString(i);
+                                getSpecialValidators().add(sparePartPubKey);
+
+                                if(sparePartPubKey.equals(myPubKey)) {
+                                    System.out.println("I am a spare part provider");
+                                    show = false;
+                                    //show notification in notification icon 2
+                                }
+                            }
+                            if (show){
+                                //show notification in notification icon 1
+                            }
                         }
+
                         break;
 
                     case "Insure":
