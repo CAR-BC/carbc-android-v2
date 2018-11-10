@@ -24,7 +24,10 @@ import android.widget.ImageButton;
 
 import java.util.ArrayList;
 
+import chainUtil.ChainUtil;
+import chainUtil.KeyGenerator;
 import core.connection.BlockJDBCDAO;
+import core.connection.VehicleJDBCDAO;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity
     private NewTransactionFragment newTransactionFragment;
     private UnregisteredNewTransactionFragment unregisteredNewTransactionFragment;
 
-    static ArrayList<String>  vehicle_numbers = new ArrayList<>();
+    public static ArrayList<String>  vehicle_numbers = new ArrayList<>();
 
     private static MainActivity activity;
 
@@ -59,7 +62,6 @@ public class MainActivity extends AppCompatActivity
 
       //  registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
 
-
         notifBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,16 +84,18 @@ public class MainActivity extends AppCompatActivity
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
 
-        BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
+        VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
 
-//TODO: don't uncomment this part
-//        if (vehicle_numbers.size()==0){
-//            unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
-//            transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
-//        }else {
+        vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
+
+//TODO:  uncomment this part
+        if (vehicle_numbers.size()==0){
+            unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
+            transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
+        }else {
             newTransactionFragment = new NewTransactionFragment();
             transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
-//        }
+        }
 
         transaction.commit();
 

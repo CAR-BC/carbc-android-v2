@@ -16,15 +16,11 @@ public class VehicleJDBCDAO implements AsyncResponse {
     public ArrayList<String> getRegistrationNumbers(String current_owner){
         APICaller apiCaller = new APICaller();
         jsonArray = null;
-
         apiCaller.delegate = this;
         ArrayList<String> arrayList = new ArrayList<>();
 
-
         try {
-
-            apiCaller.execute(base_url + "blockinfo?current_owner="+ current_owner, "GET", "v", "g");
-
+            apiCaller.execute(base_url + "findmyvehiclenumbers?current_owner="+ current_owner, "GET", "v", "g");
             while (jsonArray == null) {
                 try {
                     Thread.sleep(1000);
@@ -32,7 +28,6 @@ public class VehicleJDBCDAO implements AsyncResponse {
                     e.printStackTrace();
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,6 +42,10 @@ public class VehicleJDBCDAO implements AsyncResponse {
             e.printStackTrace();
         }
         return arrayList;
+    }
+
+    public void addDataToVehicle(){
+
     }
 
     @Override

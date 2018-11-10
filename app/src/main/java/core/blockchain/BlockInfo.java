@@ -59,7 +59,6 @@ public class BlockInfo {
     public Timestamp getBlockTime() {
         return block_timestamp;
     }
-
     public String getBlockTimeAsString(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String string  = dateFormat.format(block_timestamp);

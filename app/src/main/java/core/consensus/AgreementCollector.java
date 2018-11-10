@@ -1,5 +1,10 @@
 package core.consensus;
 
+import android.content.Intent;
+
+import com.example.madhushika.carbc_android_v3.MyApp;
+import com.example.madhushika.carbc_android_v3.NotificationActivity;
+
 import chainUtil.ChainUtil;
 import chainUtil.KeyGenerator;
 import config.EventConfigHolder;
@@ -14,6 +19,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.security.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -76,7 +82,6 @@ public class AgreementCollector extends Thread {
                     case "ExchangeOwnership":
                         String vehicleId = block.getBlockBody().getTransaction().getAddress();
                         String sender = block.getBlockBody().getTransaction().getSender();
-
                         OwnershipExchange ownershipExchange = new OwnershipExchange(vehicleId, sender);
 
                         try{
@@ -149,9 +154,10 @@ public class AgreementCollector extends Thread {
 //                    pubKey = secondaryParties.getJSONObject("RMV")
 //                            .getString("publicKey");
 
+                        NotificationActivity.nonAprovedBlocks.add(block);
                         JSONObject object = getIdentityJDBC().getIdentityByRole("RMV");
                         pubKey = object.getString("publicKey");
-                        getMandatoryValidators().add(object.getString("publicKey"));
+                        getMandatoryValidators().add(pubKey);
 
 //                    getMandatoryValidators().add(pubKey);
 
@@ -206,6 +212,15 @@ public class AgreementCollector extends Thread {
         }
         return result;
 
+    }
+
+
+
+    private void sendBlockToNotification(){
+        Intent intent = new Intent("ReceivedTransactionData");
+        intent.putExtra("nonAprovrdBlock", (Serializable) block);
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        MyApp.getContext().sendBroadcast(intent);
     }
 
     public synchronized boolean addAgreedNode(String agreedNode) {

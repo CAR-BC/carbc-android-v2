@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +44,8 @@ public class ServiceActivity extends AppCompatActivity {
     private JSONArray sparePartSellerList = new JSONArray();
     Controller controller;
     ArrayList<ServiceStation> stations;
+    JSONArray locationList;
+    ArrayList<ServiceStation> locationArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +66,7 @@ public class ServiceActivity extends AppCompatActivity {
         vehicleNumber.setText(i.getExtras().getString("vid"));
 
         String vid = i.getExtras().getString("vid");
-        JSONArray locationList = null;
+        locationList = null;
         //get location and request nearby service stations
 
         IdentityJDBC identityJDBC = new IdentityJDBC();
@@ -73,7 +76,11 @@ public class ServiceActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ArrayList<ServiceStation> locationArray = getServiceStation(locationList);
+        if (locationList.isNull(0)){
+            Toast.makeText(ServiceActivity.this,"Please select correct service station.",Toast.LENGTH_LONG).show();
+
+        }
+        locationArray = getServiceStation(locationList);
         setArrayAdaptersToLocationList(locationArray);
 
         controller = new Controller();
@@ -159,7 +166,9 @@ public class ServiceActivity extends AppCompatActivity {
             try {
                 serviceDataJSON = new JSONObject(str);
                 ArrayList<ServiceType> arrayList = getServiceTypes(new JSONObject(str));
-                System.out.println(arrayList);
+                System.out.println("+++++++++++++++++++++++++++++++++++++++++");
+//                System.out.println(arrayList.get(1).getSpareParts());
+//                System.out.println(arrayList.get(0).getSpareParts().get(0));
                 setArrayAdaptersToServiceTypeList(arrayList);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -188,19 +197,24 @@ public class ServiceActivity extends AppCompatActivity {
                 JSONArray spareParts = service.getJSONArray("serviceData");
                 ArrayList<SparePartData> sparePartsArray = new ArrayList<>();
 
-                if (spareParts.length()<0){
+                if (spareParts.length()>0){
                     for (int j = 0; j < spareParts.length(); j++) {
                         JSONObject sparePart = spareParts.getJSONObject(j);
-                        sparePartSellerList.put(sparePart.getString("seller"));
-                        String seller = sparePart.getString("seller");
-                        String sparePartName = sparePart.getString("sparePart");
-
-                        SparePartData sparePartData = new SparePartData(seller, sparePartName);
-
-                        sparePartsArray.add(sparePartData);
+                        String seller = null;
+                        String sparePartName = null;
+                        if (sparePart.has("seller")){
+                            sparePartSellerList.put(sparePart.getString("seller"));
+                            seller = sparePart.getString("seller");
+                        }
+                        if (sparePart.has("sparePart")){
+                            sparePartName = sparePart.getString("sparePart");
+                        }
+                        if (seller!=null && sparePartName !=null){
+                            SparePartData sparePartData = new SparePartData(seller, sparePartName);
+                            sparePartsArray.add(sparePartData);
+                        }
                     }
                 }
-
                 ServiceType serviceType = new ServiceType(type, sparePartsArray);
                 serviceTypesArray.add(serviceType);
             }
@@ -429,6 +443,11 @@ public class ServiceActivity extends AppCompatActivity {
                         controller.requestTransactionDataTest("ServiceRepair","23456","2018/05/21", serviceStation.getPublicKey());
 //                        stations.add(serviceStation);
                         //serviceStationJson = new JSONObject((Map) serviceStation);
+
+                        locationArray = new ArrayList<>();
+
+                        locationArray.add(serviceStation);
+                        notifyDataSetChanged();
                     }
                 });
 
