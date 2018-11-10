@@ -104,7 +104,6 @@ public class Consensus {
                 }
 
                 AgreementCollector agreementCollector = new AgreementCollector(block);
-                System.out.println("agreementcolletor ID: " + agreementCollector.getAgreementCollectorId());
                 if (agreementCollector.isExistence()) {
                     agreementCollectors.add(agreementCollector);
                     if (agreementCollector.succeed) {

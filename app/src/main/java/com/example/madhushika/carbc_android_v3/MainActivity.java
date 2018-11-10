@@ -46,16 +46,15 @@ public class MainActivity extends AppCompatActivity
     TextView criticalNotificationCount;
 
     public static ArrayList<String> vehicle_numbers;
-
-    public static ArrayList<Block> notificationList = new ArrayList<>();
-    public static ArrayList<Block> criticalNotificationList = new ArrayList<>();
-
+    public static ArrayList<Block> notificationList;
+    public static ArrayList<Block> criticalNotificationList;
     private static MainActivity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -73,6 +72,8 @@ public class MainActivity extends AppCompatActivity
 
         notificationCount = (TextView) findViewById(R.id.notificationCount);
         criticalNotificationCount = (TextView) findViewById(R.id.criticalNotificationCount);
+        notificationCount.setText(String.valueOf(notificationList.size()));
+        criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +85,6 @@ public class MainActivity extends AppCompatActivity
         });
 
         registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
-
-        //  registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
 
         notifBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,8 +107,6 @@ public class MainActivity extends AppCompatActivity
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
 
-
-//TODO:  uncomment this part
         if (vehicle_numbers.size() == 0) {
             unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
             transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
@@ -119,7 +116,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         transaction.commit();
-
         NewTransactionFragment.setActivity(activity);
         NavigationHandler.setManager(manager);
     }
@@ -127,15 +123,20 @@ public class MainActivity extends AppCompatActivity
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            String str = "";
+            String str2 = "";
+            str = intent.getStringExtra("newNomApprovedBlockReceived");
+            str2 = intent.getStringExtra("newCriticalBlockReceived");
 
-            String str = intent.getStringExtra("newNomApprovedBlockReceived");
-            String str2 = intent.getStringExtra("newCriticalBlockReceived");
-
-            if (str == "newBlock"){
-                notificationCount.setText(String.valueOf(notificationList.size()));
+            if ((str != null)) {
+                if (str.equals("newBlock")) {
+                    notificationCount.setText(String.valueOf(notificationList.size()));
+                }
             }
-            if (str2== "newCriticalBlock"){
-                criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
+            if ((str2 != null)) {
+                if (str2.equals("newCriticalBlock")) {
+                    criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
+                }
             }
         }
     };
@@ -201,10 +202,16 @@ public class MainActivity extends AppCompatActivity
             NavigationHandler.navigateTo("InfoFragment");
 
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+        @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
+    }
+
 
 }

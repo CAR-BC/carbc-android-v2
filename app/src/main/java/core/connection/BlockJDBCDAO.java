@@ -20,7 +20,7 @@ import java.sql.*;
 
 
 public class BlockJDBCDAO implements AsyncResponse {
-    final static String base_url = "http://192.168.8.102:8080/";
+    final static String base_url = "http://192.168.8.103:8080/";
 
     JSONArray jsonArray;
 
