@@ -72,13 +72,13 @@ public class Consensus {
 
     public synchronized void handleNonApprovedBlock(Block block) throws SQLException {
         if (!isDuplicateBlock(block)) {
-            if(ChainUtil.signatureVerification(block.getBlockBody().getTransaction().getSender(),
-                    block.getBlockHeader().getSignature(),block.getBlockHeader().getHash())) {
+            if (ChainUtil.signatureVerification(block.getBlockBody().getTransaction().getSender(),
+                    block.getBlockHeader().getSignature(), block.getBlockHeader().getHash())) {
 
                 log.info("signature verified for block: ", block.getBlockHeader().getBlockNumber());
 
                 boolean isPresent = false;
-                if(getNonApprovedBlocks().size()>0) {
+                if (getNonApprovedBlocks().size() > 0) {
                     System.out.println("if(getNonApprovedBlocks().size()>0)");
 
                     for (Block b : this.getNonApprovedBlocks()) {
@@ -104,25 +104,22 @@ public class Consensus {
                 }
 
                 AgreementCollector agreementCollector = new AgreementCollector(block);
-                System.out.println("agreementcolletor ID: "+agreementCollector.getAgreementCollectorId());
-                agreementCollectors.add(agreementCollector);
-                if (agreementCollector.succeed){
-                    String blockHash = block.getBlockHeader().getHash();
-                    String digitalSignature = ChainUtil.digitalSignature(block.getBlockHeader().getHash());
-                    String signedBlock = digitalSignature;
-                    Agreement agreement = new Agreement(digitalSignature, signedBlock, blockHash,
-                            KeyGenerator.getInstance().getPublicKeyAsString());
-
-                    Consensus.getInstance().handleAgreement(agreement);
+                System.out.println("agreementcolletor ID: " + agreementCollector.getAgreementCollectorId());
+                if (agreementCollector.isExistence()) {
+                    agreementCollectors.add(agreementCollector);
+                    if (agreementCollector.succeed) {
+                        String blockHash = block.getBlockHeader().getHash();
+                        String digitalSignature = ChainUtil.digitalSignature(block.getBlockHeader().getHash());
+                        String signedBlock = digitalSignature;
+                        Agreement agreement = new Agreement(digitalSignature, signedBlock, blockHash,
+                                KeyGenerator.getInstance().getPublicKeyAsString());
+                        Consensus.getInstance().handleAgreement(agreement);
+                    }
+                    log.info("agreement Collector added, size: {}", agreementCollectors.size());
                 }
-
-                log.info("agreement Collector added, size: {}", agreementCollectors.size());
-
                 //now need to check the relevant party is registered as with desired roles
                 //if want, we can check the validity of the block creator/transaction creator
-
             }
-
         }
     }
 
@@ -148,9 +145,9 @@ public class Consensus {
                             //rating calculations
                             agreementCollector.getRating().setAgreementCount(agreementCount);
                             double rating = agreementCollector.getRating().calRating(agreementCollector.
-                                    getMandatoryArraySize(),agreementCollector.getSecondaryArraySize());
+                                    getMandatoryArraySize(), agreementCollector.getSecondaryArraySize());
                             b.getBlockHeader().setRating(rating);
-                            System.out.println("Rating of the block: " +b.getBlockHeader().getRating());
+                            System.out.println("Rating of the block: " + b.getBlockHeader().getRating());
                             this.agreementCollectors.remove(agreementCollector);
                         }
                     } else {
@@ -260,7 +257,10 @@ public class Consensus {
     //no need of synchronizing
     public void handleAgreement(Agreement agreement) {
         System.out.println("agreement.getBlockHash()" + agreement.getBlockHash());
-        getAgreementCollector(agreement.getBlockHash()).addAgreementForBlock(agreement);
+        if (getAgreementCollector(agreement.getBlockHash()) != null) {
+            getAgreementCollector(agreement.getBlockHash()).addAgreementForBlock(agreement);
+        }
+
     }
 
     //no need of synchronizing
