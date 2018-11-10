@@ -31,7 +31,7 @@ import core.consensus.Consensus;
 public class NotificationActivity extends AppCompatActivity {
     private ListView notification;
 
-    public static ArrayList <Block> nonAprovedBlocks = new ArrayList<>();
+    //public static ArrayList <Block> nonAprovedBlocks = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,20 +46,20 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
-        registerReceiver(broadcastReceiver, new IntentFilter("NotificationActivity"));
-        setArrayAdapterToNotificationList(nonAprovedBlocks);
+       // registerReceiver(broadcastReceiver, new IntentFilter("NotificationActivity"));
+        setArrayAdapterToNotificationList(MainActivity.notificationList);
     }
 
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String str = intent.getStringExtra("newBlockReceived");
-            if (str.equals("newBlockAdded")){
-                nonAprovedBlocks = new ArrayList<>();
-                setArrayAdapterToNotificationList(nonAprovedBlocks);
-            }
-        }
-    };
+//    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            String str = intent.getStringExtra("newBlockReceived");
+//            if (str.equals("newBlockAdded")){
+//                nonAprovedBlocks = new ArrayList<>();
+//                setArrayAdapterToNotificationList(nonAprovedBlocks);
+//            }
+//        }
+//    };
 
     private void setArrayAdapterToNotificationList(final ArrayList<Block> notificationList){
         notification = (ListView) findViewById(R.id.list_view_notification);
@@ -86,11 +86,8 @@ public class NotificationActivity extends AppCompatActivity {
                 View cellUser = null;
 
                 if (convertView == null) {
-
                     //cellUser = inflater.inflate(R.layout.cell_notification, parent, false);
                     cellUser = LayoutInflater.from(NotificationActivity.this).inflate(R.layout.cell_notification, viewGroup, false);
-
-
                 } else {
                     cellUser = convertView;
                 }
@@ -133,6 +130,7 @@ public class NotificationActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Consensus.getInstance().sendAgreementForBlock(block.getBlockHeader().getHash());
                         Toast.makeText(NotificationActivity.this, "Sent your confirmation", Toast.LENGTH_SHORT).show();
+                        MainActivity.notificationList.remove(block);
                     }
                 });
 
@@ -161,9 +159,9 @@ public class NotificationActivity extends AppCompatActivity {
         public Button confirm_tx;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(broadcastReceiver);
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        unregisterReceiver(broadcastReceiver);
+//    }
 }

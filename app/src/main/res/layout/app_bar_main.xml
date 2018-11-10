@@ -50,6 +50,11 @@
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/baseline_notifications_black_24dp" />
 
+            <TextView android:id="@+id/notificationCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/colorRed"/>
 
         </FrameLayout>
 
@@ -75,12 +80,32 @@
         </FrameLayout>
     </LinearLayout>
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:text="@android:string/ok"
+        android:layout_margin="@dimen/fab_margin"/>
+
+    <TextView
+        android:id="@+id/criticalNotificationCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="0"
+        android:elevation="16dp"
+        android:textColor="@android:color/white"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </FrameLayout>
+
+
         <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
 
 </android.support.design.widget.CoordinatorLayout>

@@ -76,8 +76,8 @@ public class ServiceActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (locationList.isNull(0)){
-            Toast.makeText(ServiceActivity.this,"Please select correct service station.",Toast.LENGTH_LONG).show();
+        if (locationList.isNull(0)) {
+            Toast.makeText(ServiceActivity.this, "Please select correct service station.", Toast.LENGTH_LONG).show();
 
         }
         locationArray = getServiceStation(locationList);
@@ -117,7 +117,7 @@ public class ServiceActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         System.out.println(serviceDataJSON);
-                        controller.sendTransaction("ServiceRepair","23456",serviceDataJSON);
+                        controller.sendTransaction("ServiceRepair", "23456", serviceDataJSON);
                         finish();
                     }
                 });
@@ -166,15 +166,13 @@ public class ServiceActivity extends AppCompatActivity {
             try {
                 serviceDataJSON = new JSONObject(str);
                 ArrayList<ServiceType> arrayList = getServiceTypes(new JSONObject(str));
-                System.out.println("+++++++++++++++++++++++++++++++++++++++++");
-//                System.out.println(arrayList.get(1).getSpareParts());
-//                System.out.println(arrayList.get(0).getSpareParts().get(0));
                 setArrayAdaptersToServiceTypeList(arrayList);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     };
+
     private void hideActionBar() {
         //Hide the action bar only if it exists
         if (getSupportActionBar() != null) {
@@ -197,19 +195,19 @@ public class ServiceActivity extends AppCompatActivity {
                 JSONArray spareParts = service.getJSONArray("serviceData");
                 ArrayList<SparePartData> sparePartsArray = new ArrayList<>();
 
-                if (spareParts.length()>0){
+                if (spareParts.length() > 0) {
                     for (int j = 0; j < spareParts.length(); j++) {
                         JSONObject sparePart = spareParts.getJSONObject(j);
                         String seller = null;
                         String sparePartName = null;
-                        if (sparePart.has("seller")){
+                        if (sparePart.has("seller")) {
                             sparePartSellerList.put(sparePart.getString("seller"));
                             seller = sparePart.getString("seller");
                         }
-                        if (sparePart.has("sparePart")){
+                        if (sparePart.has("sparePart")) {
                             sparePartName = sparePart.getString("sparePart");
                         }
-                        if (seller!=null && sparePartName !=null){
+                        if (seller != null && sparePartName != null) {
                             SparePartData sparePartData = new SparePartData(seller, sparePartName);
                             sparePartsArray.add(sparePartData);
                         }
@@ -356,7 +354,7 @@ public class ServiceActivity extends AppCompatActivity {
                 String address = station.getString("location");
                 String publicKey = station.getString("publicKey");
                 String role = station.getString("role");
-                ServiceStation serviceStation = new ServiceStation(name,address,publicKey,role);
+                ServiceStation serviceStation = new ServiceStation(name, address, publicKey, role);
                 serviceStations.add(serviceStation);
             }
             System.out.println();
@@ -440,7 +438,7 @@ public class ServiceActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        controller.requestTransactionDataTest("ServiceRepair","23456","2018/05/21", serviceStation.getPublicKey());
+                        controller.requestTransactionDataTest("ServiceRepair", "23456", "2018/05/21", serviceStation.getPublicKey());
 //                        stations.add(serviceStation);
                         //serviceStationJson = new JSONObject((Map) serviceStation);
 

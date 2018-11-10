@@ -21,11 +21,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import Objects.ServiceType;
 import chainUtil.ChainUtil;
 import chainUtil.KeyGenerator;
+import core.blockchain.Block;
 import core.connection.BlockJDBCDAO;
 import core.connection.VehicleJDBCDAO;
 
@@ -36,8 +42,13 @@ public class MainActivity extends AppCompatActivity
     private FragmentTransaction transaction;
     private NewTransactionFragment newTransactionFragment;
     private UnregisteredNewTransactionFragment unregisteredNewTransactionFragment;
+    TextView notificationCount;
+    TextView criticalNotificationCount;
 
-    public static ArrayList<String>  vehicle_numbers = new ArrayList<>();
+    public static ArrayList<String> vehicle_numbers = new ArrayList<>();
+
+    public static ArrayList<Block> notificationList = new ArrayList<>();
+    public static ArrayList<Block> criticalNotificationList = new ArrayList<>();
 
     private static MainActivity activity;
 
@@ -60,7 +71,21 @@ public class MainActivity extends AppCompatActivity
         ImageButton notifBtn = (ImageButton) findViewById(R.id.notificationBtn);
         ImageButton searchBtn = (ImageButton) findViewById(R.id.searchBtn);
 
-      //  registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
+        notificationCount = (TextView) findViewById(R.id.notificationCount);
+        criticalNotificationCount = (TextView) findViewById(R.id.criticalNotificationCount);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, NotificationActivity.class);
+                startActivity(i);
+            }
+        });
+
+        registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
+
+        //  registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
 
         notifBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +103,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         MainActivity.activity = this;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         manager = getSupportFragmentManager();
@@ -89,10 +113,10 @@ public class MainActivity extends AppCompatActivity
         vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
 
 //TODO:  uncomment this part
-        if (vehicle_numbers.size()==0){
+        if (vehicle_numbers.size() == 0) {
             unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
             transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
-        }else {
+        } else {
             newTransactionFragment = new NewTransactionFragment();
             transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
         }
@@ -103,7 +127,21 @@ public class MainActivity extends AppCompatActivity
         NavigationHandler.setManager(manager);
     }
 
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
+            String str = intent.getStringExtra("newNomApprovedBlockReceived");
+            String str2 = intent.getStringExtra("newCriticalBlockReceived");
+
+            if (str == "newBlock"){
+                notificationCount.setText(String.valueOf(notificationList.size()));
+            }
+            if (str2== "newCriticalBlock"){
+                criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
+            }
+        }
+    };
 
     @Override
     public void onBackPressed() {
@@ -171,4 +209,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

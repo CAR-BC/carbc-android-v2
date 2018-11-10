@@ -2,6 +2,7 @@ package core.consensus;
 
 import android.content.Intent;
 
+import com.example.madhushika.carbc_android_v3.MainActivity;
 import com.example.madhushika.carbc_android_v3.MyApp;
 import com.example.madhushika.carbc_android_v3.NotificationActivity;
 
@@ -89,6 +90,7 @@ public class AgreementCollector extends Thread {
                         OwnershipExchange ownershipExchange = new OwnershipExchange(vehicleId, sender);
 
                         try{
+
                             if (ownershipExchange.isAuthorizedToSeller()){
 
                                 String newOwnerPubKey = secondaryParties.getJSONObject("NewOwner").getString("publicKey");
@@ -98,10 +100,24 @@ public class AgreementCollector extends Thread {
                                 String RmvPubKey = obj.getString("publicKey");
                                 getMandatoryValidators().add(RmvPubKey);
 
+
                                 if(newOwnerPubKey.equals(myPubKey)) {
                                     //show notification icon 2
+                                    MainActivity.criticalNotificationList.add(block);
+                                    Intent intent = new Intent("newCriticalBlockReceived");
+                                    intent.putExtra("newCriticalBlockReceived", "newCriticalBlock");
+                                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                    MyApp.getContext().sendBroadcast(intent);
+
+                                }else if(RmvPubKey.equals(myPubKey)) {
+                                    //show notification in service station
                                 }else{
                                     //show notification icon 1
+                                    MainActivity.notificationList.add(block);
+                                    Intent intent = new Intent("newBlockReceived");
+                                    intent.putExtra("newNomApprovedBlockReceived", "newBlock");
+                                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                    MyApp.getContext().sendBroadcast(intent);
                                 }
 
                             }
@@ -136,7 +152,6 @@ public class AgreementCollector extends Thread {
                                 //show notification in notification icon 1
                             }
                         }
-
                         break;
 
                     case "Insure":
@@ -174,7 +189,7 @@ public class AgreementCollector extends Thread {
                             //show notification to me
                         }
 
-                        NotificationActivity.nonAprovedBlocks.add(block);
+                       // NotificationActivity.nonAprovedBlocks.add(block);
                         JSONObject object = getIdentityJDBC().getIdentityByRole("RMV");
                         pubKey = object.getString("publicKey");
                         getMandatoryValidators().add(pubKey);
