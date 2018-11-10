@@ -14,10 +14,12 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import Objects.ReminderItem;
 import chainUtil.KeyGenerator;
 import controller.Controller;
+import core.connection.VehicleJDBCDAO;
 import network.communicationHandler.MessageSender;
 //import controller.Controller;
 
@@ -39,6 +41,9 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
 //        System.out.println("publickey: " + KeyGenerator.getInstance().getPublicKeyAsString());
 
 
+        VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
+        MainActivity.vehicle_numbers = new ArrayList<>();
+        MainActivity.vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
 
         SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);
         boolean login_statusStored = preferences.getBoolean("login_status", false);

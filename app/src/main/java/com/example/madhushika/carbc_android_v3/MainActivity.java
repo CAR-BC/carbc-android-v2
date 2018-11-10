@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     TextView notificationCount;
     TextView criticalNotificationCount;
 
-    public static ArrayList<String> vehicle_numbers = new ArrayList<>();
+    public static ArrayList<String> vehicle_numbers;
 
     public static ArrayList<Block> notificationList = new ArrayList<>();
     public static ArrayList<Block> criticalNotificationList = new ArrayList<>();
@@ -108,9 +108,6 @@ public class MainActivity extends AppCompatActivity
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
 
-        VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
-
-        vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
 
 //TODO:  uncomment this part
         if (vehicle_numbers.size() == 0) {
