@@ -47,7 +47,7 @@ public class AgreementCollector extends Thread {
         this.identityJDBC = new IdentityJDBC();
         this.mandatoryValidators = new ArrayList<>();
         this.specialValidators = new ArrayList<>();
-        this.threshold = 3;
+        this.threshold = 1;
 
         setMandatoryAgreements();
 
@@ -89,8 +89,7 @@ public class AgreementCollector extends Thread {
                         break;
 
                     case "ServiceRepair":
-                        pubKey = secondaryParties.getJSONObject("ServiceStation").getString("publicKey");
-                        getMandatoryValidators().add(pubKey);
+                        pubKey = secondaryParties.getJSONObject("serviceStation").getString("publicKey");
                         getMandatoryValidators().add(pubKey);
 
                         JSONArray sparePartProvider = thirdParties.getJSONArray("SparePartProvider");
@@ -253,7 +252,7 @@ public class AgreementCollector extends Thread {
                     getAgreements().add(agreement);
                     //check for mandatory
                     if (getMandatoryValidators().contains(agreement.getPublicKey())) {
-                        System.out.println("mandatory validator received");
+                        System.out.println("Agreement received from a mandatory validator");
                         System.out.println(agreement.getPublicKey());
                         getMandatoryValidators().remove(agreement.getPublicKey());
                         // add rating

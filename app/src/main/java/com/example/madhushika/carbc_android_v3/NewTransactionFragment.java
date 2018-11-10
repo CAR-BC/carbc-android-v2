@@ -66,7 +66,7 @@ public class NewTransactionFragment extends Fragment {
         emissionTesting = (CardView) view.findViewById(R.id.tr_emision_vehicle);
 
         ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("AC-2156");
+        arrayList.add("23456");
         arrayList.add("DF-3561");
         setDataToSpinner(arrayList);
 

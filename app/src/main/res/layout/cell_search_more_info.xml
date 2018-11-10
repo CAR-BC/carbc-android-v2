@@ -25,7 +25,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Job : "
+                    android:text="Job      :   "
+                    android:textStyle="bold"
                     android:textSize="20dp"/>
 
                 <TextView
@@ -43,7 +44,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Date : "
+                    android:text="Date     :   "
+                    android:textStyle="bold"
                     android:textSize="20dp"/>
 
                 <TextView
@@ -61,7 +63,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rating : "
+                    android:text="Rating  :   "
+                    android:textStyle="bold"
                     android:textSize="20dp"/>
 
                 <TextView

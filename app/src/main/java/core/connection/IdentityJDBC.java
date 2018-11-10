@@ -18,10 +18,12 @@ public class IdentityJDBC implements AsyncResponse {
 
     JSONArray jsonArray;
 
-    APICaller apiCaller = new APICaller();
 
     //get an identity of a person by address
     public JSONObject getIdentityByAddress(String address) throws SQLException, JSONException {
+        APICaller apiCaller = new APICaller();
+        JSONObject object = new JSONObject();
+        jsonArray = null;
         apiCaller.delegate = this;
         try {
 
@@ -38,11 +40,18 @@ public class IdentityJDBC implements AsyncResponse {
             e.printStackTrace();
 
         }
-        return jsonArray.getJSONObject(0);
+        if (jsonArray.getBoolean(0)){
+            JSONArray array = jsonArray.getJSONArray(1);
+            object = array.getJSONObject(0);
+        }
+        return object;
     }
 
     //get an identity of a person by address
     public JSONObject getIdentityByRole(String role) throws SQLException, JSONException {
+        APICaller apiCaller = new APICaller();
+    JSONObject object = new JSONObject();
+        jsonArray = null;
         apiCaller.delegate = this;
         try {
 
@@ -59,7 +68,11 @@ public class IdentityJDBC implements AsyncResponse {
             e.printStackTrace();
 
         }
-        return jsonArray.getJSONObject(0);
+        if (jsonArray.getBoolean(0)){
+            JSONArray array = jsonArray.getJSONArray(1);
+            object = array.getJSONObject(0);
+        }
+        return object;
     }
 
     public String getPeerPublicKey(String peerID) {
@@ -67,6 +80,9 @@ public class IdentityJDBC implements AsyncResponse {
     }
 
     public JSONArray getPeersByLocation(String location) throws SQLException {
+        APICaller apiCaller = new APICaller();
+        JSONArray array = new JSONArray();
+        jsonArray = null;
         apiCaller.delegate = this;
         try {
 
@@ -83,7 +99,15 @@ public class IdentityJDBC implements AsyncResponse {
             e.printStackTrace();
 
         }
-        return jsonArray;
+        try {
+            if (jsonArray.getBoolean(0)){
+                array = jsonArray.getJSONArray(1);
+                //array = array.getJSONArray(0);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return array;
         }
 
 
