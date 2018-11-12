@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     private UnregisteredNewTransactionFragment unregisteredNewTransactionFragment;
     TextView notificationCount;
     TextView criticalNotificationCount;
+    FloatingActionButton fab;
 
     public static ArrayList<String> vehicle_numbers;
     public static ArrayList<Block> notificationList;
@@ -72,10 +74,11 @@ public class MainActivity extends AppCompatActivity
 
         notificationCount = (TextView) findViewById(R.id.notificationCount);
         criticalNotificationCount = (TextView) findViewById(R.id.criticalNotificationCount);
-        notificationCount.setText(String.valueOf(notificationList.size()));
-        criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
+//        notificationCount.setText(String.valueOf(notificationList.size()));
+//        criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +86,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i);
             }
         });
+        fab.setEnabled(false);
 
         registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
 
@@ -115,6 +119,23 @@ public class MainActivity extends AppCompatActivity
             transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
         }
 
+//        if (MainActivity.vehicle_numbers.size()==0){
+//            Menu menuNav=navigationView.getMenu();
+//            MenuItem nav_item2 = menuNav.findItem(R.id.navigation_status);
+//            nav_item2.setEnabled(false);
+//            MenuItem nav_item3 = menuNav.findItem(R.id.navigation_info);
+//            nav_item3.setEnabled(false);
+//            MenuItem nav_item4 = menuNav.findItem(R.id.navigation_reminders);
+//            nav_item4.setEnabled(false);
+//        }else {
+//            Menu menuNav=navigationView.getMenu();
+//            MenuItem nav_item2 = menuNav.findItem(R.id.navigation_status);
+//            nav_item2.setEnabled(true);
+//            MenuItem nav_item3 = menuNav.findItem(R.id.navigation_info);
+//            nav_item3.setEnabled(true);
+//            MenuItem nav_item4 = menuNav.findItem(R.id.navigation_reminders);
+//            nav_item4.setEnabled(true);
+//        }
         transaction.commit();
         NewTransactionFragment.setActivity(activity);
         NavigationHandler.setManager(manager);
@@ -136,6 +157,7 @@ public class MainActivity extends AppCompatActivity
             if ((str2 != null)) {
                 if (str2.equals("newCriticalBlock")) {
                     criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
+                    fab.setEnabled(true);
                 }
             }
         }
@@ -193,25 +215,32 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.navigation_status) {
-            NavigationHandler.navigateTo("StatusFragment");
+            if (vehicle_numbers.size()==0){
+                NavigationHandler.navigateTo("addtransactionFragment");
+                Toast.makeText(MainActivity.this,"This option will be enable ",Toast.LENGTH_SHORT).show();
+            }else {
+                NavigationHandler.navigateTo("StatusFragment");
+            }
 
         } else if (id == R.id.navigation_reminders) {
-            NavigationHandler.navigateTo("RemindersFragment");
+            if (vehicle_numbers.size()==0){
+                NavigationHandler.navigateTo("addtransactionFragment");
+                Toast.makeText(MainActivity.this,"This option will be enable ",Toast.LENGTH_SHORT).show();
+            }else {
+                NavigationHandler.navigateTo("RemindersFragment");
+            }
 
         } else if (id == R.id.navigation_info) {
-            NavigationHandler.navigateTo("InfoFragment");
+            if (vehicle_numbers.size()==0){
+                NavigationHandler.navigateTo("addtransactionFragment");
+                Toast.makeText(MainActivity.this,"This option will be enable ",Toast.LENGTH_SHORT).show();
 
+            }else {
+                NavigationHandler.navigateTo("InfoFragment");
+            }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-//        @Override
-//    protected void onPause() {
-//        super.onPause();
-//        unregisterReceiver(broadcastReceiver);
-//    }
-
-
 }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,6 +43,10 @@ public class ServiceActivity extends AppCompatActivity {
     private JSONObject serviceDataJSON;
     private JSONObject serviceStationJson;
     private JSONArray sparePartSellerList = new JSONArray();
+    private Button done;
+    private TextView vehicleDetailsText;
+    String regNo;
+    ServiceStation serviceStationSelected;
     Controller controller;
     ArrayList<ServiceStation> stations;
     JSONArray locationList;
@@ -64,6 +69,9 @@ public class ServiceActivity extends AppCompatActivity {
         Intent i = getIntent();
         vehicleNumber = (TextView) findViewById(R.id.vehicle_number);
         vehicleNumber.setText(i.getExtras().getString("vid"));
+        regNo = i.getExtras().getString("vid");
+        locationListView = (ListView) findViewById(R.id.service_location_list);
+        vehicleDetailsText = (TextView) findViewById(R.id.vehicleDetailsText);
 
         String vid = i.getExtras().getString("vid");
         locationList = null;
@@ -82,19 +90,21 @@ public class ServiceActivity extends AppCompatActivity {
         }
         locationArray = getServiceStation(locationList);
         setArrayAdaptersToLocationList(locationArray);
+        setClickListnerToLocationList();
 
         controller = new Controller();
 
         registerReceiver(broadcastReceiver, new IntentFilter("ReceivedTransactionData"));
+
 
         //catch the response and stop activity indicator
         //getServiceTypes(response)
         //set adapter
         //enable buttons
 
-        Button done = (Button) findViewById(R.id.done_btn);
+        done = (Button) findViewById(R.id.done_btn);
         Button cancel = (Button) findViewById(R.id.cancel_btn);
-
+        done.setEnabled(false);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +176,12 @@ public class ServiceActivity extends AppCompatActivity {
             try {
                 serviceDataJSON = new JSONObject(str);
                 ArrayList<ServiceType> arrayList = getServiceTypes(new JSONObject(str));
+                locationArray = new ArrayList<>();
+                locationArray.add(serviceStationSelected);
+                setArrayAdaptersToLocationList(locationArray);
                 setArrayAdaptersToServiceTypeList(arrayList);
+                vehicleDetailsText.setText("Service details");
+                done.setEnabled(true);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -190,9 +205,16 @@ public class ServiceActivity extends AppCompatActivity {
 
             for (int i = 0; i < servicetypes.length(); i++) {
                 JSONObject service = servicetypes.getJSONObject(i);
-                String type = service.getString("serviceType");
+                JSONArray spareParts = null;
+                String type = null;
+                if (service.has("serviceType")) {
+                    type = service.getString("serviceType");
+                }
+                if (service.has("serviceData")) {
+                    spareParts = service.getJSONArray("serviceData");
+                }
 
-                JSONArray spareParts = service.getJSONArray("serviceData");
+
                 ArrayList<SparePartData> sparePartsArray = new ArrayList<>();
 
                 if (spareParts.length() > 0) {
@@ -261,79 +283,79 @@ public class ServiceActivity extends AppCompatActivity {
 
                 Placeholder ph = (Placeholder) cellUser.getTag();
                 TextView serviceType;
-                ListView spareParts;
+                // ListView spareParts;
 
 
                 if (ph == null) {
                     serviceType = (TextView) cellUser.findViewById(R.id.service_type_txt);
-                    spareParts = (ListView) cellUser.findViewById(R.id.list_spare_parts);
+                    //spareParts = (ListView) cellUser.findViewById(R.id.list_spare_parts);
 
 
                     ph = new Placeholder();
                     ph.serviceType = serviceType;
-                    ph.spareParts = spareParts;
+                    // ph.spareParts = spareParts;
 
                     cellUser.setTag(ph);
                 } else {
                     serviceType = ph.serviceType;
-                    spareParts = ph.spareParts;
+                    // spareParts = ph.spareParts;
 
                 }
 
                 serviceType.setText(serviceTypeItem.getServiceType());
-                spareParts.setAdapter(new BaseAdapter() {
-                    @Override
-                    public int getCount() {
-                        return serviceTypeItem.getSpareParts().size();
-                    }
-
-                    @Override
-                    public Object getItem(int position) {
-                        return serviceTypeItem.getSpareParts().get(position);
-                    }
-
-                    @Override
-                    public long getItemId(int position) {
-                        return position;
-                    }
-
-                    @Override
-                    public View getView(int position, View convertView, ViewGroup parent) {
-
-                        final SparePartData sparePart = serviceTypeItem.getSpareParts().get(position);
-                        View cellUserSP = null;
-
-                        if (convertView == null) {
-
-                            cellUserSP = LayoutInflater.from(ServiceActivity.this).inflate(R.layout.cell_service_type,
-                                    parent, false);
-
-                        } else {
-                            cellUserSP = convertView;
-                        }
-
-                        PlaceholderSP ph = (PlaceholderSP) cellUserSP.getTag();
-                        TextView sparePartTxt;
-
-
-                        if (ph == null) {
-                            sparePartTxt = (TextView) cellUserSP.findViewById(R.id.spare_parts_txt);
-
-
-                            ph = new PlaceholderSP();
-                            ph.sparepart = sparePartTxt;
-
-                            cellUserSP.setTag(ph);
-                        } else {
-                            sparePartTxt = ph.sparepart;
-
-                        }
-
-                        sparePartTxt.setText(sparePart.getSparePart());
-
-                        return cellUserSP;
-                    }
-                });
+//                spareParts.setAdapter(new BaseAdapter() {
+//                    @Override
+//                    public int getCount() {
+//                        return serviceTypeItem.getSpareParts().size();
+//                    }
+//
+//                    @Override
+//                    public Object getItem(int position) {
+//                        return serviceTypeItem.getSpareParts().get(position);
+//                    }
+//
+//                    @Override
+//                    public long getItemId(int position) {
+//                        return position;
+//                    }
+//
+//                    @Override
+//                    public View getView(int position, View convertView, ViewGroup parent) {
+//
+//                        final SparePartData sparePart = serviceTypeItem.getSpareParts().get(position);
+//                        View cellUserSP = null;
+//
+//                        if (convertView == null) {
+//
+//                            cellUserSP = LayoutInflater.from(ServiceActivity.this).inflate(R.layout.cell_service_type,
+//                                    parent, false);
+//
+//                        } else {
+//                            cellUserSP = convertView;
+//                        }
+//
+//                        PlaceholderSP ph = (PlaceholderSP) cellUserSP.getTag();
+//                        TextView sparePartTxt;
+//
+//
+//                        if (ph == null) {
+//                            sparePartTxt = (TextView) cellUserSP.findViewById(R.id.spare_parts_txt);
+//
+//
+//                            ph = new PlaceholderSP();
+//                            ph.sparepart = sparePartTxt;
+//
+//                            cellUserSP.setTag(ph);
+//                        } else {
+//                            sparePartTxt = ph.sparepart;
+//
+//                        }
+//
+//                        sparePartTxt.setText(sparePart.getSparePart());
+//
+//                        return cellUserSP;
+//                    }
+//                });
 
                 return cellUser;
             }
@@ -366,8 +388,32 @@ public class ServiceActivity extends AppCompatActivity {
     }
 
 
+    private void setClickListnerToLocationList() {
+
+        locationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                serviceStationJson = new JSONObject();
+                JSONObject serviceStationElem = new JSONObject();
+                try {
+                    serviceStationElem.put("name", locationArray.get(position).getName());
+                    serviceStationElem.put("publicKey", locationArray.get(position).getPublicKey());
+                    serviceStationJson.put("serviceStation", serviceStationElem);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                serviceStationSelected = locationArray.get(position);
+                System.out.println("*********************service station name*********************");
+                System.out.println(locationArray.get(position).getName());
+                controller.requestTransactionDataTest("ServiceRepair", regNo, "2018/05/21", locationArray.get(position).getPublicKey());
+//                        stations.add(serviceStation);
+                //serviceStationJson = new JSONObject((Map) serviceStation);
+            }
+        });
+    }
+
     private void setArrayAdaptersToLocationList(final ArrayList<ServiceStation> locationList) {
-        locationListView = (ListView) findViewById(R.id.service_location_list);
 
         locationListView.setAdapter(new BaseAdapter() {
             @Override
@@ -388,7 +434,7 @@ public class ServiceActivity extends AppCompatActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup viewGroup) {
 
-                final ServiceStation serviceStation = locationList.get(position);
+                ServiceStation serviceStation = locationList.get(position);
                 View cellUser = null;
 
                 if (convertView == null) {
@@ -408,46 +454,23 @@ public class ServiceActivity extends AppCompatActivity {
                 if (ph == null) {
                     name = (TextView) cellUser.findViewById(R.id.service_location_txt);
                     address = (TextView) cellUser.findViewById(R.id.service_location_address_txt);
-                    select = (Button) cellUser.findViewById(R.id.select_location);
+                    // select = (Button) cellUser.findViewById(R.id.select_location);
 
                     ph = new PlaceholderLocation();
                     ph.name = name;
                     ph.address = address;
-                    ph.select = select;
+                    //ph.select = select;
 
                     cellUser.setTag(ph);
                 } else {
                     name = ph.name;
                     address = ph.address;
-                    select = ph.select;
+                    // select = ph.select;
 
                 }
 
                 name.setText(serviceStation.getName());
                 address.setText(serviceStation.getAddress());
-                select.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        serviceStationJson = new JSONObject();
-                        JSONObject serviceStationElem = new JSONObject();
-                        try {
-                            serviceStationElem.put("name", serviceStation.getName());
-                            serviceStationElem.put("publicKey", serviceStation.getPublicKey());
-                            serviceStationJson.put("serviceStation", serviceStationElem);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        controller.requestTransactionDataTest("ServiceRepair", "23456", "2018/05/21", serviceStation.getPublicKey());
-//                        stations.add(serviceStation);
-                        //serviceStationJson = new JSONObject((Map) serviceStation);
-
-                        locationArray = new ArrayList<>();
-
-                        locationArray.add(serviceStation);
-                        notifyDataSetChanged();
-                    }
-                });
 
                 return cellUser;
             }

@@ -49,7 +49,7 @@ public class MessageSender {
             RequestMessage requestIPMessage = MessageCreator.createSpecificMessage(jsonObject, "Register", "0");
             requestIPMessage.addHeader("keepActive", "false");
             log.info("talking to bootsrap node");
-            Node.getInstance().sendMessageToPeer("192.168.8.103", 49154,requestIPMessage);
+            Node.getInstance().sendMessageToPeer("192.168.8.21", 49154,requestIPMessage);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -238,7 +238,7 @@ public class MessageSender {
             jsonObject.put("peerID", peerID);
             jsonObject.put("listeningPort",Node.getInstance().getNodeConfig().getListenerPort());
             RequestMessage peerDetailsRequestMessage = MessageCreator.createMessage(jsonObject, "RequestPeerDetails");
-            Node.getInstance().sendMessageToPeer("192.168.8.103", 49154, peerDetailsRequestMessage);
+            Node.getInstance().sendMessageToPeer("192.168.8.21", 49154, peerDetailsRequestMessage);
             log.info("Peer Details Requested");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -273,7 +273,7 @@ public class MessageSender {
             RequestMessage transactionDetailsMessage = MessageCreator.createSpecificMessage(jsonObject,
                     "TransactionDetails", dataRequester);
             Node.getInstance().sendMessageToPeer(ip, listeningPort, transactionDetailsMessage);
-            log.info("Transaction Details Sent to:  {}", dataRequester);
+                                log.info("Transaction Details Sent to:  {}", dataRequester);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -4,8 +4,13 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorRed">#d10c0c</color>
+    <color name="colorRejectedRed">#f15454</color>
+    <color name="colorYellow">#fffd7b</color>
+    <color name="colorAcceptedGreen">#8eed6b</color>
     <color name="colorgGreen">#248f27</color>
     <color name="colorgWhite">#ffffff</color>
     <color name="colorGreenCell">#e0fddc</color>
+    <color name="colorGreenCellMargin">#041e01</color>
     <color name="colortransparent">#80ffffff</color>
+    <color name="colorBlue">#8082fa75</color>
 </resources>

@@ -199,26 +199,33 @@ public class AgreementCollector extends Thread {
                         break;
 
                     case "RegisterVehicle":
+                        log.info("executing Registration smart contract");
                         Registration registrationSmartContract = new Registration(blockData);
-//                            .getString("publicKey");
-                        if (registrationSmartContract.isAuthorized()) {
-                            //show notification to me
+
+                        if (registrationSmartContract.isAuthorized()){
+                            //show notification in notification icon 1
+                            MainActivity.notificationList.add(block);
+                            Intent intent = new Intent("MainActivity");
+                            intent.putExtra("newNomApprovedBlockReceived", "newBlock");
+                            System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
+
+                            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                            MyApp.getContext().sendBroadcast(intent);
+
+                            log.info("Registration is authorized");
+
                             JSONObject object = getIdentityJDBC().getIdentityByRole("RMV");
                             String rmvPubKey = object.getString("publicKey");
-                            if (isMandatoryPartyValid("RMV", rmvPubKey)) {
+
+                            if (isMandatoryPartyValid("RMV", rmvPubKey)){
                                 getMandatoryValidators().add(object.getString("publicKey"));
+                                log.info("added RMV to mandatory validator array");
+                                log.info("no of mandatory validators: {}", getMandatoryValidators().size());
                             }
-                        } else {
+                        }else{
+                            log.info("Registration is not authorized");
                             existence = false;
                         }
-
-
-                        // NotificationActivity.nonAprovedBlocks.add(block);
-                        JSONObject object = getIdentityJDBC().getIdentityByRole("RMV");
-                        pubKey = object.getString("publicKey");
-                        getMandatoryValidators().add(pubKey);
-
-//                    getMandatoryValidators().add(pubKey);
 
                         break;
 
@@ -303,7 +310,9 @@ public class AgreementCollector extends Thread {
                     if (getMandatoryValidators().contains(agreement.getPublicKey())) {
                         System.out.println("Agreement received from a mandatory validator");
                         System.out.println(agreement.getPublicKey());
+                        System.out.println("mandatory validator size = " + getMandatoryValidators().size());
                         getMandatoryValidators().remove(agreement.getPublicKey());
+                        System.out.println("mandatory validator size = " + getMandatoryValidators().size());
                         // add rating
                     } else if (getSpecialValidators().contains(agreement.getPublicKey())) {
                         getSpecialValidators().remove(agreement.getPublicKey());

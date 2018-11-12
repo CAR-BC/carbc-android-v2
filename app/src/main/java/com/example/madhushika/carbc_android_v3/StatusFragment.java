@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Objects.StatusItem;
+import core.connection.HistoryDAO;
 
 
 /**
@@ -37,36 +38,40 @@ public class StatusFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_status, container, false);
         spinner =(Spinner)view.findViewById(R.id.vehicle_number);
-        List<String> list = new ArrayList<String>();
-        list.add("NW-6060");
-        list.add("WP-2112");
-        list.add("NW-6146");
+//        List<String> list = new ArrayList<String>();
+//        list.add("NW-6060");
+//        list.add("WP-2112");
+//        list.add("NW-6146");
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
-                R.layout.item_spinner, list);
+                R.layout.item_spinner, MainActivity.vehicle_numbers);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
-
         listView = (ListView)view.findViewById(R.id.status_list);
 
-        final StatusItem[] statusItems = new StatusItem[3];
-        StatusItem item1 = new StatusItem("Service","12/05/2018","pending");
-        StatusItem item2 = new StatusItem("Insurance","13/05/2018","added");
-        StatusItem item3 = new StatusItem("Emision testing","02/05/2018","reject");
+//        final StatusItem[] statusItems = new StatusItem[3];
+//        StatusItem item1 = new StatusItem("Service","12/05/2018","pending");
+//        StatusItem item2 = new StatusItem("Insurance","13/05/2018","accepted");
+//        StatusItem item3 = new StatusItem("Emision testing","02/05/2018","rejected");
+//
+//        statusItems[0] = item1;
+//        statusItems[1] = item2;
+//        statusItems[2] = item3;
 
-        statusItems[0] = item1;
-        statusItems[1] = item2;
-        statusItems[2] = item3;
+
+        HistoryDAO historyDAO = new HistoryDAO();
+        final ArrayList<StatusItem> allHistory = historyDAO.getAllHistory();
 
         listView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
-                return statusItems.length;
+                return allHistory.size();
             }
 
             @Override
             public Object getItem(int position) {
-                return statusItems[position];
+                return allHistory.get(position);
             }
 
             @Override
@@ -76,7 +81,7 @@ public class StatusFragment extends Fragment {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                StatusItem statusItem = statusItems[position];
+                StatusItem statusItem = allHistory.get(position);
                 View cellUser = null;
 
                 if (convertView == null) {
@@ -112,6 +117,13 @@ public class StatusFragment extends Fragment {
                 date1.setText(statusItem.getDate1());
                 condition.setText(statusItem.getCondition());
 
+                if (statusItem.getCondition().equalsIgnoreCase("pending")){
+                    condition.setBackgroundResource(R.color.colorYellow);
+                } if (statusItem.getCondition().equalsIgnoreCase("accepted")){
+                    condition.setBackgroundResource(R.color.colorAcceptedGreen);
+                } if (statusItem.getCondition().equalsIgnoreCase("rejected")){
+                    condition.setBackgroundResource(R.color.colorRejectedRed);
+                }
                 return cellUser;
             }
         });

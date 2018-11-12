@@ -2,6 +2,7 @@ package core.consensus;
 
 import android.content.Intent;
 
+import com.example.madhushika.carbc_android_v3.MainActivity;
 import com.example.madhushika.carbc_android_v3.MyApp;
 
 import chainUtil.ChainUtil;
@@ -228,6 +229,7 @@ public class Consensus {
             //TODO: need to check that this is the right block to add based on the previous hash
             BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
             blockJDBCDAO.addBlockToBlockchain(blockInfo, identity);
+            MainActivity.notificationList.remove(block);
         }
     }
 

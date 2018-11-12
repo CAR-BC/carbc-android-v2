@@ -20,6 +20,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import Objects.BlockInfo;
@@ -137,6 +138,9 @@ public class NotificationActivity extends AppCompatActivity {
                 request_more.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Intent intents = new Intent(NotificationActivity.this, ShowMoreInfoNotificationView.class);
+                        intents.putExtra("block", (Serializable) block);
+                        startActivity(intents);
                         //fill
                     }
                 });
@@ -158,10 +162,4 @@ public class NotificationActivity extends AppCompatActivity {
         public Button more_btn;
         public Button confirm_tx;
     }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        unregisterReceiver(broadcastReceiver);
-//    }
 }

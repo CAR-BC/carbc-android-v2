@@ -2,9 +2,11 @@ package core.connection;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.support.design.widget.NavigationView;
 
 import com.example.madhushika.carbc_android_v3.MainActivity;
 import com.example.madhushika.carbc_android_v3.NavigationHandler;
+import com.example.madhushika.carbc_android_v3.R;
 
 import HelperInterface.AsyncResponse;
 import chainUtil.ChainUtil;
@@ -20,7 +22,7 @@ import java.sql.*;
 
 
 public class BlockJDBCDAO implements AsyncResponse {
-    final static String base_url = "http://192.168.8.103:8080/";
+    final static String base_url = "http://192.168.8.21:8080/";
 
     JSONArray jsonArray;
 
@@ -80,6 +82,8 @@ public class BlockJDBCDAO implements AsyncResponse {
                 }
             }
 
+//            MainActivity.notificationList.remove()
+
             if (blockInfo.getEvent().equals("ExchangeOwnership")){
                 String data = blockInfo.getData();
                 JSONObject object = new JSONObject(data);
@@ -92,6 +96,10 @@ public class BlockJDBCDAO implements AsyncResponse {
                         e.printStackTrace();
                     }
                 }
+                VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
+                MainActivity.vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
+
+                NavigationHandler.navigateTo("addtransactionFragment");
             }
 
             if(blockInfo.getEvent().equals("RegisterVehicle")){
@@ -330,11 +338,11 @@ public class BlockJDBCDAO implements AsyncResponse {
     public JSONObject getVehicleInfoByEvent(String vehicleId, String event) throws SQLException, JSONException {
         APICaller apiCaller = new APICaller();
         jsonArray = null;
-
+JSONObject object = new JSONObject();
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url + "getVehicleinfo?event=" + URLEncoder.encode(event, "UTF-8") +
+            apiCaller.execute(base_url + "vehicleinfo?event=" + URLEncoder.encode(event, "UTF-8") +
                     "&address=" + URLEncoder.encode(vehicleId, "UTF-8").replace("+","%20"), "GET", "v", "g");
 
             while (jsonArray == null) {
@@ -348,7 +356,11 @@ public class BlockJDBCDAO implements AsyncResponse {
             e.printStackTrace();
         }
 
-        return jsonArray.getJSONObject(0);
+        if (jsonArray.getBoolean(0)) {
+            JSONArray array = jsonArray.getJSONArray(1);
+            object= array.getJSONObject(0);
+        }
+        return object;
     }
 
 

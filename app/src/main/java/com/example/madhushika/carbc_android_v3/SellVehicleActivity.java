@@ -83,10 +83,10 @@ public class SellVehicleActivity extends AppCompatActivity {
                             try {
                                 newOwner.put("name", "Ashan");
                                 newOwner.put("publicKey", previousOwner.getText().toString());
-                                secondaryParty.put("SecondaryParty", previousOwner.getText().toString());
+                                secondaryParty.put("NewOwner", newOwner);
                                 JSONObject thirdParty = new JSONObject();
                                 object.put("preOwner", KeyGenerator.getInstance().getPublicKeyAsString());
-                                object.put("vehicleId", vid);
+                                object.put("vehicleId", VehicleJDBCDAO.vehicleNumbersWithRegistrationNumbers.get(vid));
                                 object.put("SecondaryParty", secondaryParty);
                                 object.put("ThirdParty", thirdParty);
 

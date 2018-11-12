@@ -30,7 +30,7 @@ public class OwnershipExchange {
 
                 if (vehicleInfo1.length()>0){
                     JSONObject data = new JSONObject(vehicleInfo1.getString("data"));
-                    if ((data.getString("current_owner").equals(sender))){
+                    if ((data.getString("currentOwner").equals(sender))){
                         return true;
                     }
                 }
