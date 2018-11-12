@@ -25,13 +25,13 @@
                 android:layout_height="30dp"
                 android:background="@color/colorGreenCell" />
 
-            <TextView
-                android:layout_marginLeft="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/vehicle_class"
-                android:hint="car"
-                android:textSize="30dp"/>
+            <!--<TextView-->
+                <!--android:layout_marginLeft="15dp"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/vehicle_class"-->
+                <!--android:hint="car"-->
+                <!--android:textSize="30dp"/>-->
 
         </LinearLayout>
 
@@ -53,6 +53,7 @@
                 android:padding="30dp"
                 android:rowCount="4"
                 android:layout_marginTop="150dp">
+                <!--android:layout_marginTop="150dp">-->
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/tr_buy_vehicle"

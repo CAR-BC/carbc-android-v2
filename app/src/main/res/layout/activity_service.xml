@@ -46,22 +46,43 @@
                 android:textSize="20dp" />
         </android.support.v7.widget.Toolbar>
 
-        <TextView
-            android:id="@+id/vehicle_number"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="20dp"
-            android:hint="Vehicle Number"
-            android:padding="20dp"
-            android:textSize="20dp" />
+            android:orientation="horizontal"
+            android:layout_margin="30dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:text="Vehicle Number : "
+                android:textSize="20dp" />
+            <TextView
+                android:id="@+id/vehicle_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="20dp"
+                android:textSize="20dp" />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/service_location_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></ListView>
 
+        <TextView
+            android:id="@+id/vehicleDetailsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:textColor="@color/colorGreenCellMargin"
+            android:textSize="20dp" />
+
         <ListView
+            android:layout_gravity="center"
             android:id="@+id/service_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></ListView>

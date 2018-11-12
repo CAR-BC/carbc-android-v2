@@ -30,6 +30,8 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launching_empty);
 
+        System.out.println(KeyGenerator.getInstance().getPublicKeyAsString());
+
         Controller controller = new Controller();
         controller.startNode();
         MessageSender.requestIP();
@@ -46,6 +48,8 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
         MainActivity.vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
         MainActivity.notificationList = new ArrayList<>();
         MainActivity.criticalNotificationList = new ArrayList<>();
+
+
 
         SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);
         boolean login_statusStored = preferences.getBoolean("login_status", false);

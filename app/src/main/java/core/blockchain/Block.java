@@ -3,6 +3,7 @@ package core.blockchain;
 import chainUtil.ChainUtil;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Block {
+public class Block implements Serializable {
     private BlockHeader blockHeader;
     private BlockBody blockBody;
 

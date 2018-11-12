@@ -3,11 +3,12 @@ package core.blockchain;
 import chainUtil.ChainUtil;
 import core.connection.BlockJDBCDAO;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
-public class BlockHeader {
+public class BlockHeader implements Serializable {
     private String previousHash;
     private String hash;
     private String signature;

@@ -1,6 +1,7 @@
 package core.connection;
 
 import HelperInterface.AsyncResponse;
+import Objects.StatusItem;
 import chainUtil.ChainUtil;
 import core.blockchain.Block;
 import core.blockchain.BlockInfo;
@@ -17,8 +18,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static core.connection.BlockJDBCDAO.base_url;
+import static core.connection.BlockJDBCDAO.convertResultSetIntoJSON;
 
 public class HistoryDAO implements AsyncResponse {
     private final Logger log = LoggerFactory.getLogger(HistoryDAO.class);
@@ -76,7 +79,6 @@ public class HistoryDAO implements AsyncResponse {
             return true;
         }
         return false;
-
     }
 
 
@@ -197,13 +199,67 @@ public class HistoryDAO implements AsyncResponse {
         try {
             if (jsonArray.getBoolean(0)) {
                 JSONArray array = jsonArray.getJSONArray(1);
-                exists = array.getBoolean(0);
+
+                if (array.getInt(0)==1){
+                    exists = true;
+                }else {
+                    exists = false;
+                }
 
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return exists;
+    }
+
+    public ArrayList<StatusItem> getAllHistory(){
+
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
+        apiCaller.delegate = this;
+        ArrayList<StatusItem> statusItems = new ArrayList<>();
+
+        try {
+            apiCaller.execute(base_url + "findallhistory" , "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (jsonArray.getBoolean(0)){
+                JSONArray array = jsonArray.getJSONArray(1);
+                for (int i = 0; i< array.length(); i++){
+                    //TODO: convert json to block info
+
+                    JSONObject object = array.getJSONObject(i);
+                    String job = object.getString("event");
+                    String date = object.getString("block_timestamp").substring(0,9);
+                    String status;
+                    if (object.getBoolean("validity")){
+                         status = "Accepted";
+                    }
+                    else {
+                        status = "rejected";
+                    }
+
+                    StatusItem statusItem = new StatusItem(job,date,status);
+
+                    statusItems.add(statusItem);
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return statusItems;
     }
 }
 

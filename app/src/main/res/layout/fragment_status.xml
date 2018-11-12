@@ -23,13 +23,13 @@
                 android:layout_height="30dp"
                 android:background="@color/colorGreenCell" />
 
-            <TextView
-                android:layout_marginLeft="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/vehicle_class"
-                android:hint="car"
-                android:textSize="30dp"/>
+            <!--<TextView-->
+                <!--android:layout_marginLeft="15dp"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/vehicle_class"-->
+                <!--android:hint="car"-->
+                <!--android:textSize="30dp"/>-->
 
         </LinearLayout>
 

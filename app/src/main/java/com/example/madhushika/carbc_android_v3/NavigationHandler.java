@@ -1,5 +1,6 @@
 package com.example.madhushika.carbc_android_v3;
 
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
@@ -24,11 +25,11 @@ public class NavigationHandler {
                         transaction.hide(manager.findFragmentByTag("addtransactionFragment"));
                     }
                 } else {
-                    if (manager.findFragmentByTag("addtransactionFragment") == null) {
+                   // if (manager.findFragmentByTag("addtransactionFragment") == null) {
                         transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
-                    } else {
-                        transaction.show(manager.findFragmentByTag("addtransactionFragment"));
-                    }
+//                    } else {
+//                        transaction.show(manager.findFragmentByTag("addtransactionFragment"));
+//                    }
                     if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") != null) {
                         transaction.hide(manager.findFragmentByTag("addUnregisteredNewTransactionFragment"));
                     }

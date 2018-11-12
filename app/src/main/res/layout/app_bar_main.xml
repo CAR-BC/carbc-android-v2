@@ -7,16 +7,16 @@
     tools:context=".MainActivity">
 
     <!--<android.support.design.widget.AppBarLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:theme="@style/AppTheme.AppBarOverlay">-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:theme="@style/AppTheme.AppBarOverlay">-->
 
-        <!--<android.support.v7.widget.Toolbar-->
-            <!--android:id="@+id/toolbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="?attr/actionBarSize"-->
-            <!--android:background="?attr/colorPrimary"-->
-            <!--app:popupTheme="@style/AppTheme.PopupOverlay" />-->
+    <!--<android.support.v7.widget.Toolbar-->
+    <!--android:id="@+id/toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="?attr/actionBarSize"-->
+    <!--android:background="?attr/colorPrimary"-->
+    <!--app:popupTheme="@style/AppTheme.PopupOverlay" />-->
 
     <!--</android.support.design.widget.AppBarLayout>-->
 
@@ -26,8 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:orientation="horizontal"
         android:background="@color/colorgGreen"
+        android:orientation="horizontal"
         android:weightSum="12">
 
         <android.support.v7.widget.Toolbar
@@ -50,11 +50,12 @@
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/baseline_notifications_black_24dp" />
 
-            <TextView android:id="@+id/notificationCount"
+            <TextView
+                android:id="@+id/notificationCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="@color/colorRed"/>
+                android:layout_gravity="top|end"
+                android:textColor="@color/colorRed" />
 
         </FrameLayout>
 
@@ -70,13 +71,6 @@
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/baseline_search_black_24dp" />
 
-            <!--<ProgressBar-->
-                <!--android:id="@+id/progressBarLoadingSave"-->
-                <!--style="?android:attr/progressBarStyleSmall"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:progressDrawable="@drawable/circular_loading" />-->
-
         </FrameLayout>
     </LinearLayout>
 
@@ -85,27 +79,26 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:text="@android:string/ok"
-        android:layout_margin="@dimen/fab_margin"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:text="@android:string/ok" />
 
-    <TextView
-        android:id="@+id/criticalNotificationCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="0"
-        android:elevation="16dp"
-        android:textColor="@android:color/white"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/criticalNotificationCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="16dp"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white" />
 
     </FrameLayout>
 
-
-        <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
+    <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
 
 </android.support.design.widget.CoordinatorLayout>

@@ -2,6 +2,7 @@ package core.consensus;
 
 import android.content.Intent;
 
+import com.example.madhushika.carbc_android_v3.MainActivity;
 import com.example.madhushika.carbc_android_v3.MyApp;
 
 import chainUtil.ChainUtil;
@@ -251,7 +252,13 @@ public class Consensus {
 
             //TODO: need to check that this is the right block to add based on the previous hash
             blockJDBCDAO.addBlockToBlockchain(blockInfo, identity);
+            MainActivity.notificationList.remove(block);
+            Intent intent = new Intent("MainActivity");
+            intent.putExtra("newNomApprovedBlockReceived", "newBlock");
+            System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
 
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            MyApp.getContext().sendBroadcast(intent);
             //updating in history table
             updateHistory(block.getBlockHeader().getHash());
         }
