@@ -228,6 +228,9 @@ public class Consensus {
             //TODO: need to check that this is the right block to add based on the previous hash
             BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
             blockJDBCDAO.addBlockToBlockchain(blockInfo, identity);
+
+            //updating in history table
+            updateHistory(block.getBlockHeader().getHash());
         }
     }
 
@@ -332,6 +335,29 @@ public class Consensus {
         this.nonApprovedBlocks.remove(nonApprovedBlock);
 //        setChanged();
 //        notifyObservers();
+    }
+
+    public boolean isItMyBlock(String blockHash) {
+        boolean myBlock = false;
+        try {
+            HistoryDAO historyDAO = new HistoryDAO();
+            boolean exist = historyDAO.checkExistence(blockHash);
+            myBlock = exist;
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return myBlock;
+    }
+
+    public void updateHistory(String blockHash) {
+        if(isItMyBlock(blockHash)) {
+            HistoryDAO historyDAO = new HistoryDAO();
+            historyDAO.setValidity(blockHash);
+            log.info("History Updated for: ", blockHash);
+        }else {
+            log.info("Not My Block");
+        }
     }
 
 }
