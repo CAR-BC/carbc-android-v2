@@ -230,7 +230,12 @@ public class Consensus {
             BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
             blockJDBCDAO.addBlockToBlockchain(blockInfo, identity);
             MainActivity.notificationList.remove(block);
+            Intent intent = new Intent("MainActivity");
+            intent.putExtra("newNomApprovedBlockReceived", "newBlock");
+            System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
 
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            MyApp.getContext().sendBroadcast(intent);
             //updating in history table
             updateHistory(block.getBlockHeader().getHash());
         }

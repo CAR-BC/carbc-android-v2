@@ -54,6 +54,7 @@
                 android:id="@+id/notificationCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
                 android:textColor="@color/colorRed" />
 
         </FrameLayout>

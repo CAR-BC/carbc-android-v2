@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -47,20 +48,19 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
-       // registerReceiver(broadcastReceiver, new IntentFilter("NotificationActivity"));
+        registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
         setArrayAdapterToNotificationList(MainActivity.notificationList);
     }
 
-//    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            String str = intent.getStringExtra("newBlockReceived");
-//            if (str.equals("newBlockAdded")){
-//                nonAprovedBlocks = new ArrayList<>();
-//                setArrayAdapterToNotificationList(nonAprovedBlocks);
-//            }
-//        }
-//    };
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String str = intent.getStringExtra("confirmationSent");
+            if (str.equals("confirmationSent")){
+                setArrayAdapterToNotificationList(MainActivity.notificationList);
+            }
+        }
+    };
 
     private void setArrayAdapterToNotificationList(final ArrayList<Block> notificationList){
         notification = (ListView) findViewById(R.id.list_view_notification);
@@ -132,6 +132,19 @@ public class NotificationActivity extends AppCompatActivity {
                         Consensus.getInstance().sendAgreementForBlock(block.getBlockHeader().getHash());
                         Toast.makeText(NotificationActivity.this, "Sent your confirmation", Toast.LENGTH_SHORT).show();
                         MainActivity.notificationList.remove(block);
+
+                        Intent intent = new Intent("MainActivity");
+                        intent.putExtra("newNomApprovedBlockReceived", "newBlock");
+                        intent.putExtra("confirmationSent", "confirmationSent");
+                        System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
+                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        MyApp.getContext().sendBroadcast(intent);
+
+//                        Intent intent1 = new Intent("NotificationActivity");
+//                        intent.putExtra("confirmationSent", "confirmationSent");
+//                        System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
+//                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+//                        MyApp.getContext().sendBroadcast(intent1);
                     }
                 });
 
@@ -139,7 +152,7 @@ public class NotificationActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intents = new Intent(NotificationActivity.this, ShowMoreInfoNotificationView.class);
-                        intents.putExtra("block", (Serializable) block);
+                        intents.putExtra("block", block);
                         startActivity(intents);
                         //fill
                     }
@@ -162,4 +175,6 @@ public class NotificationActivity extends AppCompatActivity {
         public Button more_btn;
         public Button confirm_tx;
     }
+
+
 }

@@ -2,12 +2,13 @@ package core.blockchain;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-public class Transaction {
+public class Transaction implements Serializable {
     private String transactionId;
     private String sender;
     private String event;

@@ -3,6 +3,7 @@ package com.example.madhushika.carbc_android_v3;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -28,7 +29,7 @@ public class ShowMoreInfoNotificationView extends AppCompatActivity {
 
         Intent i = getIntent();
         Block block = (Block) i.getExtras().get("block");
-        ArrayList<MoreInfoItem> moreInfoItems = new ArrayList<>();
+        final ArrayList<MoreInfoItem> moreInfoItems = new ArrayList<>();
         String data = block.getBlockBody().getTransaction().getData();
         JSONObject object = null;
         try {
@@ -105,25 +106,62 @@ public class ShowMoreInfoNotificationView extends AppCompatActivity {
         listView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
-                return 0;
+                return moreInfoItems.size();
             }
 
             @Override
             public Object getItem(int position) {
-                return null;
+                return moreInfoItems.get(position);
             }
 
             @Override
             public long getItemId(int position) {
-                return 0;
+                return position;
             }
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                return null;
+                MoreInfoItem moreInfoItem = moreInfoItems.get(position);
+                View cellUser = null;
+
+                if (convertView == null) {
+
+                    cellUser = LayoutInflater.from(ShowMoreInfoNotificationView.this).inflate(R.layout.cell_more_info,
+                            parent, false);
+
+                } else {
+                    cellUser = convertView;
+                }
+                Placeholder ph = (Placeholder) cellUser.getTag();
+                TextView key;
+                TextView data;
+
+
+                if (ph == null) {
+                    key = (TextView) cellUser.findViewById(R.id.more_info_heading_txt);
+                    data = (TextView) cellUser.findViewById(R.id.more_info_data_txt);
+
+                    ph = new Placeholder();
+                    ph.key = key;
+                    ph.data = data;
+
+                    cellUser.setTag(ph);
+                } else {
+                    key = ph.key;
+                    data = ph.data;
+
+                }
+
+                key.setText(moreInfoItem.getKey());
+                data.setText(moreInfoItem.getValue());
+
+                return cellUser;
             }
         });
+    }
 
-
+    private class Placeholder {
+        public TextView key;
+        public TextView data;
     }
 }

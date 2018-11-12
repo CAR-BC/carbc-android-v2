@@ -590,4 +590,59 @@ JSONObject object = new JSONObject();
 
         return jsonArray;
     }
+
+    public void setValidity(Boolean validity, String blockhash) {
+
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
+        apiCaller.delegate = this;
+
+        try {
+            apiCaller.execute(base_url + "setvalidityinblockchain" +"?validity="+ validity + "&block_hash=" + blockhash, "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public JSONObject checkPossibilityToAddBlock(String previousHash) throws SQLException {
+        APICaller apiCaller2 = new APICaller();
+        apiCaller2.delegate = this;
+        JSONObject object = new JSONObject();
+        jsonArray = null;
+        try {
+            apiCaller2.execute(base_url + "checkpossibility" + "?pre_block_hash" +  previousHash , "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (jsonArray.getBoolean(0)) {
+                //JSONArray newArry = new JSONArray();
+               JSONArray array = jsonArray.getJSONArray(1);
+               JSONArray array1 = array.getJSONArray(0);
+                object.put("blockHash",array1.getString(0));
+                object.put("blockTimeStamp",array1.getString(1));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
 }

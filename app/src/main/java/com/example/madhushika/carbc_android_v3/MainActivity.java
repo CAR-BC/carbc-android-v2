@@ -146,18 +146,24 @@ public class MainActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent) {
             String str = "";
             String str2 = "";
+            String str3="";
             str = intent.getStringExtra("newNomApprovedBlockReceived");
             str2 = intent.getStringExtra("newCriticalBlockReceived");
-
+            str3 = intent.getStringExtra("confirmationSent");
             if ((str != null)) {
-                if (str.equals("newBlock")) {
-                    notificationCount.setText(String.valueOf(notificationList.size()));
+
+                if (str.equals("newBlock")|| str3.equals("confirmationSent")) {
+                    if ((notificationList.size() != 0)) {
+                        notificationCount.setText(String.valueOf(notificationList.size()));
+                    }
                 }
             }
             if ((str2 != null)) {
                 if (str2.equals("newCriticalBlock")) {
-                    criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
-                    fab.setEnabled(true);
+                    if (criticalNotificationList.size() != 0) {
+                        criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
+                        fab.setEnabled(true);
+                    }
                 }
             }
         }
@@ -215,27 +221,27 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.navigation_status) {
-            if (vehicle_numbers.size()==0){
+            if (vehicle_numbers.size() == 0) {
                 NavigationHandler.navigateTo("addtransactionFragment");
-                Toast.makeText(MainActivity.this,"This option will be enable ",Toast.LENGTH_SHORT).show();
-            }else {
+                Toast.makeText(MainActivity.this, "This option will be enable ", Toast.LENGTH_SHORT).show();
+            } else {
                 NavigationHandler.navigateTo("StatusFragment");
             }
 
         } else if (id == R.id.navigation_reminders) {
-            if (vehicle_numbers.size()==0){
+            if (vehicle_numbers.size() == 0) {
                 NavigationHandler.navigateTo("addtransactionFragment");
-                Toast.makeText(MainActivity.this,"This option will be enable ",Toast.LENGTH_SHORT).show();
-            }else {
+                Toast.makeText(MainActivity.this, "This option will be enable ", Toast.LENGTH_SHORT).show();
+            } else {
                 NavigationHandler.navigateTo("RemindersFragment");
             }
 
         } else if (id == R.id.navigation_info) {
-            if (vehicle_numbers.size()==0){
+            if (vehicle_numbers.size() == 0) {
                 NavigationHandler.navigateTo("addtransactionFragment");
-                Toast.makeText(MainActivity.this,"This option will be enable ",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "This option will be enable ", Toast.LENGTH_SHORT).show();
 
-            }else {
+            } else {
                 NavigationHandler.navigateTo("InfoFragment");
             }
         }

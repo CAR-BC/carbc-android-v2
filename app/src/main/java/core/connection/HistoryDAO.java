@@ -199,7 +199,13 @@ public class HistoryDAO implements AsyncResponse {
         try {
             if (jsonArray.getBoolean(0)) {
                 JSONArray array = jsonArray.getJSONArray(1);
-                exists = array.getBoolean(0);
+
+                if (array.getInt(0)==1){
+                    exists = true;
+                }else {
+                    exists = false;
+                }
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
