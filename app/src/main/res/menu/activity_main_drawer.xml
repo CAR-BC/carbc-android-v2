@@ -28,10 +28,10 @@
                 android:icon="@drawable/outline_assistant_photo_black_24dp"
                 android:title="Status" />
 
-            <item
-                android:id="@+id/navigation_reminders"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="Reminders" />
+            <!--<item-->
+                <!--android:id="@+id/navigation_reminders"-->
+                <!--android:icon="@drawable/ic_menu_slideshow"-->
+                <!--android:title="Reminders" />-->
 
             <item
                 android:id="@+id/navigation_info"

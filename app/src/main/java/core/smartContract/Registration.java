@@ -12,16 +12,17 @@ public class Registration {
     }
 
     public boolean isAuthorized() throws SQLException {
-        boolean isPresent = false;
+        boolean isAuthorized = false;
         try{
             String registrationNumber = data.getString("registrationNumber");
             VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
-            isPresent = vehicleJDBCDAO.searchVehicleByRegistrationNumber(registrationNumber);
+            boolean isPresent = vehicleJDBCDAO.searchVehicleByRegistrationNumber(registrationNumber);
+            isAuthorized = !isPresent;
 
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-            return isPresent;
+            return isAuthorized;
         }
     }
 }

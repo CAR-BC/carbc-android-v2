@@ -14,7 +14,7 @@ public class NavigationHandler {
 
         FragmentTransaction transaction = manager.beginTransaction();
     switch (fragment) {
-            case "addtransactionFragment":
+            case "addtransaction":
                 if (MainActivity.vehicle_numbers.size() == 0) {
                     if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") == null) {
                         transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addUnregisteredNewTransactionFragment");
@@ -136,7 +136,9 @@ public class NavigationHandler {
                 if (manager.findFragmentByTag("StatusFragment") == null) {
                     transaction.add(R.id.contentLayout, new StatusFragment(), "StatusFragment");
                 } else {
-                    transaction.show(manager.findFragmentByTag("StatusFragment"));
+                    transaction.hide(manager.findFragmentByTag("StatusFragment"));
+                    transaction.add(R.id.contentLayout, new StatusFragment(), "StatusFragment");
+
                 }
                 if (manager.findFragmentByTag("addtransactionFragment") != null) {
                     transaction.hide(manager.findFragmentByTag("addtransactionFragment"));

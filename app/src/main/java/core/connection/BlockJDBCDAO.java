@@ -22,7 +22,7 @@ import java.sql.*;
 
 
 public class BlockJDBCDAO implements AsyncResponse {
-    final static String base_url = "http://192.168.8.21:8080/";
+    final static String base_url = "http://192.168.8.102:8080/";
 
     JSONArray jsonArray;
 
@@ -518,14 +518,25 @@ JSONObject object = new JSONObject();
                     JSONObject data = new JSONObject(object.getString("data"));
                     JSONObject vehicleInfo = new JSONObject();
 
-                    vehicleInfo.put("current_owner", object.getString("current_owner"));
-                    vehicleInfo.put("engine_number", data.getString("engine_number"));
-                    vehicleInfo.put("vehicle_class", data.getString("vehicle_class"));
-                    vehicleInfo.put("condition_and_note", data.getString("condition_and_note"));
-                    vehicleInfo.put("make", data.getString("make"));
-                    vehicleInfo.put("model", data.getString("model"));
-                    vehicleInfo.put("year_of_manufacture", data.getString("year_of_manufacture"));
-                    vehicleInfo.put("registration_number", data.getString("registration_number"));
+                    if (data.has("current_owner")){
+                        vehicleInfo.put("current_owner", object.getString("current_owner"));
+                    }
+                    if (data.has("engine_number")){
+                        vehicleInfo.put("engine_number", data.getString("engine_number"));
+                    }
+                    if (data.has("make")){
+                        vehicleInfo.put("make", data.getString("make"));
+                    }
+                    if (data.has("model")){
+                        vehicleInfo.put("model", data.getString("model"));
+
+                    }
+                    if (data.has("chassis_number")){
+                        vehicleInfo.put("chassis_number", data.getString("chassis_number"));
+                    }
+                    if (data.has("registration_number")){
+                        vehicleInfo.put("registration_number", data.getString("registration_number"));
+                    }
                     vehicleInfo.put("rating", object.getDouble("rating"));
                     vehicleInfo.put("address", object.getString("address"));
                     finalObject.put("data", vehicleInfo);
@@ -596,9 +607,15 @@ JSONObject object = new JSONObject();
         APICaller apiCaller = new APICaller();
         jsonArray = null;
         apiCaller.delegate = this;
+        String validityTxt = "";
+        if (validity){
+            validityTxt = "1";
+        } else {
+            validityTxt = "0";
+        }
 
         try {
-            apiCaller.execute(base_url + "setvalidityinblockchain" +"?validity="+ validity + "&block_hash=" + blockhash, "GET", "v", "g");
+            apiCaller.execute(base_url + "setvalidityinblockchain" +"?validity="+ validityTxt + "&block_hash=" + blockhash, "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -618,7 +635,7 @@ JSONObject object = new JSONObject();
         JSONObject object = new JSONObject();
         jsonArray = null;
         try {
-            apiCaller2.execute(base_url + "checkpossibility" + "?pre_block_hash" +  previousHash , "GET", "v", "g");
+            apiCaller2.execute(base_url + "checkpossibility" + "?pre_block_hash=" +  previousHash , "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {

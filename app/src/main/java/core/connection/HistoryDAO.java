@@ -241,7 +241,8 @@ public class HistoryDAO implements AsyncResponse {
 
                     JSONObject object = array.getJSONObject(i);
                     String job = object.getString("event");
-                    String date = object.getString("block_timestamp").substring(0,9);
+                    String date = object.getString("block_timestamp").substring(0,10);
+                    String vid = object.getString("address");
                     String status;
                     if (object.getBoolean("validity")){
                          status = "Accepted";
@@ -250,8 +251,11 @@ public class HistoryDAO implements AsyncResponse {
                         status = "rejected";
                     }
 
-                    StatusItem statusItem = new StatusItem(job,date,status);
+                    StatusItem statusItem = new StatusItem(job,date,status,vid);
 
+                    System.out.println("-----------------------------------------");
+                    System.out.println(vid);
+                    System.out.println(VehicleJDBCDAO.registrationNumbersWithVehicleNumbers.get(vid));
                     statusItems.add(statusItem);
                 }
             }

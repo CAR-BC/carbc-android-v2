@@ -34,6 +34,7 @@ import Objects.SparePartData;
 import controller.Controller;
 import core.connection.BlockJDBCDAO;
 import core.connection.IdentityJDBC;
+import core.connection.VehicleJDBCDAO;
 
 public class ServiceActivity extends AppCompatActivity {
     private ListView listView;
@@ -127,7 +128,7 @@ public class ServiceActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         System.out.println(serviceDataJSON);
-                        controller.sendTransaction("ServiceRepair", "23456", serviceDataJSON);
+                        controller.sendTransaction("ServiceRepair", VehicleJDBCDAO.vehicleNumbersWithRegistrationNumbers.get(regNo), serviceDataJSON);
                         finish();
                     }
                 });
@@ -194,7 +195,6 @@ public class ServiceActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
-
 
     private ArrayList<ServiceType> getServiceTypes(JSONObject object) {
         ArrayList<ServiceType> serviceTypesArray = null;
@@ -502,9 +502,9 @@ public class ServiceActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(broadcastReceiver);
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        unregisterReceiver(broadcastReceiver);
+//    }
 }

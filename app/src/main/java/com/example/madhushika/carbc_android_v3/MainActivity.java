@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.navigation_add_event) {
-            NavigationHandler.navigateTo("addtransactionFragment");
+            NavigationHandler.navigateTo("addtransaction");
             // Handle the camera action
         } else if (id == R.id.navigation_view_vehicle) {
 //            NavigationHandler.navigateTo("SearchVehicleFragment");
@@ -221,29 +221,12 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.navigation_status) {
-            if (vehicle_numbers.size() == 0) {
-                NavigationHandler.navigateTo("addtransactionFragment");
-                Toast.makeText(MainActivity.this, "This option will be enable ", Toast.LENGTH_SHORT).show();
-            } else {
                 NavigationHandler.navigateTo("StatusFragment");
-            }
-
-        } else if (id == R.id.navigation_reminders) {
-            if (vehicle_numbers.size() == 0) {
-                NavigationHandler.navigateTo("addtransactionFragment");
-                Toast.makeText(MainActivity.this, "This option will be enable ", Toast.LENGTH_SHORT).show();
-            } else {
-                NavigationHandler.navigateTo("RemindersFragment");
-            }
-
-        } else if (id == R.id.navigation_info) {
-            if (vehicle_numbers.size() == 0) {
-                NavigationHandler.navigateTo("addtransactionFragment");
-                Toast.makeText(MainActivity.this, "This option will be enable ", Toast.LENGTH_SHORT).show();
-
-            } else {
+//        } else if (id == R.id.navigation_reminders) {
+//                NavigationHandler.navigateTo("RemindersFragment");
+        }
+        else if (id == R.id.navigation_info) {
                 NavigationHandler.navigateTo("InfoFragment");
-            }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

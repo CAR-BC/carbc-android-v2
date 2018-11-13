@@ -24,7 +24,6 @@ import core.connection.HistoryDAO;
  */
 public class StatusFragment extends Fragment {
 
-    private Spinner spinner;
     private ListView listView;
 
     public StatusFragment() {
@@ -37,28 +36,8 @@ public class StatusFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_status, container, false);
-        spinner =(Spinner)view.findViewById(R.id.vehicle_number);
-//        List<String> list = new ArrayList<String>();
-//        list.add("NW-6060");
-//        list.add("WP-2112");
-//        list.add("NW-6146");
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
-                R.layout.item_spinner, MainActivity.vehicle_numbers);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(dataAdapter);
 
         listView = (ListView)view.findViewById(R.id.status_list);
-
-//        final StatusItem[] statusItems = new StatusItem[3];
-//        StatusItem item1 = new StatusItem("Service","12/05/2018","pending");
-//        StatusItem item2 = new StatusItem("Insurance","13/05/2018","accepted");
-//        StatusItem item3 = new StatusItem("Emision testing","02/05/2018","rejected");
-//
-//        statusItems[0] = item1;
-//        statusItems[1] = item2;
-//        statusItems[2] = item3;
-
 
         HistoryDAO historyDAO = new HistoryDAO();
         final ArrayList<StatusItem> allHistory = historyDAO.getAllHistory();
@@ -95,27 +74,32 @@ public class StatusFragment extends Fragment {
                 TextView job;
                 TextView date1;
                 TextView condition;
+                TextView registrationNumber;
 
                 if (ph == null) {
                     job = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_event);
                     date1 = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_date);
                     condition = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_condition);
+                    registrationNumber =(TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_registrationNumber);
 
                     ph = new Placeholder();
                     ph.job = job;
                     ph.datet = date1;
                     ph.condition = condition;
+                    ph.registrationNumber = registrationNumber;
 
                     cellUser.setTag(ph);
                 } else {
                     job = ph.job;
                     date1 = ph.datet;
                     condition = ph.condition;
+                    registrationNumber = ph.registrationNumber;
                 }
 
                 job.setText(statusItem.getJob());
                 date1.setText(statusItem.getDate1());
                 condition.setText(statusItem.getCondition());
+                registrationNumber.setText(statusItem.getRegistrationNumber());
 
                 if (statusItem.getCondition().equalsIgnoreCase("pending")){
                     condition.setBackgroundResource(R.color.colorYellow);
@@ -123,6 +107,12 @@ public class StatusFragment extends Fragment {
                     condition.setBackgroundResource(R.color.colorAcceptedGreen);
                 } if (statusItem.getCondition().equalsIgnoreCase("rejected")){
                     condition.setBackgroundResource(R.color.colorRejectedRed);
+                    condition.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //TODO: resend block
+                        }
+                    });
                 }
                 return cellUser;
             }
@@ -135,6 +125,7 @@ public class StatusFragment extends Fragment {
         public TextView job;
         public TextView datet;
         public TextView condition;
+        public TextView registrationNumber;
 
     }
 

@@ -101,37 +101,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Vehicle Class"
+                android:text="Chassis Number"
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/vehicle_class"
+                android:id="@+id/chassis_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Vehicle class"
-                android:textSize="20dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Condition and Notes"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/condition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Condition and Notes"
+                android:hint="Chassis Number"
                 android:textSize="20dp" />
         </LinearLayout>
 
@@ -149,7 +127,7 @@
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/make"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -171,7 +149,7 @@
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/model"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -183,30 +161,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Year of Manufacturing"
-                android:textSize="18dp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/manufacturing_year"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Manuacturing year"
-                android:textSize="20dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/cancel_btn"
@@ -225,6 +180,7 @@
                 android:gravity="center"
                 android:text="Done" />
         </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

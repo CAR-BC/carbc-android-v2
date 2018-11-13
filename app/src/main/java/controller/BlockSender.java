@@ -30,15 +30,16 @@ public class BlockSender extends Thread {
     }
 
     public void run() {
-        switch (event) {
-            case "RegisterVehicle":
-                sendRegisterTransaction();
-                break;
-
-            default:
-                sendTransaction();
-                break;
-        }
+        sendTransaction();
+//        switch (event) {
+//            case "RegisterVehicle":
+//                sendRegisterTransaction();
+//                break;
+//
+//            default:
+//                sendTransaction();
+//                break;
+//        }
     }
 
     public void sendRegisterTransaction() {

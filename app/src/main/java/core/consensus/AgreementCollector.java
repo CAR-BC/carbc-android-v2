@@ -204,14 +204,16 @@ public class AgreementCollector extends Thread {
 
                         if (registrationSmartContract.isAuthorized()){
                             //show notification in notification icon 1
-                            MainActivity.notificationList.add(block);
-                            Intent intent = new Intent("MainActivity");
-                            intent.putExtra("newNomApprovedBlockReceived", "newBlock");
-                            System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
+                            if (!myPubKey.equals(blockData.getString("currentOwner"))){
+                                MainActivity.notificationList.add(block);
+                                Intent intent = new Intent("MainActivity");
+                                intent.putExtra("newNomApprovedBlockReceived", "newBlock");
+                                System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
 
-                            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                            MyApp.getContext().sendBroadcast(intent);
+                                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                MyApp.getContext().sendBroadcast(intent);
 
+                            }
                             log.info("Registration is authorized");
 
                             JSONObject object = getIdentityJDBC().getIdentityByRole("RMV");

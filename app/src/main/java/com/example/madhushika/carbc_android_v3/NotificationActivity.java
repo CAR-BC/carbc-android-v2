@@ -175,6 +175,11 @@ public class NotificationActivity extends AppCompatActivity {
         public Button more_btn;
         public Button confirm_tx;
     }
-
+//    @Override
+//    protected void onPause() {
+//        super.onResume();
+//        super.onPause();
+//        unregisterReceiver(broadcastReceiver);
+//    }
 
 }

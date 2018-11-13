@@ -4,11 +4,13 @@ public class StatusItem {
     private String job;
     private String date1;
     private String condition;
+    private String registrationNumber;
 
-    public StatusItem(String job, String date1, String condition) {
+    public StatusItem(String job, String date1, String condition, String registrationNumber) {
         this.job = job;
         this.date1 = date1;
         this.condition = condition;
+        this.setRegistrationNumber(registrationNumber);
     }
 
     public String getJob() {
@@ -33,5 +35,14 @@ public class StatusItem {
 
     public void setCondition(String condition) {
         this.condition = condition;
+    }
+
+
+    public String getRegistrationNumber() {
+        return registrationNumber;
+    }
+
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
     }
 }

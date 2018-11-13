@@ -1,5 +1,6 @@
 package com.example.madhushika.carbc_android_v3;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,15 +10,20 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import chainUtil.KeyGenerator;
 import controller.Controller;
@@ -25,13 +31,10 @@ import controller.Controller;
 public class RegisterVehicleActivity extends AppCompatActivity {
     //private EditText vehicleNumber;
     private EditText registrationNumber;
-    //private EditText currentOwner;
+    private EditText chassisNumber;
     private EditText engineNumber;
-    private EditText vehicleClass;
-    private EditText condition;
-    private EditText make;
-    private EditText model;
-    private EditText manufacturingYear;
+    private Spinner make;
+    private Spinner model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,24 +52,39 @@ public class RegisterVehicleActivity extends AppCompatActivity {
         Button done = (Button) findViewById(R.id.done_btn);
         Button cancel = (Button) findViewById(R.id.cancel_btn);
 
-       // vehicleNumber = (EditText)findViewById(R.id.reg_vehicle_id);
         registrationNumber = (EditText) findViewById(R.id.registration_number);
-        //currentOwner = (EditText) findViewById(R.id.current_owner);
         engineNumber = (EditText) findViewById(R.id.engine_number);
-        vehicleClass = (EditText) findViewById(R.id.vehicle_class);
-        condition = (EditText) findViewById(R.id.condition);
-        make = (EditText) findViewById(R.id.make);
-        model = (EditText) findViewById(R.id.model);
-        manufacturingYear = (EditText) findViewById(R.id.manufacturing_year);
+        chassisNumber = (EditText) findViewById(R.id.chassis_number);
+        make = (Spinner) findViewById(R.id.make);
+        model = (Spinner)findViewById(R.id.model);
+
+        ArrayList<String> makeList = new ArrayList<>();
+        makeList.add("Select");
+        makeList.add("Toyota");
+        makeList.add("Honda");
+
+        ArrayList<String> modelList = new ArrayList<>();
+        modelList.add("Select");
+        modelList.add("Axio");
+        modelList.add("Audi");
+
+//        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(chassisNumber.getWindowToken(), 0);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this.getApplicationContext(),
+                R.layout.item_spinner, makeList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        make.setAdapter(dataAdapter);
+
+        ArrayAdapter<String> dataAdaptermodel = new ArrayAdapter<String>(this.getApplicationContext(),
+                R.layout.item_spinner, modelList);
+        dataAdaptermodel.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        model.setAdapter(dataAdaptermodel);
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!registrationNumber.getText().toString().isEmpty() &&
-                        !engineNumber.getText().toString().isEmpty()
-                && !vehicleClass.getText().toString().isEmpty() && !condition.getText().toString().isEmpty()
-                        && !make.getText().toString().isEmpty() && !model.getText().toString().isEmpty() &&
-                        !manufacturingYear.getText().toString().isEmpty()){
+                        !engineNumber.getText().toString().isEmpty() && !chassisNumber.getText().toString().isEmpty()){
 
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterVehicleActivity.this);
@@ -82,11 +100,9 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                         try {
                             object.put("currentOwner",KeyGenerator.getInstance().getPublicKeyAsString());
                             object.put("engineNumber",engineNumber.getText().toString());
-                            object.put("vehicleClass",vehicleClass.getText().toString());
-                            object.put("conditionAndNote",condition.getText().toString());
-                            object.put("make",make.getText().toString());
-                            object.put("model",model.getText().toString());
-                            object.put("yearOfManufacture",manufacturingYear.getText().toString());
+                            object.put("chassisNumber",chassisNumber.getText().toString());
+                            object.put("make",make.getSelectedItem().toString());
+                            object.put("model",model.getSelectedItem().toString());
                             object.put("registrationNumber",registrationNumber.getText().toString());
                             object.put("SecondaryParty",new JSONObject());
                             object.put("ThirdParty",new JSONObject());
@@ -101,7 +117,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
                         editor.commit();
 
 
-                        controller.sendTransaction("RegisterVehicle", null, object);
+                        controller.sendTransaction("RegisterVehicle", registrationNumber.getText().toString(), object);
                         finish();
                     }
                 });
