@@ -203,6 +203,7 @@ public class Consensus {
             JSONObject addedBlock = blockJDBCDAO.checkPossibilityToAddBlock(block.getBlockHeader().getPreviousHash());
 
             BlockInfo blockInfo = new BlockInfo();
+            blockInfo.setValidity(true);
 
             Identity identity = null;
             if (addedBlock.length() != 0){
