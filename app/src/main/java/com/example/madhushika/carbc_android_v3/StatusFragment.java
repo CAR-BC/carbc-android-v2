@@ -73,7 +73,7 @@ public class StatusFragment extends Fragment {
                 Placeholder ph = (Placeholder) cellUser.getTag();
                 TextView job;
                 TextView date1;
-                TextView condition;
+                final TextView condition;
                 TextView registrationNumber;
 
                 if (ph == null) {
@@ -111,6 +111,10 @@ public class StatusFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             //TODO: resend block
+                            if(condition.getText().toString().equalsIgnoreCase("Rejected")){
+                                condition.setText("Pending");
+                                condition.setBackgroundResource(R.color.colorYellow);
+                            }
                         }
                     });
                 }
@@ -119,6 +123,10 @@ public class StatusFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setArrayAdapterTostatusList(ArrayList<StatusItem> statusItemsList ){
+
     }
 
     private class Placeholder {

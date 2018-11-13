@@ -42,12 +42,12 @@ public class VehicleJDBCDAO implements AsyncResponse {
                     JSONObject object = array.getJSONObject(i);
                     arrayList.add(object.getString("registration_number"));
                     System.out.println("??????????????????????????????");
-                    System.out.println("registration_number"+object.getString("registration_number"));
-                    System.out.println("vehicle_id"+object.getString("vehicle_id"));
+                    System.out.println("registration_number" + object.getString("registration_number"));
+                    System.out.println("vehicle_id" + object.getString("vehicle_id"));
                     vehicleNumbersWithRegistrationNumbers.put(object.getString("registration_number")
-                            ,object.getString("vehicle_id"));
+                            , object.getString("vehicle_id"));
                     registrationNumbersWithVehicleNumbers.put(object.getString("vehicle_id")
-                            ,object.getString("registration_number"));
+                            , object.getString("registration_number"));
 
                     System.out.println("********************************************************");
                     System.out.println(registrationNumbersWithVehicleNumbers.keySet());
@@ -65,7 +65,40 @@ public class VehicleJDBCDAO implements AsyncResponse {
     }
 
     public boolean searchVehicleByRegistrationNumber(String registrationNumber) {
-        return true;
+        APICaller apiCaller2 = new APICaller();
+        apiCaller2.delegate = this;
+
+        boolean isPresent = true;
+
+        try {
+            apiCaller2.execute(base_url + "searchvehicledata" + "?registration_number=" + registrationNumber, "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (jsonArray.getBoolean(0)) {
+                JSONArray array = jsonArray.getJSONArray(1);
+                if (array.getInt(0)>0){
+                    isPresent =true;
+                }else {
+                    isPresent = false;
+                }
+            }
+
+            System.out.println(jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return isPresent;
     }
 
     @Override

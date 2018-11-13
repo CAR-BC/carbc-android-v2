@@ -97,7 +97,6 @@ public class ServiceActivity extends AppCompatActivity {
 
         registerReceiver(broadcastReceiver, new IntentFilter("ReceivedTransactionData"));
 
-
         //catch the response and stop activity indicator
         //getServiceTypes(response)
         //set adapter
@@ -303,59 +302,6 @@ public class ServiceActivity extends AppCompatActivity {
                 }
 
                 serviceType.setText(serviceTypeItem.getServiceType());
-//                spareParts.setAdapter(new BaseAdapter() {
-//                    @Override
-//                    public int getCount() {
-//                        return serviceTypeItem.getSpareParts().size();
-//                    }
-//
-//                    @Override
-//                    public Object getItem(int position) {
-//                        return serviceTypeItem.getSpareParts().get(position);
-//                    }
-//
-//                    @Override
-//                    public long getItemId(int position) {
-//                        return position;
-//                    }
-//
-//                    @Override
-//                    public View getView(int position, View convertView, ViewGroup parent) {
-//
-//                        final SparePartData sparePart = serviceTypeItem.getSpareParts().get(position);
-//                        View cellUserSP = null;
-//
-//                        if (convertView == null) {
-//
-//                            cellUserSP = LayoutInflater.from(ServiceActivity.this).inflate(R.layout.cell_service_type,
-//                                    parent, false);
-//
-//                        } else {
-//                            cellUserSP = convertView;
-//                        }
-//
-//                        PlaceholderSP ph = (PlaceholderSP) cellUserSP.getTag();
-//                        TextView sparePartTxt;
-//
-//
-//                        if (ph == null) {
-//                            sparePartTxt = (TextView) cellUserSP.findViewById(R.id.spare_parts_txt);
-//
-//
-//                            ph = new PlaceholderSP();
-//                            ph.sparepart = sparePartTxt;
-//
-//                            cellUserSP.setTag(ph);
-//                        } else {
-//                            sparePartTxt = ph.sparepart;
-//
-//                        }
-//
-//                        sparePartTxt.setText(sparePart.getSparePart());
-//
-//                        return cellUserSP;
-//                    }
-//                });
 
                 return cellUser;
             }

@@ -26,7 +26,8 @@ public class NavigationHandler {
                     }
                 } else {
                    // if (manager.findFragmentByTag("addtransactionFragment") == null) {
-                        transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
+//                        transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
+                        transaction.add(R.id.contentLayout, new TransactionNew(), "addtransactionFragment");
 //                    } else {
 //                        transaction.show(manager.findFragmentByTag("addtransactionFragment"));
 //                    }

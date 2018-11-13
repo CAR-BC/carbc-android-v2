@@ -34,7 +34,8 @@ public class UnregisteredNewTransactionFragment extends Fragment {
         buyVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), BuyVehicleActivity.class);
+//                Intent i = new Intent(getActivity(), BuyVehicleActivity.class);
+                Intent i = new Intent(getActivity(), MapsActivity.class);
                 startActivity(i);
             }
         });

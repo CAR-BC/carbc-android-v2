@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,10 @@ import TransactionFragments.BuyVehicleFragment;
 import TransactionFragments.SellVehicleFragment;
 import core.blockchain.Block;
 import core.consensus.Consensus;
+import network.Client.RequestMessage;
+import network.Node;
+import network.Protocol.MessageCreator;
+import network.communicationHandler.MessageSender;
 
 
 /**
@@ -123,6 +129,8 @@ public class NewTransactionFragment extends Fragment {
                 String vehiclNo = spinner.getSelectedItem().toString();
                 i.putExtra("vid",vehiclNo);
                 startActivity(i);
+                RequestMessage requestMessage  = MessageCreator.createMessage(new JSONObject(), "test");
+                Node.getInstance().sendMessageToPeer("192.168.8.107",45673 ,requestMessage);
 
             }
         });
@@ -180,6 +188,5 @@ public class NewTransactionFragment extends Fragment {
 //        super.onPause();
 //        getActivity().unregisterReceiver(broadcastReceiver);
 //    }
-
 
 }

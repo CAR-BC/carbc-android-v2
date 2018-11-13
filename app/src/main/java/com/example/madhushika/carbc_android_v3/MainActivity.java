@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     TextView notificationCount;
     TextView criticalNotificationCount;
     FloatingActionButton fab;
+    private TransactionNew transactionNew;
 
     public static ArrayList<String> vehicle_numbers;
     public static ArrayList<Block> notificationList;
@@ -115,7 +116,9 @@ public class MainActivity extends AppCompatActivity
             unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
             transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
         } else {
-            newTransactionFragment = new NewTransactionFragment();
+//            newTransactionFragment = new NewTransactionFragment();
+//            transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
+            transactionNew = new TransactionNew();
             transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
         }
 
