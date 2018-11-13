@@ -63,7 +63,7 @@ public class Consensus {
     public void broadcastBlock(Block block, String data) {
         HistoryDAO historyDAO = new HistoryDAO();
         try {
-            historyDAO.saveBlockWithAdditionalData(block, data);
+            historyDAO.saveBlockWithAdditionalData(block, data, "Pending");
             handleNonApprovedBlock(block);
             MessageSender.broadCastBlock(block);
         } catch (SQLException e) {
@@ -266,7 +266,7 @@ public class Consensus {
             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             MyApp.getContext().sendBroadcast(intent);
             //updating in history table
-            updateHistory(block.getBlockHeader().getHash());
+            manageStatus2(block.getBlockHeader().getHash(), block.getBlockHeader().getPreviousHash());
         }
     }
 
@@ -393,6 +393,38 @@ public class Consensus {
             log.info("History Updated for: ", blockHash);
         }else {
             log.info("Not My Block");
+        }
+    }
+
+    public void manageStatus2(String blockHash, String previousBlockHash) {
+        HistoryDAO historyDAO = new HistoryDAO();
+        try{
+            if(isItMyBlock(blockHash)) {
+                updateHistory(blockHash);
+                historyDAO.setStatus(blockHash, "Accepted");
+            }else {
+                //block failed
+                //auto resending commented out
+//                Thread.sleep(5000);
+//                JSONObject failedBlockDetails = historyDAO.getFailedBlockDetails(blockHash);
+//                if(failedBlockDetails.length() != 0) {
+//                    Controller controller = new Controller();
+//                    controller.sendTransaction(failedBlockDetails.getString("event"),
+//                            failedBlockDetails.getString("vehicleId"),
+//                            new JSONObject(failedBlockDetails.getString("data")));
+//                }
+            }
+            handleHistoryStatus(previousBlockHash, historyDAO);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleHistoryStatus(String previousHash, HistoryDAO historyDAO) {
+        try {
+            historyDAO.handlePendingBlocks(previousHash);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

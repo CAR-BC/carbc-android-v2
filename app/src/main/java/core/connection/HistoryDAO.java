@@ -30,7 +30,7 @@ public class HistoryDAO implements AsyncResponse {
 
 
 
-    public boolean saveBlockWithAdditionalData(Block block, String data) throws SQLException {
+    public boolean saveBlockWithAdditionalData(Block block, String data, String status) throws SQLException {
         APICaller apiCaller = new APICaller();
         jsonArray = null;
 
@@ -64,7 +64,9 @@ public class HistoryDAO implements AsyncResponse {
                         "&sender=" + URLEncoder.encode(blockInfo.getSender(),"UTF-8") +
                         "&event=" + URLEncoder.encode(blockInfo.getEvent(),"UTF-8") +
                         "&data=" + URLEncoder.encode(blockInfo.getData(),"UTF-8") +
-                        "&address=" + URLEncoder.encode(blockInfo.getAddress(),"UTF-8") , "GET", "BlockInfo", blockInfo);
+                        "&address=" + URLEncoder.encode(blockInfo.getAddress(),"UTF-8")+
+                                "&address=" + URLEncoder.encode(blockInfo.getAddress(),"UTF-8") ,
+                        "&address=" + status , "GET", "BlockInfo", blockInfo);
 
                 while (jsonArray == null) {
                     try {
@@ -264,6 +266,43 @@ public class HistoryDAO implements AsyncResponse {
             e.printStackTrace();
         }
         return statusItems;
+    }
+
+    public void handlePendingBlocks(String previousBlockHah) throws SQLException {
+        String queryString = "UPDATE `History` SET `status` = Failed WHERE  `previous_hash` = ? AND `status` = Pending";
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
+        apiCaller.delegate = this;
+        try {
+            apiCaller.execute(base_url + "handlestatushistory" + "?pre_block_hash=" + previousBlockHah, "GET", "v", "g");
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setStatus(String blockhash, String status) {
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
+        apiCaller.delegate = this;
+        try {
+            apiCaller.execute(base_url + "setstatushistory" + "?status=" + status + "&block_hash=" + blockhash, "GET", "v", "g");
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 
