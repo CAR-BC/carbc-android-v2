@@ -81,11 +81,11 @@
             android:textColor="@color/colorGreenCellMargin"
             android:textSize="20dp" />
 
-        <ListView
+        <ListViewn
             android:layout_gravity="center"
             android:id="@+id/service_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></ListView>
+            android:layout_height="wrap_content"></ListViewn>
 
         <LinearLayout
             android:layout_width="match_parent"
