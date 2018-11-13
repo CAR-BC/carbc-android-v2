@@ -245,13 +245,8 @@ public class HistoryDAO implements AsyncResponse {
                     String job = object.getString("event");
                     String date = object.getString("block_timestamp").substring(0,10);
                     String vid = object.getString("address");
-                    String status;
-                    if (object.getBoolean("validity")){
-                         status = "Accepted";
-                    }
-                    else {
-                        status = "rejected";
-                    }
+                    String status = object.getString("status");
+
 
                     StatusItem statusItem = new StatusItem(job,date,status,vid);
 
