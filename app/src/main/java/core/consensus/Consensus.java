@@ -132,25 +132,30 @@ public class Consensus {
                 String blockHash = b.getBlockHeader().getHash();
                 AgreementCollector agreementCollector = getAgreementCollector(blockHash);
 
-                synchronized (agreementCollectors) {
-                    if (agreementCollector.getMandatoryValidators().size() == 0) {
-                        System.out.println("agreementCollector.getMandatoryValidators().size() == 0");
-                        int agreementCount = agreementCollector.getAgreements().size();
-                        if (agreementCount >= agreementCollector.getThreshold()) {
-                            qualifiedBlocks.add(b);
+                if (agreementCollector != null){
+                    synchronized (agreementCollectors) {
+                        if (agreementCollector.getMandatoryValidators().size() == 0) {
+                            System.out.println("agreementCollector.getMandatoryValidators().size() == 0");
+                            int agreementCount = agreementCollector.getAgreements().size();
+                            if (agreementCount >= agreementCollector.getThreshold()) {
+                                qualifiedBlocks.add(b);
 
-                            //rating calculations
-                            agreementCollector.getRating().setAgreementCount(agreementCount);
-                            double rating = agreementCollector.getRating().calRating(agreementCollector.
-                                    getMandatoryArraySize(), agreementCollector.getSecondaryArraySize());
-                            b.getBlockHeader().setRating(rating);
-                            System.out.println("Rating of the block: " + b.getBlockHeader().getRating());
-                            this.agreementCollectors.remove(agreementCollector);
+                                //rating calculations
+                                agreementCollector.getRating().setAgreementCount(agreementCount);
+                                double rating = agreementCollector.getRating().calRating(agreementCollector.
+                                        getMandatoryArraySize(), agreementCollector.getSecondaryArraySize());
+                                b.getBlockHeader().setRating(rating);
+                                System.out.println("Rating of the block: " + b.getBlockHeader().getRating());
+                                this.agreementCollectors.remove(agreementCollector);
+                            }
+                        } else {
+                            //blocks with insufficient agreements
                         }
-                    } else {
-                        //blocks with insufficient agreements
                     }
+                }else {
+                    log.info("no agreement collector found. Smart contract failure may occurred");
                 }
+
             }
         }
         try {
