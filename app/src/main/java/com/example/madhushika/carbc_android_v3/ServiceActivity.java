@@ -778,6 +778,9 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
         for (ServiceStation s : locationArray){
             if (s.getPublicKey().equals(marker.getTag())){
                 System.out.println("Current selected location : " + s.getAddress());
+                Intent i = new Intent(ServiceActivity.this, ServiceSecondActivity.class);
+                startActivity(i);
+
             }
         }
     }

@@ -104,7 +104,29 @@ public class BlockJDBCDAO implements AsyncResponse {
                 }
             }
 
-            if (blockInfo.getEvent().equals("RegisterVehicle")) {
+
+
+            if (blockInfo.getEvent().equals("BuyVehicle")){
+                String data = blockInfo.getData();
+                JSONObject object = new JSONObject(data);
+                apiCaller2.execute(base_url + "updatevehicle?current_owner=" + URLEncoder.encode(object.getString("newOwner"), "UTF-8")+
+                        "&vehicle_id=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8" ) , "GET", "Identity", identity);
+                while (jsonArray == null) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
+                MainActivity.vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
+
+                if (MainActivity.vehicle_numbers.size() > 0) {
+                    NavigationHandler.navigateTo("addtransaction");
+                }
+            }
+
+            if(blockInfo.getEvent().equals("RegisterVehicle")){
                 String data = blockInfo.getData();
                 JSONObject object = new JSONObject(data);
                 apiCaller3.execute(base_url + "insertintovehicle?registration_number=" + URLEncoder.encode(object.getString("registrationNumber"), "UTF-8") +
