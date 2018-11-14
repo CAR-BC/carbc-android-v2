@@ -214,7 +214,7 @@ public class Consensus {
             if (addedBlock.length() != 0){
                 String blockHashInDB = addedBlock.getString("blockHash");
                 Timestamp blockTimestamp = ChainUtil.convertStringToTimestamp(block.getBlockHeader().getBlockTime());
-                Timestamp blockTimestampInDB = ChainUtil.convertStringToTimestamp(addedBlock.getString("blockTimeStamp"));
+                Timestamp blockTimestampInDB = ChainUtil.convertStringToTimestamp2(addedBlock.getString("blockTimeStamp").substring(0, 19));
                 if (blockTimestampInDB.after(blockTimestamp)) {
                     //timestamp in block in db > timestamp in this block
                     //set validity = 0 in block in db
@@ -401,7 +401,6 @@ public class Consensus {
         try{
             if(isItMyBlock(blockHash)) {
                 updateHistory(blockHash);
-                historyDAO.setStatus(blockHash, "Accepted");
             }else {
                 //block failed
                 //auto resending commented out
