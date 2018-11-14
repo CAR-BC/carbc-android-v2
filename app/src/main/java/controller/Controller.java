@@ -114,30 +114,15 @@ public class Controller {
     }
 
     public void startNode() {
-//        System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
-
-        /*
-         * Set the main directory as home
-         * */
-//        System.setProperty(Constants.CARBC_HOME, System.getProperty("user.dir"));
-
-        /*
-         * At the very beginning
-         * A Config common to all: network, blockchain, etc.
-         * */
-//        CommonConfigHolder commonConfigHolder = CommonConfigHolder.getInstance();
-//        commonConfigHolder.setConfigUsingResource("peer2");
-
-        /*
-         * when initializing the network
-         * */
+        String publicKey = KeyGenerator.getInstance().getPublicKeyAsString();
+        String peerID = publicKey.substring(publicKey.length() - 40);
         Node node = Node.getInstance();
-//        node.initTest2("User2", 42761);
-        node.initTest2("User1", 42761);
+        if(publicKey != null) {
+            node.initTest2(peerID, 42761);
+        }else {
+            node.initTest2("User", 42761);
 
-        /*
-         * when we want our node to start listening
-         * */
+        }
         node.startListening();
     }
 
