@@ -82,7 +82,7 @@ public class BuyVehicleActivity extends AppCompatActivity {
                                     object.put("ThirdParty", thirdParty);
 
                                     Controller controller = new Controller();
-                                    controller.sendTransaction("ExchangeOwnership", vid.getText().toString()
+                                    controller.sendTransaction("BuyVehicle", vid.getText().toString()
                                            , object);
 
                                 } catch (JSONException e) {

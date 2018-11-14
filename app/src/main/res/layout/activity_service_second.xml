@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="10dp"
     tools:context=".ServiceSecondActivity">
 
     <LinearLayout
@@ -16,16 +17,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_margin="30dp">
-            <TextView
-                android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:text="Vehicle Number : "
-                android:textSize="20dp" />
+                android:layout_weight="1"/>
             <TextView
                 android:id="@+id/vehicle_number"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="9"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginVertical="20dp"

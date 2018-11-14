@@ -20,6 +20,7 @@ public class ServiceSecondActivity extends AppCompatActivity {
     TextView vehicle_number;
     TextView service_station;
     ListView service_type_list;
+    ArrayList<String> selectedServiceTypeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +84,9 @@ public class ServiceSecondActivity extends AppCompatActivity {
                     }
 
                     service_station.setText(serviceStation);
-
+                    if (isSelected.isSelected()){
+                        selectedServiceTypeList.add(serviceStation);
+                    }
 
                     return cellUser;
                 }
