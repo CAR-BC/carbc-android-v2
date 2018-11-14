@@ -119,26 +119,10 @@ public class MainActivity extends AppCompatActivity
 //            newTransactionFragment = new NewTransactionFragment();
 //            transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
             transactionNew = new TransactionNew();
-            transaction.add(R.id.contentLayout, new TransactionNew(), "addtransactionFragment");
+            transaction.add(R.id.contentLayout, new TransactionNew(), "addtransaction");
         }
 
-//        if (MainActivity.vehicle_numbers.size()==0){
-//            Menu menuNav=navigationView.getMenu();
-//            MenuItem nav_item2 = menuNav.findItem(R.id.navigation_status);
-//            nav_item2.setEnabled(false);
-//            MenuItem nav_item3 = menuNav.findItem(R.id.navigation_info);
-//            nav_item3.setEnabled(false);
-//            MenuItem nav_item4 = menuNav.findItem(R.id.navigation_reminders);
-//            nav_item4.setEnabled(false);
-//        }else {
-//            Menu menuNav=navigationView.getMenu();
-//            MenuItem nav_item2 = menuNav.findItem(R.id.navigation_status);
-//            nav_item2.setEnabled(true);
-//            MenuItem nav_item3 = menuNav.findItem(R.id.navigation_info);
-//            nav_item3.setEnabled(true);
-//            MenuItem nav_item4 = menuNav.findItem(R.id.navigation_reminders);
-//            nav_item4.setEnabled(true);
-//        }
+
         transaction.commit();
         NewTransactionFragment.setActivity(activity);
         NavigationHandler.setManager(manager);
