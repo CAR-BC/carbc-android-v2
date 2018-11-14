@@ -105,13 +105,13 @@ public class StatusFragment extends Fragment {
                     condition.setBackgroundResource(R.color.colorYellow);
                 } if (statusItem.getCondition().equalsIgnoreCase("accepted")){
                     condition.setBackgroundResource(R.color.colorAcceptedGreen);
-                } if (statusItem.getCondition().equalsIgnoreCase("rejected")){
+                } if (statusItem.getCondition().equalsIgnoreCase("Failed")){
                     condition.setBackgroundResource(R.color.colorRejectedRed);
                     condition.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             //TODO: resend block
-                            if(condition.getText().toString().equalsIgnoreCase("Rejected")){
+                            if(condition.getText().toString().equalsIgnoreCase("Failed")){
                                 condition.setText("Pending");
                                 condition.setBackgroundResource(R.color.colorYellow);
                             }
