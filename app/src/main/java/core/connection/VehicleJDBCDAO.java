@@ -104,6 +104,38 @@ public class VehicleJDBCDAO implements AsyncResponse {
 //        return false;
     }
 
+    public String getCurrentOwner(String registration_number){
+        APICaller apiCaller2 = new APICaller();
+        apiCaller2.delegate = this;
+
+       String current_owner = null;
+        try {
+            apiCaller2.execute(base_url + "getvehicleownerbyregistrationnumber" + "?registration_number=" + registration_number, "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (jsonArray.getBoolean(0)) {
+                JSONArray array = jsonArray.getJSONArray(1);
+               current_owner =  array.getString(0);
+            }
+
+            System.out.println(jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return current_owner;
+    }
+
     @Override
     public JSONArray processFinish(JSONArray output) {
         System.out.println("process finish executed");

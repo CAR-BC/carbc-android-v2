@@ -268,9 +268,18 @@ public class AgreementCollector extends Thread {
 
                                 if(preOwnerPubKey.equals(myPubKey)) {
                                     //show notification icon 2
-                                    Thread.sleep(6000);
-                                    log.info("pre owner sending agreements");
-                                    Consensus.getInstance().sendAgreementForBlock(block.getBlockHeader().getHash());
+                                    MainActivity.criticalNotificationList.add(block);
+                                    //TODO: remove this line
+                                    MainActivity.notificationList.add(block);
+                                    Intent intent = new Intent("MainActivity");
+                                    intent.putExtra("newCriticalBlockReceived", "newCriticalBlock");
+                                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                    System.out.println("+++++++++++newCriticalBlockReceived++++++++++");
+                                    MyApp.getContext().sendBroadcast(intent);
+
+//                                    Thread.sleep(6000);
+//                                    log.info("pre owner sending agreements");
+//                                    Consensus.getInstance().sendAgreementForBlock(block.getBlockHeader().getHash());
                                 }
                             }else{
                                 log.info("seller is not authorized");
@@ -279,8 +288,6 @@ public class AgreementCollector extends Thread {
 
                         }catch (NullPointerException e){
                             System.out.println("error occurred in smart contract");
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
                         } finally {
                             break;
                         }

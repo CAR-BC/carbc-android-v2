@@ -14,6 +14,10 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import chainUtil.KeyGenerator;
+import controller.Controller;
+import core.connection.VehicleJDBCDAO;
+
 
 public class BuyVehicleActivity extends AppCompatActivity {
     private EditText vid;
@@ -51,27 +55,43 @@ public class BuyVehicleActivity extends AppCompatActivity {
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            //call blockchain method
-                            JSONObject object = new JSONObject();
-                            try {
-                                JSONObject secondaryParty = new JSONObject();
-                                JSONObject newOwner = new JSONObject();
-                                newOwner.put("name", "Ashan");
-                                newOwner.put("publicKey", "mykey");
-                                secondaryParty.put("SecondaryParty", newOwner);
-                                JSONObject thirdParty = new JSONObject();
 
-                                object.put("registrationNumber", vid.getText().toString());
-                                object.put("preOwner", owner.getText().toString());
-                                object.put("vehicleId", "vehicleId");
-                                object.put("SecondaryParty", secondaryParty);
-                                object.put("ThirdParty", thirdParty);
+                            VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
+                            String preOwner = vehicleJDBCDAO.getCurrentOwner(vid.getText().toString());
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                            if (preOwner!= null){
+                                //call blockchain method
+                                JSONObject object = new JSONObject();
+                                try {
+
+                                    object.put("newOwner", KeyGenerator.getInstance().getPublicKeyAsString());
+//                                    object.put("registrationNumber", vid.getText().toString());
+                                    object.put("vehicleId", vid.getText().toString());
+
+//                                    object.put("PreOwner", preOwner);
+                                    JSONObject secondaryParty = new JSONObject();
+                                    JSONObject PreOwner = new JSONObject();
+                                    PreOwner.put("name", "Ashan");
+                                    PreOwner.put("publicKey",preOwner);
+                                    secondaryParty.put("PreOwner", PreOwner);
+                                    object.put("SecondaryParty", secondaryParty);
+
+                                    JSONObject thirdParty = new JSONObject();
+                                    object.put("ThirdParty", thirdParty);
+
+                                    Controller controller = new Controller();
+                                    controller.sendTransaction("ExchangeOwnership", vid.getText().toString()
+                                           , object);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                //send transaction
+                                finish();
+                            }else {
+                                Toast.makeText(BuyVehicleActivity.this,"No such vehicle in the system",Toast.LENGTH_SHORT).show();
                             }
-                            //send transaction
-                            finish();
+
                         }
                     });
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
