@@ -30,7 +30,7 @@ public class StatusFragment extends Fragment {
 
     private ListView listView;
     LayoutInflater inflater;
-    ProgressDialog mDialog;
+
 
     public StatusFragment() {
         // Required empty public constructor
@@ -53,16 +53,9 @@ public class StatusFragment extends Fragment {
     }
 
     private void setArrayAdapterTostatusList( ){
-        Log.d("Padmal", "Inside method");
-        mDialog = new ProgressDialog(getActivity());
-        mDialog.setMessage("Please wait...");
-        mDialog.setTitle("Loading");
-        mDialog.setCancelable(false);
-        mDialog.show();
-        Log.d("Padmal", "Started fetching");
+
         HistoryDAO historyDAO = new HistoryDAO();
         final ArrayList<StatusItem> allHistory = historyDAO.getAllHistory();
-        mDialog.dismiss();
         Log.d("Padmal", "Finished fetching");
         listView.setAdapter(new BaseAdapter() {
             @Override
