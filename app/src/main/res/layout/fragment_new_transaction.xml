@@ -51,8 +51,7 @@
                 android:scrollbars="vertical"
                 android:stretchMode="spacingWidthUniform"
                 android:padding="30dp"
-                android:rowCount="4"
-                android:layout_marginTop="150dp">
+                android:rowCount="4">
                 <!--android:layout_marginTop="150dp">-->
 
                 <!--<android.support.v7.widget.CardView-->

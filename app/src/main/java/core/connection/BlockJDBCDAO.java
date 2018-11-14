@@ -119,7 +119,7 @@ public class BlockJDBCDAO implements AsyncResponse {
                 VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
                 MainActivity.vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
 
-                NavigationHandler.navigateTo("addtransactionFragment");
+                NavigationHandler.navigateTo("addtransaction");
             }
 
         } catch (Exception e) {
