@@ -1,0 +1,10 @@
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:gravity="center_vertical"
+    android:padding="15dp"
+    android:singleLine="true"
+    android:textAlignment="center"
+    android:textSize="20sp"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:ellipsize="marquee"/>

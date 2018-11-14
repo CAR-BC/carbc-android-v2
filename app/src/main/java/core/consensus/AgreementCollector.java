@@ -1,6 +1,7 @@
 package core.consensus;
 
 import android.content.Intent;
+import android.util.Log;
 
 import com.example.madhushika.carbc_android_v3.MainActivity;
 import com.example.madhushika.carbc_android_v3.MyApp;

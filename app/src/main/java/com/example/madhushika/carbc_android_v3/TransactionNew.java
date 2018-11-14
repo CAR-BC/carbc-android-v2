@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,16 +28,19 @@ public class TransactionNew extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_transaction_new, container, false);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
         adapter = new TabsAdapter(getFragmentManager());
-        adapter.addFragment(new NewTransactionFragment(), "Tab 1");
-        adapter.addFragment(new UnregisteredNewTransactionFragment(), "Tab 2");
+        adapter.addFragment(new NewTransactionFragment(), "Add Event");
+        adapter.addFragment(new UnregisteredNewTransactionFragment(), "New Vehicle");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
         return view;
     }
+
+
 
 }

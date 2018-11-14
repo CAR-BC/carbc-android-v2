@@ -1,8 +1,11 @@
 package com.example.madhushika.carbc_android_v3;
 
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+
+import java.io.IOException;
 
 import chainUtil.KeyGenerator;
 import core.connection.VehicleJDBCDAO;
@@ -13,27 +16,21 @@ public class NavigationHandler {
     public static void navigateTo(String fragment) {
 
         FragmentTransaction transaction = manager.beginTransaction();
-    switch (fragment) {
+        switch (fragment) {
             case "addtransaction":
                 if (MainActivity.vehicle_numbers.size() == 0) {
                     if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") == null) {
                         transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addUnregisteredNewTransactionFragment");
                     } else {
                         transaction.show(manager.findFragmentByTag("addUnregisteredNewTransactionFragment"));
-                        }
+                    }
                     if (manager.findFragmentByTag("addtransactionFragment") != null) {
                         transaction.hide(manager.findFragmentByTag("addtransactionFragment"));
                     }
                 } else {
-                   // if (manager.findFragmentByTag("addtransactionFragment") == null) {
+                    // if (manager.findFragmentByTag("addtransactionFragment") == null) {
 //                        transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
-                        transaction.add(R.id.contentLayout, new TransactionNew(), "addtransactionFragment");
-//                    } else {
-//                        transaction.show(manager.findFragmentByTag("addtransactionFragment"));
-//                    }
-                    if (manager.findFragmentByTag("addUnregisteredNewTransactionFragment") != null) {
-                        transaction.hide(manager.findFragmentByTag("addUnregisteredNewTransactionFragment"));
-                    }
+                    transaction.add(R.id.contentLayout, new TransactionNew(), "addNewtransaction");
                 }
 
                 if (manager.findFragmentByTag("SearchVehicleFragment") != null) {
@@ -134,6 +131,8 @@ public class NavigationHandler {
 //                }
 //                break;
             case "StatusFragment":
+
+
                 if (manager.findFragmentByTag("StatusFragment") == null) {
                     transaction.add(R.id.contentLayout, new StatusFragment(), "StatusFragment");
                 } else {
@@ -222,5 +221,4 @@ public class NavigationHandler {
     public static void setManager(FragmentManager manager) {
         NavigationHandler.manager = manager;
     }
-
 }

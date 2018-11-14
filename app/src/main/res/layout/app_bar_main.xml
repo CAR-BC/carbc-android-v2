@@ -25,39 +25,56 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:background="@color/colorgGreen"
         android:orientation="horizontal"
-        android:weightSum="12">
+        android:weightSum="13">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="8"
+            android:layout_weight="9"
             android:theme="@style/AppTheme.AppBarOverlay"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2">
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:gravity="center">
 
             <ImageButton
                 android:id="@+id/notificationBtn"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
-                app:srcCompat="@drawable/baseline_notifications_black_24dp" />
+                app:srcCompat="@drawable/ic_notifications_white_24dp" />
 
-            <TextView
-                android:id="@+id/notificationCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|end"
-                android:textColor="@color/colorRed" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        </FrameLayout>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/notificationCount"
+                    android:layout_width="0dp"
+                    android:text="45"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/colorgWhite" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <FrameLayout
             android:layout_width="0dp"
@@ -69,8 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
-                app:srcCompat="@drawable/baseline_search_black_24dp" />
-
+                app:srcCompat="@drawable/ic_search_white_24dp" />
         </FrameLayout>
     </LinearLayout>
 

@@ -11,11 +11,10 @@
     tools:showIn="@layout/app_bar_main">
 
     <FrameLayout
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>
-
 
 </android.support.constraint.ConstraintLayout>

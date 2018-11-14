@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -59,6 +61,18 @@ public class NewTransactionFragment extends Fragment {
 
         spinner =(Spinner)view.findViewById(R.id.vehicle_number);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinner.setSelection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         //buyVehicle = (CardView) view.findViewById(R.id.tr_buy_vehicle);
         sellVehicle = (CardView) view.findViewById(R.id.tr_sell_vehicle2);
         serviceVehicle = (CardView) view.findViewById(R.id.tr_service_vehicle);
@@ -68,12 +82,14 @@ public class NewTransactionFragment extends Fragment {
         //leasePayment =(CardView) view.findViewById(R.id.tr_leasing_payment_vehicle);
         emissionTesting = (CardView) view.findViewById(R.id.tr_emision_vehicle);
 
-//        ArrayList<String> arrayList = new ArrayList<>();
-//        arrayList.add("23456");
-//        arrayList.add("DF-3561");
-//        setDataToSpinner(arrayList);
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("23456");
+        arrayList.add("DF-3561");
+        arrayList.add("DF-3562");
+        arrayList.add("DF-3234");
+        setDataToSpinner(arrayList);
 
-        setDataToSpinner(MainActivity.vehicle_numbers);
+        //setDataToSpinner(MainActivity.vehicle_numbers);
 //        buyVehicle.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -175,7 +191,7 @@ public class NewTransactionFragment extends Fragment {
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 R.layout.item_spinner, vehicleNubmers);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapter.setDropDownViewResource(R.layout.vehicle_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
     }
 

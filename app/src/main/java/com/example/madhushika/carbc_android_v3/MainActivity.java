@@ -1,17 +1,17 @@
 package com.example.madhushika.carbc_android_v3;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,22 +19,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
-import Objects.ServiceType;
-import chainUtil.ChainUtil;
-import chainUtil.KeyGenerator;
 import core.blockchain.Block;
-import core.connection.BlockJDBCDAO;
-import core.connection.VehicleJDBCDAO;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -71,6 +64,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         ImageButton notifBtn = (ImageButton) findViewById(R.id.notificationBtn);
+        //notifBtn.setImageDrawable(getDrawable(R.drawable.ic_arrow_back_black_24dp));
         ImageButton searchBtn = (ImageButton) findViewById(R.id.searchBtn);
 
         notificationCount = (TextView) findViewById(R.id.notificationCount);
@@ -94,8 +88,12 @@ public class MainActivity extends AppCompatActivity
         notifBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, NotificationActivity.class);
-                startActivity(i);
+                if (notificationList.size() != 0) {
+                    Intent i = new Intent(MainActivity.this, NotificationActivity.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getApplicationContext(), "No notifications", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -116,32 +114,24 @@ public class MainActivity extends AppCompatActivity
             unregisteredNewTransactionFragment = new UnregisteredNewTransactionFragment();
             transaction.add(R.id.contentLayout, new UnregisteredNewTransactionFragment(), "addUnregisteredNewTransactionFragment");
         } else {
-//            newTransactionFragment = new NewTransactionFragment();
-//            transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
             transactionNew = new TransactionNew();
-            transaction.add(R.id.contentLayout, new TransactionNew(), "addtransactionFragment");
+            transaction.add(R.id.contentLayout, new TransactionNew(), "addNewtransaction");
         }
-
-//        if (MainActivity.vehicle_numbers.size()==0){
-//            Menu menuNav=navigationView.getMenu();
-//            MenuItem nav_item2 = menuNav.findItem(R.id.navigation_status);
-//            nav_item2.setEnabled(false);
-//            MenuItem nav_item3 = menuNav.findItem(R.id.navigation_info);
-//            nav_item3.setEnabled(false);
-//            MenuItem nav_item4 = menuNav.findItem(R.id.navigation_reminders);
-//            nav_item4.setEnabled(false);
-//        }else {
-//            Menu menuNav=navigationView.getMenu();
-//            MenuItem nav_item2 = menuNav.findItem(R.id.navigation_status);
-//            nav_item2.setEnabled(true);
-//            MenuItem nav_item3 = menuNav.findItem(R.id.navigation_info);
-//            nav_item3.setEnabled(true);
-//            MenuItem nav_item4 = menuNav.findItem(R.id.navigation_reminders);
-//            nav_item4.setEnabled(true);
-//        }
         transaction.commit();
         NewTransactionFragment.setActivity(activity);
         NavigationHandler.setManager(manager);
+    }
+
+    @Override
+    protected void onResume() {
+        if ((notificationList.size() != 0)) {
+            notificationCount.setVisibility(View.VISIBLE);
+
+            notificationCount.setText(String.valueOf(notificationList.size()));
+        } else {
+            notificationCount.setVisibility(View.GONE);
+        }
+        super.onResume();
     }
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -157,6 +147,7 @@ public class MainActivity extends AppCompatActivity
 
                 if (str.equals("newBlock")|| str3.equals("confirmationSent")) {
                     if ((notificationList.size() != 0)) {
+                        notificationCount.setVisibility(View.VISIBLE);
                         notificationCount.setText(String.valueOf(notificationList.size()));
                     }
                 }
@@ -174,6 +165,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        // TODO: Check which fragment is the current one and if it's home, exit. Else go to home.
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -208,10 +200,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        final int id = item.getItemId();
 
         if (id == R.id.navigation_add_event) {
-            NavigationHandler.navigateTo("addtransaction");
+            displayFragment("addtransaction", id);
+            //NavigationHandler.navigateTo("addtransaction");
             // Handle the camera action
         } else if (id == R.id.navigation_view_vehicle) {
 //            NavigationHandler.navigateTo("SearchVehicleFragment");
@@ -224,7 +217,13 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.navigation_status) {
-                NavigationHandler.navigateTo("StatusFragment");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    displayFragment("StatusFragment", id);
+                    //NavigationHandler.navigateTo("StatusFragment");
+                }
+            }, 300);
 //        } else if (id == R.id.navigation_reminders) {
 //                NavigationHandler.navigateTo("RemindersFragment");
         }
@@ -235,4 +234,28 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void displayFragment(String tag, int id) {
+        Fragment fragment = getFragment(id);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.contentLayout, fragment, tag);
+        fragmentTransaction.commit();
+    }
+
+    private Fragment getFragment(int id) {
+        switch (id) {
+            case R.id.navigation_add_event:
+                if (vehicle_numbers.size() == 0) {
+                    return new UnregisteredNewTransactionFragment();
+                } else {
+                    return new TransactionNew();
+                }
+            case R.id.navigation_status:
+                return new StatusFragment();
+            default:
+                return null;
+        }
+    }
+
+
 }
