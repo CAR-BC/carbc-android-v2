@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void displayFragment(String tag, int id) {
+    public void displayFragment(String tag, int id) {
         Fragment fragment = getFragment(id);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.contentLayout, fragment, tag);

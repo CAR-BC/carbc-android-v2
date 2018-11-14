@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,32 +11,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 
-import Objects.BlockInfo;
-import Objects.ServiceType;
 import core.blockchain.Block;
-import core.blockchain.BlockHeader;
 import core.consensus.Consensus;
 
-public class NotificationActivity extends AppCompatActivity {
-    private ListView notification;
+public class CriticalNotificationList extends AppCompatActivity {
+    ListView criticalNotificationList;
 
-    //public static ArrayList <Block> nonAprovedBlocks = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notification);
+        setContentView(R.layout.activity_critical_notification_list);
         hideActionBar();
 
         ImageView backBtn = (ImageView) findViewById(R.id.back_button);
@@ -55,19 +45,17 @@ public class NotificationActivity extends AppCompatActivity {
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String str1 = intent.getStringExtra("newNomApprovedBlockReceived");
-            //TODO: Test this again
             String str = intent.getStringExtra("confirmationSent");
-            if (str.equals("confirmationSent") || str1.equals("newBlock")){
+            if (str.equals("confirmationSent")){
                 setArrayAdapterToNotificationList(MainActivity.notificationList);
             }
         }
     };
 
     private void setArrayAdapterToNotificationList(final ArrayList<Block> notificationList){
-        notification = (ListView) findViewById(R.id.list_view_notification);
+        criticalNotificationList = (ListView) findViewById(R.id.list_view_notification);
 
-        notification.setAdapter(new BaseAdapter() {
+        criticalNotificationList.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
                 return notificationList.size();
@@ -90,7 +78,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                 if (convertView == null) {
                     //cellUser = inflater.inflate(R.layout.cell_notification, parent, false);
-                    cellUser = LayoutInflater.from(NotificationActivity.this).inflate(R.layout.cell_notification, viewGroup, false);
+                    cellUser = LayoutInflater.from(CriticalNotificationList.this).inflate(R.layout.cell_notification, viewGroup, false);
                 } else {
                     cellUser = convertView;
                 }
@@ -132,7 +120,7 @@ public class NotificationActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Consensus.getInstance().sendAgreementForBlock(block.getBlockHeader().getHash());
-                        Toast.makeText(NotificationActivity.this, "Sent your confirmation", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CriticalNotificationList.this, "Sent your confirmation", Toast.LENGTH_SHORT).show();
                         MainActivity.notificationList.remove(block);
 
                         Intent intent = new Intent("MainActivity");
@@ -142,13 +130,18 @@ public class NotificationActivity extends AppCompatActivity {
                         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         MyApp.getContext().sendBroadcast(intent);
 
+//                        Intent intent1 = new Intent("NotificationActivity");
+//                        intent.putExtra("confirmationSent", "confirmationSent");
+//                        System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
+//                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+//                        MyApp.getContext().sendBroadcast(intent1);
                     }
                 });
 
                 request_more.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intents = new Intent(NotificationActivity.this, ShowMoreInfoNotificationView.class);
+                        Intent intents = new Intent(CriticalNotificationList.this, ShowMoreInfoNotificationView.class);
                         intents.putExtra("block", block);
                         startActivity(intents);
                         //fill

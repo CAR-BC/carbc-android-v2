@@ -58,6 +58,8 @@ public class BuyVehicleActivity extends AppCompatActivity {
 
                             VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
                             String preOwner = vehicleJDBCDAO.getCurrentOwner(vid.getText().toString());
+                            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+                            System.out.println(preOwner);
 
                             if (preOwner!= null){
                                 //call blockchain method
