@@ -132,7 +132,8 @@ public class Controller {
          * when initializing the network
          * */
         Node node = Node.getInstance();
-        node.initTest2("p9lite", 42761);
+        node.initTest2("User2", 42761);
+//        node.initTest2("User1", 42761);
 
         /*
          * when we want our node to start listening
