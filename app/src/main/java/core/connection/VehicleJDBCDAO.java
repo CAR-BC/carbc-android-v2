@@ -65,7 +65,9 @@ public class VehicleJDBCDAO implements AsyncResponse {
     }
 
     public boolean searchVehicleByRegistrationNumber(String registrationNumber) {
-        return true;
+
+
+        return false;
     }
 
     @Override
