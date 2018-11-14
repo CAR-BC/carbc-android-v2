@@ -244,6 +244,47 @@ public class AgreementCollector extends Thread {
                         getMandatoryValidators().add(pubKey);
                         break;
 
+                    case "BuyVehicle":
+                        String vehicleNumber = block.getBlockBody().getTransaction().getAddress();
+//                    String preOwner = blockData.getString("preOwner");
+                        String preOwner = secondaryParties.getJSONObject("PreOwner").getString("publicKey");
+
+                        log.info("initializing OwnershipExchange smart contract");
+                        OwnershipExchange ownershipExchge = new OwnershipExchange(vehicleNumber, preOwner);
+
+                        try{
+                            if (ownershipExchge.isAuthorizedToSeller()){
+                                log.info("seller is authorized");
+                                String preOwnerPubKey = secondaryParties.getJSONObject("PreOwner").getString("publicKey");
+                                getMandatoryValidators().add(preOwnerPubKey);
+                                log.info("added new owner to mandatory validator array");
+                                log.info("no of mandatory validators: {}", getMandatoryValidators().size());
+
+                                JSONObject obj = getIdentityJDBC().getIdentityByRole("RMV");
+                                String RmvPubKey = obj.getString("publicKey");
+                                getMandatoryValidators().add(RmvPubKey);
+                                log.info("added RMV to mandatory validator array");
+                                log.info("no of mandatory validators: {}", getMandatoryValidators().size());
+
+                                if(preOwnerPubKey.equals(myPubKey)) {
+                                    //show notification icon 2
+                                    Thread.sleep(6000);
+                                    log.info("pre owner sending agreements");
+                                    Consensus.getInstance().sendAgreementForBlock(block.getBlockHeader().getHash());
+                                }
+                            }else{
+                                log.info("seller is not authorized");
+                                log.info("smart contract failed");
+                            }
+
+                        }catch (NullPointerException e){
+                            System.out.println("error occurred in smart contract");
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } finally {
+                            break;
+                        }
+
                 }
             }
             mandatoryCount = mandatoryValidators.size();

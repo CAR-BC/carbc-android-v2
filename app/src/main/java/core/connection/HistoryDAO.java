@@ -65,7 +65,6 @@ public class HistoryDAO implements AsyncResponse {
                         "&event=" + URLEncoder.encode(blockInfo.getEvent(),"UTF-8") +
                         "&data=" + URLEncoder.encode(blockInfo.getData(),"UTF-8") +
                         "&address=" + URLEncoder.encode(blockInfo.getAddress(),"UTF-8")+
-                        "&address=" + URLEncoder.encode(blockInfo.getAddress(),"UTF-8")+
                         "&status=" + status , "GET", "BlockInfo", blockInfo);
 
                 while (jsonArray == null) {
