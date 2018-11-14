@@ -28,7 +28,7 @@ public class MessageSender {
 
     private static  MessageSender messageSender;
     private final static Logger log = LoggerFactory.getLogger(MessageSender.class);
-    private static String bootsrappingNodeId = "192.168.8.101";
+    private static String bootsrappingNodeId = "192.168.8.103";
 
 
     private MessageSender() {};
@@ -50,7 +50,7 @@ public class MessageSender {
             RequestMessage requestIPMessage = MessageCreator.createSpecificMessage(jsonObject, "Register", "0");
             requestIPMessage.addHeader("keepActive", "false");
             log.info("talking to bootsrap node");
-            Node.getInstance().sendMessageToPeer("192.168.8.101", 49154,requestIPMessage);
+            Node.getInstance().sendMessageToPeer(bootsrappingNodeId, 49154,requestIPMessage);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -238,7 +238,7 @@ public class MessageSender {
             jsonObject.put("peerID", peerID);
             jsonObject.put("listeningPort",Node.getInstance().getNodeConfig().getListenerPort());
             RequestMessage peerDetailsRequestMessage = MessageCreator.createMessage(jsonObject, "RequestPeerDetails");
-            Node.getInstance().sendMessageToPeer("192.168.8.101", 49154, peerDetailsRequestMessage);
+            Node.getInstance().sendMessageToPeer(bootsrappingNodeId, 49154, peerDetailsRequestMessage);
             log.info("Peer Details Requested");
         } catch (JSONException e) {
             e.printStackTrace();
