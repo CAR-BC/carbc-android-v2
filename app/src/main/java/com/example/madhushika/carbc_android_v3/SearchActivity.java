@@ -27,15 +27,12 @@ import core.connection.BlockJDBCDAO;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private TextView owner;
+    private TextView registration_number;
     private TextView engine_no;
-    private TextView vehicle_class;
-    private TextView condition;
+    private TextView chassis_number;
     private TextView make;
     private TextView vmodel;
-    private TextView year;
     private TextView rating;
-    private EditText reg_no;
 
     private ListView moreInfoList;
 
@@ -46,30 +43,19 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         hideActionBar();
 
-        owner = findViewById(R.id.search_owner_txt);
         engine_no = findViewById(R.id.search_engine_no_txt);
-        vehicle_class = findViewById(R.id.search_class_txt);
-        condition = findViewById(R.id.search_condition_txt);
+        chassis_number = findViewById(R.id.search_class_txt);
         make = findViewById(R.id.search_make_txt);
         rating = findViewById(R.id.search_rating_txt);
         vmodel = findViewById(R.id.search_model_txt);
-        year = findViewById(R.id.search_year_txt);
+        registration_number = findViewById(R.id.search_vehicle_vid);
 
-        reg_no = findViewById(R.id.search_vehicle_vid);
         final BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
 
 
         //ImageView backBtn = (ImageView) findViewById(R.id.back_button);
 
         final Button reqBtn = (Button) findViewById(R.id.req_more);
-        /*backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });*/
-
-        //    registerReceiver(broadcastReceiver, new IntentFilter("SearchActivity"));
 
         reqBtn.setEnabled(false);
         ImageView searchBtn = (ImageView) findViewById(R.id.search_btn);
@@ -81,19 +67,16 @@ public class SearchActivity extends AppCompatActivity {
                 JSONArray array = new JSONArray();
                 setArrayAdapterToMoreInfoList(array);
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(reg_no.getWindowToken(), 0);
-                JSONObject data = blockJDBCDAO.getRegistrationInfoByRegistrationNumber(reg_no.getText().toString());
+                imm.hideSoftInputFromWindow(registration_number.getWindowToken(), 0);
+                JSONObject data = blockJDBCDAO.getRegistrationInfoByRegistrationNumber(registration_number.getText().toString());
 
                 try {
                     if (data.getBoolean("status")){
                         try {
                             JSONObject vehicleData = data.getJSONObject("data");
-                            owner.setText(vehicleData.getString("current_owner"));
                             engine_no.setText(vehicleData.getString("engine_number"));
-                            vehicle_class.setText(vehicleData.getString("vehicle_class"));
+                            chassis_number.setText(vehicleData.getString("chassis_number"));
                             vmodel.setText(vehicleData.getString("model"));
-                            year.setText(vehicleData.getString("year_of_manufacture"));
-                            condition.setText(vehicleData.getString("condition_and_note"));
                             make.setText(vehicleData.getString("make"));
                             rating.setText(vehicleData.getString("rating"));
 
@@ -103,12 +86,9 @@ public class SearchActivity extends AppCompatActivity {
                         }
                     }
                     else {
-                        owner.setText("N/A");
                         engine_no.setText("N/A");
-                        vehicle_class.setText("N/A");
+                        chassis_number.setText("N/A");
                         vmodel.setText("N/A");
-                        year.setText("N/A");
-                        condition.setText("N/A");
                         make.setText("N/A");
                         rating.setText("N/A");
                         Toast.makeText(SearchActivity.this,"No such vehicle in the system",Toast.LENGTH_LONG).show();
@@ -129,7 +109,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //request data from backend
-                JSONArray vehicledata = blockJDBCDAO.getVehicleInfoByRegistrationNumber(reg_no.getText().toString());
+                JSONArray vehicledata = blockJDBCDAO.getVehicleInfoByRegistrationNumber(registration_number.getText().toString());
                 System.out.println(vehicledata);
                 if (vehicledata.length() > 0) {
                     setArrayAdapterToMoreInfoList(vehicledata);

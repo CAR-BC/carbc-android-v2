@@ -79,14 +79,14 @@ public class IdentityJDBC implements AsyncResponse {
         return KeyGenerator.getInstance().getPublicKeyAsString();
     }
 
-    public JSONArray getPeersByLocation(String location) throws SQLException {
+    public JSONArray getPeersByLocation() throws SQLException {
         APICaller apiCaller = new APICaller();
         JSONArray array = new JSONArray();
         jsonArray = null;
         apiCaller.delegate = this;
         try {
 
-            apiCaller.execute(base_url+"findidentitybyaddress?address=" + location, "GET", "v", "g");
+            apiCaller.execute(base_url+"getservicestations", "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -108,8 +108,7 @@ public class IdentityJDBC implements AsyncResponse {
             e.printStackTrace();
         }
         return array;
-        }
-
+    }
 
 
     @Override

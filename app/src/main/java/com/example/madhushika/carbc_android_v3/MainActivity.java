@@ -166,9 +166,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         // TODO: Check which fragment is the current one and if it's home, exit. Else go to home.
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("StatusFragment");
+        Fragment fragment1 = getSupportFragmentManager().findFragmentByTag("InfoFragment");
+        if (fragment != null || fragment1 != null){
+            displayFragment("addtransaction", R.id.navigation_add_event);
         } else {
             super.onBackPressed();
         }
@@ -204,31 +205,26 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.navigation_add_event) {
             displayFragment("addtransaction", id);
-            //NavigationHandler.navigateTo("addtransaction");
-            // Handle the camera action
+
         } else if (id == R.id.navigation_view_vehicle) {
-//            NavigationHandler.navigateTo("SearchVehicleFragment");
             Intent i = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(i);
 
         } else if (id == R.id.navigation_notifications) {
-            //NavigationHandler.navigateTo("NotificationFragment");
             Intent i = new Intent(MainActivity.this, NotificationActivity.class);
             startActivity(i);
 
         } else if (id == R.id.navigation_status) {
+            displayFragment("prigressBar",R.id.progress_bar_item);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     displayFragment("StatusFragment", id);
-                    //NavigationHandler.navigateTo("StatusFragment");
                 }
             }, 300);
-//        } else if (id == R.id.navigation_reminders) {
-//                NavigationHandler.navigateTo("RemindersFragment");
         }
         else if (id == R.id.navigation_info) {
-                NavigationHandler.navigateTo("InfoFragment");
+            displayFragment("InfoFragment",id );
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -252,6 +248,12 @@ public class MainActivity extends AppCompatActivity
                 }
             case R.id.navigation_status:
                 return new StatusFragment();
+
+            case R.id.navigation_info:
+                return new InfoFragment();
+
+            case R.id.progress_bar_item:
+                return new ProgressBarFragment();
             default:
                 return null;
         }

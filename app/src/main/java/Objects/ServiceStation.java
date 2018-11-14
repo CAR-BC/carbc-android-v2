@@ -5,6 +5,8 @@ public class ServiceStation {
     private String address;
     private String publicKey;
     private String role;
+    private String longtitude;
+    private String lattitude;
 
     public ServiceStation(String name, String address) {
         this.name = name;
@@ -12,11 +14,13 @@ public class ServiceStation {
 
     }
 
-    public ServiceStation(String name, String address, String publicKey, String role) {
+    public ServiceStation(String name, String address, String publicKey, String role, String lattitude, String longtitude) {
         this.name = name;
         this.address = address;
         this.setPublicKey(publicKey);
         this.setRole(role);
+        this.lattitude = lattitude;
+        this.longtitude = longtitude;
     }
 
     public String getName() {
@@ -50,5 +54,13 @@ public class ServiceStation {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getLongtitude() {
+        return longtitude;
+    }
+
+    public String getLattitude() {
+        return lattitude;
     }
 }
