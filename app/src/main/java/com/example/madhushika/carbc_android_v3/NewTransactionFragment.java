@@ -59,13 +59,13 @@ public class NewTransactionFragment extends Fragment {
 
         spinner =(Spinner)view.findViewById(R.id.vehicle_number);
 
-        buyVehicle = (CardView) view.findViewById(R.id.tr_buy_vehicle);
+        //buyVehicle = (CardView) view.findViewById(R.id.tr_buy_vehicle);
         sellVehicle = (CardView) view.findViewById(R.id.tr_sell_vehicle2);
         serviceVehicle = (CardView) view.findViewById(R.id.tr_service_vehicle);
-        registerVehicle = (CardView) view.findViewById(R.id.tr_reg_new_vehicle);
+        //registerVehicle = (CardView) view.findViewById(R.id.tr_reg_new_vehicle);
         insureVehicle = (CardView) view.findViewById(R.id.tr_insure_vehicle);
-        leasing = (CardView) view.findViewById(R.id.tr_leasing_vehicle);
-        leasePayment =(CardView) view.findViewById(R.id.tr_leasing_payment_vehicle);
+       // leasing = (CardView) view.findViewById(R.id.tr_leasing_vehicle);
+        //leasePayment =(CardView) view.findViewById(R.id.tr_leasing_payment_vehicle);
         emissionTesting = (CardView) view.findViewById(R.id.tr_emision_vehicle);
 
 //        ArrayList<String> arrayList = new ArrayList<>();
@@ -74,15 +74,15 @@ public class NewTransactionFragment extends Fragment {
 //        setDataToSpinner(arrayList);
 
         setDataToSpinner(MainActivity.vehicle_numbers);
-        buyVehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), BuyVehicleActivity.class);
-                String vehiclNo = spinner.getSelectedItem().toString();
-                i.putExtra("vid",vehiclNo);
-                startActivity(i);
-            }
-        });
+//        buyVehicle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getActivity(), BuyVehicleActivity.class);
+//                String vehiclNo = spinner.getSelectedItem().toString();
+//                i.putExtra("vid",vehiclNo);
+//                startActivity(i);
+//            }
+//        });
         sellVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,16 +102,16 @@ public class NewTransactionFragment extends Fragment {
 
             }
         });
-        registerVehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), RegisterVehicleActivity.class);
-                String vehiclNo = spinner.getSelectedItem().toString();
-                i.putExtra("vid",vehiclNo);
-                startActivity(i);
-
-            }
-        });
+//        registerVehicle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getActivity(), RegisterVehicleActivity.class);
+//                String vehiclNo = spinner.getSelectedItem().toString();
+//                i.putExtra("vid",vehiclNo);
+//                startActivity(i);
+//
+//            }
+//        });
         insureVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,28 +122,28 @@ public class NewTransactionFragment extends Fragment {
 
             }
         });
-        leasing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), LeasingActivity.class);
-                String vehiclNo = spinner.getSelectedItem().toString();
-                i.putExtra("vid",vehiclNo);
-                startActivity(i);
-                RequestMessage requestMessage  = MessageCreator.createMessage(new JSONObject(), "test");
-                Node.getInstance().sendMessageToPeer("192.168.8.107",45673 ,requestMessage);
-
-            }
-        });
-        leasePayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), LeasingPaymentActivity.class);
-                String vehiclNo = spinner.getSelectedItem().toString();
-                i.putExtra("vid",vehiclNo);
-                startActivity(i);
-
-            }
-        });
+//        leasing.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getActivity(), LeasingActivity.class);
+//                String vehiclNo = spinner.getSelectedItem().toString();
+//                i.putExtra("vid",vehiclNo);
+//                startActivity(i);
+//                RequestMessage requestMessage  = MessageCreator.createMessage(new JSONObject(), "test");
+//                Node.getInstance().sendMessageToPeer("192.168.8.107",45673 ,requestMessage);
+//
+//            }
+//        });
+//        leasePayment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getActivity(), LeasingPaymentActivity.class);
+//                String vehiclNo = spinner.getSelectedItem().toString();
+//                i.putExtra("vid",vehiclNo);
+//                startActivity(i);
+//
+//            }
+//        });
         emissionTesting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

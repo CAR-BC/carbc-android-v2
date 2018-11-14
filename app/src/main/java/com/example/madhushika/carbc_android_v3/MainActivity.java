@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity
 //            newTransactionFragment = new NewTransactionFragment();
 //            transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
             transactionNew = new TransactionNew();
-            transaction.add(R.id.contentLayout, new NewTransactionFragment(), "addtransactionFragment");
+            transaction.add(R.id.contentLayout, new TransactionNew(), "addtransactionFragment");
         }
 
 //        if (MainActivity.vehicle_numbers.size()==0){
