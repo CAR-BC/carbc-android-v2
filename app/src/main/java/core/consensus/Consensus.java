@@ -72,6 +72,7 @@ public class Consensus {
     }
 
     public synchronized void handleNonApprovedBlock(Block block) throws SQLException {
+        log.info("===============================handle non approved blocks");
         if (!isDuplicateBlock(block)) {
             if (ChainUtil.signatureVerification(block.getBlockBody().getTransaction().getSender(),
                     block.getBlockHeader().getSignature(), block.getBlockHeader().getHash())) {

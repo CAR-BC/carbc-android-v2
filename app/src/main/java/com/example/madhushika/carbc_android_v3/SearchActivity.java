@@ -1,14 +1,10 @@
 package com.example.madhushika.carbc_android_v3;
 
-import android.arch.core.executor.TaskExecutor;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -24,14 +20,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.EventListener;
 
 import Objects.EventData;
-import core.blockchain.Block;
 import core.connection.BlockJDBCDAO;
-import core.consensus.Consensus;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -67,15 +59,15 @@ public class SearchActivity extends AppCompatActivity {
         final BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
 
 
-        ImageView backBtn = (ImageView) findViewById(R.id.back_button);
+        //ImageView backBtn = (ImageView) findViewById(R.id.back_button);
 
         final Button reqBtn = (Button) findViewById(R.id.req_more);
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        /*backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });
+        });*/
 
         //    registerReceiver(broadcastReceiver, new IntentFilter("SearchActivity"));
 
@@ -266,8 +258,20 @@ public class SearchActivity extends AppCompatActivity {
     public void hideActionBar() {
         //Hide the action bar only if it exists
         if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Search Vehicle");
+            //getSupportActionBar().hide();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

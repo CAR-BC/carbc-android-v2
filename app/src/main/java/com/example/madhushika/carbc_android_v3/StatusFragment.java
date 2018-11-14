@@ -1,13 +1,17 @@
 package com.example.madhushika.carbc_android_v3;
 
 
+import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,23 +29,41 @@ import core.connection.HistoryDAO;
 public class StatusFragment extends Fragment {
 
     private ListView listView;
+    LayoutInflater inflater;
+    ProgressDialog mDialog;
 
     public StatusFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setArrayAdapterTostatusList();
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.inflater = inflater;
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_status, container, false);
-
         listView = (ListView)view.findViewById(R.id.status_list);
+        return view;
+    }
 
+    private void setArrayAdapterTostatusList( ){
+        Log.d("Padmal", "Inside method");
+        mDialog = new ProgressDialog(getActivity());
+        mDialog.setMessage("Please wait...");
+        mDialog.setTitle("Loading");
+        mDialog.setCancelable(false);
+        mDialog.show();
+        Log.d("Padmal", "Started fetching");
         HistoryDAO historyDAO = new HistoryDAO();
         final ArrayList<StatusItem> allHistory = historyDAO.getAllHistory();
-
+        mDialog.dismiss();
+        Log.d("Padmal", "Finished fetching");
         listView.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
@@ -73,13 +95,13 @@ public class StatusFragment extends Fragment {
                 Placeholder ph = (Placeholder) cellUser.getTag();
                 TextView job;
                 TextView date1;
-                final TextView condition;
+                final ImageView condition;
                 TextView registrationNumber;
 
                 if (ph == null) {
                     job = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_event);
                     date1 = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_date);
-                    condition = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_condition);
+                    condition = (ImageView) cellUser.findViewById(R.id.cell_my_vehicle_status_condition);
                     registrationNumber =(TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_registrationNumber);
 
                     ph = new Placeholder();
@@ -98,16 +120,15 @@ public class StatusFragment extends Fragment {
 
                 job.setText(statusItem.getJob());
                 date1.setText(statusItem.getDate1());
-                condition.setText(statusItem.getCondition());
                 registrationNumber.setText(statusItem.getRegistrationNumber());
 
                 if (statusItem.getCondition().equalsIgnoreCase("pending")){
-                    condition.setBackgroundResource(R.color.colorYellow);
+                    condition.setImageDrawable(getResources().getDrawable(R.drawable.ic_progress_24dp));
                 } if (statusItem.getCondition().equalsIgnoreCase("accepted")){
-                    condition.setBackgroundResource(R.color.colorAcceptedGreen);
+                    condition.setImageDrawable(getResources().getDrawable(R.drawable.ic_success_24dp));
                 } if (statusItem.getCondition().equalsIgnoreCase("Failed")){
-                    condition.setBackgroundResource(R.color.colorRejectedRed);
-                    condition.setOnClickListener(new View.OnClickListener() {
+                    condition.setImageDrawable(getResources().getDrawable(R.drawable.ic_fail_24dp));
+                    /*condition.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             //TODO: resend block
@@ -116,23 +137,17 @@ public class StatusFragment extends Fragment {
                                 condition.setBackgroundResource(R.color.colorYellow);
                             }
                         }
-                    });
+                    });*/
                 }
                 return cellUser;
             }
         });
-
-        return view;
-    }
-
-    private void setArrayAdapterTostatusList(ArrayList<StatusItem> statusItemsList ){
-
     }
 
     private class Placeholder {
         public TextView job;
         public TextView datet;
-        public TextView condition;
+        public ImageView condition;
         public TextView registrationNumber;
 
     }

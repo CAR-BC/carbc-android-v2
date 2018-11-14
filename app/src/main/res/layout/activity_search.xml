@@ -15,29 +15,17 @@
             android:layout_marginTop="18dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/back_button"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="0dp"
-                android:src="@drawable/ic_baseline_arrow_back_black_24dp"/>
-
+            android:weightSum="11"
+            android:layout_height="?attr/actionBarSize">
 
             <EditText
                 android:layout_marginLeft="15dp"
                 android:id="@+id/search_vehicle_vid"
-                android:hint="Enter vehicle number"
+                android:hint="Vehicle number"
                 android:layout_width="0dp"
-                android:layout_weight="8"
+                android:layout_weight="9"
                 android:layout_height="48dp"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:background="@null"/>
 
             <ImageView
@@ -46,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_search_black_24dp" />
+                android:src="@drawable/ic_search_black_24dp" />
 
 
         </LinearLayout>

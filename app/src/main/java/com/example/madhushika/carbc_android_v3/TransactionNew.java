@@ -29,7 +29,6 @@ public class TransactionNew extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        this.hideActionBar();
         View view = inflater.inflate(R.layout.fragment_transaction_new, container, false);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
@@ -42,11 +41,6 @@ public class TransactionNew extends Fragment {
         return view;
     }
 
-    private void hideActionBar() {
-        //Hide the action bar only if it exists
-        if (((AppCompatActivity)getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-        }
-    }
+
 
 }
