@@ -98,9 +98,10 @@ public class Consensus {
                 log.info("size of nonApprovedBlocks: {}", nonApprovedBlocks.size());
 
 
+                AgreementCollector agreementCollector = new AgreementCollector(block);
+                System.out.println("agreement colletor ID: "+agreementCollector.getAgreementCollectorId());
                 TimeKeeper timeKeeper = new TimeKeeper(block.getBlockHeader().getPreviousHash());
                 timeKeeper.start();
-                AgreementCollector agreementCollector = new AgreementCollector(block);
                 if (agreementCollector.isExistence()) {
                     agreementCollectors.add(agreementCollector);
                     if (agreementCollector.succeed) {

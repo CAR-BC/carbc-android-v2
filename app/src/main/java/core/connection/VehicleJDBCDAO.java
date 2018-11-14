@@ -65,40 +65,43 @@ public class VehicleJDBCDAO implements AsyncResponse {
     }
 
     public boolean searchVehicleByRegistrationNumber(String registrationNumber) {
-        APICaller apiCaller2 = new APICaller();
-        apiCaller2.delegate = this;
+//        APICaller apiCaller2 = new APICaller();
+//        apiCaller2.delegate = this;
+//
+//        boolean isPresent = true;
+//
+//        try {
+//            apiCaller2.execute(base_url + "searchvehicledata" + "?registration_number=" + registrationNumber, "GET", "v", "g");
+//
+//            while (jsonArray == null) {
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            if (jsonArray.getBoolean(0)) {
+//                JSONArray array = jsonArray.getJSONArray(1);
+//                if (array.getInt(0)>0){
+//                    isPresent =true;
+//                }else {
+//                    isPresent = false;
+//                }
+//            }
+//
+//            System.out.println(jsonArray);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return isPresent;
 
-        boolean isPresent = true;
 
-        try {
-            apiCaller2.execute(base_url + "searchvehicledata" + "?registration_number=" + registrationNumber, "GET", "v", "g");
-
-            while (jsonArray == null) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (jsonArray.getBoolean(0)) {
-                JSONArray array = jsonArray.getJSONArray(1);
-                if (array.getInt(0)>0){
-                    isPresent =true;
-                }else {
-                    isPresent = false;
-                }
-            }
-
-            System.out.println(jsonArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return isPresent;
+        return false;
     }
 
     @Override
