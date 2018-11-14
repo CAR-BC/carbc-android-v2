@@ -268,6 +268,7 @@ public class AgreementCollector extends Thread {
 
                                 if(preOwnerPubKey.equals(myPubKey)) {
                                     //show notification icon 2
+                                    log.info("pre owner sending agreements");
                                     MainActivity.criticalNotificationList.add(block);
                                     //TODO: remove this line
                                     MainActivity.notificationList.add(block);

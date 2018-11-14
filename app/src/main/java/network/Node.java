@@ -321,5 +321,9 @@ public final class Node {
         node.startListening();
     }
 
+    public void deletePeers() {
+        nodeConfig.deleteNeigbours();
+    }
+
 
 }

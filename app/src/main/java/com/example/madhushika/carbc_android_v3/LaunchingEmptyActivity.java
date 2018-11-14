@@ -20,6 +20,7 @@ import Objects.ReminderItem;
 import chainUtil.KeyGenerator;
 import controller.Controller;
 import core.connection.VehicleJDBCDAO;
+import network.Node;
 import network.communicationHandler.MessageSender;
 //import controller.Controller;
 
@@ -30,10 +31,9 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launching_empty);
 
-        System.out.println(KeyGenerator.getInstance().getPublicKeyAsString());
-
         Controller controller = new Controller();
         controller.startNode();
+        Node.getInstance().deletePeers();
         MessageSender.requestIP();
 
        // KeyGenerator.getInstance().generateKeyPair();

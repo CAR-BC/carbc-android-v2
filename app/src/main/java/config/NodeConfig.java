@@ -60,4 +60,8 @@ public class NodeConfig {
             }
         }
     }
+
+    public void deleteNeigbours() {
+        neighbours = new ArrayList<>();
+    }
 }
