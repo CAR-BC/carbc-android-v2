@@ -150,13 +150,19 @@ public class MainActivity extends AppCompatActivity
                         notificationCount.setVisibility(View.VISIBLE);
                         notificationCount.setText(String.valueOf(notificationList.size()));
                     }
+                    {
+                        notificationCount.setVisibility(View.GONE);
+                    }
                 }
             }
             if ((str2 != null)) {
                 if (str2.equals("newCriticalBlock")) {
                     if (criticalNotificationList.size() != 0) {
                         criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
+                        criticalNotificationCount.setVisibility(View.VISIBLE);
                         fab.setEnabled(true);
+                    }else {
+                        criticalNotificationCount.setVisibility(View.GONE);
                     }
                 }
             }

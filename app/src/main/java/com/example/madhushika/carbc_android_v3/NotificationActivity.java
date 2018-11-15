@@ -58,7 +58,12 @@ public class NotificationActivity extends AppCompatActivity {
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String str = intent.getStringExtra("confirmationSent");
+            String str = null;
+
+            if (intent!=null){
+               str = intent.getStringExtra("confirmationSent");
+            }
+
             if (str.equals("confirmationSent")){
                 setArrayAdapterToNotificationList(MainActivity.notificationList);
             }
@@ -184,11 +189,12 @@ public class NotificationActivity extends AppCompatActivity {
         public Button more_btn;
         public Button confirm_tx;
     }
-//    @Override
-//    protected void onPause() {
-//        super.onResume();
-//        super.onPause();
-//        unregisterReceiver(broadcastReceiver);
-//    }
+
+    @Override
+    protected void onPause() {
+        super.onResume();
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
+    }
 
 }
