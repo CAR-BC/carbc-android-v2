@@ -113,6 +113,8 @@ public class SearchActivity extends AppCompatActivity {
                 System.out.println(vehicledata);
                 if (vehicledata.length() > 0) {
                     setArrayAdapterToMoreInfoList(vehicledata);
+                }else {
+                    Toast.makeText(SearchActivity.this,"No more transactions",Toast.LENGTH_SHORT);
                 }
             }
         });

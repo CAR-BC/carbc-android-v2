@@ -6,7 +6,9 @@ import android.util.Log;
 import com.example.madhushika.carbc_android_v3.MainActivity;
 import com.example.madhushika.carbc_android_v3.MyApp;
 import com.example.madhushika.carbc_android_v3.NotificationActivity;
+import com.example.madhushika.carbc_android_v3.StatusFragment;
 
+import Objects.StatusItem;
 import chainUtil.ChainUtil;
 import chainUtil.KeyGenerator;
 import config.EventConfigHolder;
@@ -358,6 +360,18 @@ public class AgreementCollector extends Thread {
                         agreement.getBlockHash())) {
 
                     getAgreements().add(agreement);
+                    ArrayList<StatusItem> statusItems = StatusFragment.allHistory;
+                    for (int i = 0; i<statusItems.size();i++){
+                        StatusItem item = statusItems.get(i);
+                        if (item.getBlockHash().equals(agreement.getBlockHash())){
+                            item.setValue(item.getValue()+1);
+
+                            Intent intent = new Intent("StatusFragment");
+                            intent.putExtra("agreementReceived", "agreementReceived");
+                            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                            MyApp.getContext().sendBroadcast(intent);
+                        }
+                    }
 
                     //check for mandatory
                     if (getMandatoryValidators().contains(agreement.getPublicKey())) {

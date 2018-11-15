@@ -248,9 +248,10 @@ public class HistoryDAO implements AsyncResponse {
                     String date = object.getString("block_timestamp").substring(0,10);
                     String vid = object.getString("address");
                     String status = object.getString("status");
+                    String blockHash = object.getString("block_hash");
 
 
-                    StatusItem statusItem = new StatusItem(job,date,status,vid);
+                    StatusItem statusItem = new StatusItem(job,date,status,vid,0,blockHash);
 
                     System.out.println("-----------------------------------------");
                     System.out.println(vid);

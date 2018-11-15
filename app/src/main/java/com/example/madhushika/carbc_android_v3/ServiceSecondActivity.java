@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import controller.Controller;
 import core.blockchain.Block;
 
 public class ServiceSecondActivity extends AppCompatActivity {
@@ -104,6 +105,10 @@ public class ServiceSecondActivity extends AppCompatActivity {
                             JSONObject thirdParty = new JSONObject();
                             thirdParty.put("SparePartProvider", sparePartSellerList);
                             serviceDataJSON.put("ThirdParty", thirdParty);
+
+
+                            Controller controller = new Controller();
+                            controller.sendTransaction("ServiceRepair", vehicleNumber, serviceDataJSON);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
