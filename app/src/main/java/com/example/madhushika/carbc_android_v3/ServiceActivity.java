@@ -781,6 +781,7 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
                 Intent i = new Intent(ServiceActivity.this, ServiceSecondActivity.class);
                 i.putExtra("vid",regNo);
                 i.putExtra("station",s.getName());
+                i.putExtra("publicKey",s.getPublicKey());
                 startActivity(i);
 
             }

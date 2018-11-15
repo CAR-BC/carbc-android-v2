@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,10 +34,15 @@ public class ServiceSecondActivity extends AppCompatActivity {
     ListView service_type_list;
     String vehicleNumber;
     String station;
+    String publicKey;
     ImageView backBtn;
     ArrayList<String> selectedServiceTypeList;
     Button doneBtn;
     Button cancelBtn;
+    String timestamp;
+    private JSONObject serviceDataJSON;
+    private JSONObject serviceStationJson;
+    private JSONArray sparePartSellerList = new JSONArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,8 @@ public class ServiceSecondActivity extends AppCompatActivity {
         if (i != null)
             vehicleNumber = i.getExtras().getString("vid");
             station = i.getExtras().getString("station");
+            publicKey = i.getExtras().getString("publicKey");
+
         vehicle_number.setText(vehicleNumber);
         service_station.setText(station);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +83,31 @@ public class ServiceSecondActivity extends AppCompatActivity {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
+
+                        try {
+                            serviceDataJSON = new JSONObject();
+                            serviceDataJSON.put("vehicle_id", vehicleNumber);
+                            serviceDataJSON.put("serviced_date", timestamp);
+                            serviceDataJSON.put("cost", 100000);
+                            JSONArray services = new JSONArray();
+
+                            for (int k = 0; k < selectedServiceTypeList.size(); k++){
+                                JSONObject service = new JSONObject();
+                                service.put("serviceType", selectedServiceTypeList.get(k));
+                                service.put("serviceData", new JSONArray());
+
+                                services.put(service);
+                            }
+                            serviceDataJSON.put("services", services);
+                            serviceDataJSON.put("SecondaryParty", serviceStationJson);
+
+                            JSONObject thirdParty = new JSONObject();
+                            thirdParty.put("SparePartProvider", sparePartSellerList);
+                            serviceDataJSON.put("ThirdParty", thirdParty);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                         finish();
                     }
