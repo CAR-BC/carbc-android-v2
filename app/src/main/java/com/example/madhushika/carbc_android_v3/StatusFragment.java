@@ -157,6 +157,7 @@ public class StatusFragment extends Fragment {
         HistoryDAO historyDAO = new HistoryDAO();
         allHistory = historyDAO.getAllHistory();
 
+        //TODO: should change this
         if (allHistory.size() != historyRecords.size()){
             for (int i = 0;i<allHistory.size()-historyRecords.size();i++){
                 historyRecords.add(allHistory.get(i));

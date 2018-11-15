@@ -46,9 +46,12 @@ public class CriticalNotificationList extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String str = intent.getStringExtra("confirmationSent");
-            if (str.equals("confirmationSent")){
-                setArrayAdapterToNotificationList(MainActivity.criticalNotificationList);
+            if (str!=null){
+                if (str.equals("confirmationSent")){
+                    setArrayAdapterToNotificationList(MainActivity.criticalNotificationList);
+                }
             }
+
         }
     };
 
@@ -124,7 +127,6 @@ public class CriticalNotificationList extends AppCompatActivity {
                         MainActivity.notificationList.remove(block);
 
                         Intent intent = new Intent("MainActivity");
-                        intent.putExtra("newNomApprovedBlockReceived", "newBlock");
                         intent.putExtra("confirmationSent", "confirmationSent");
                         System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
                         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
