@@ -18,7 +18,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import chainUtil.ChainUtil;
+import chainUtil.KeyGenerator;
 import core.blockchain.Block;
+import core.consensus.Agreement;
 import core.consensus.Consensus;
 
 public class CriticalNotificationList extends AppCompatActivity {
@@ -120,6 +123,12 @@ public class CriticalNotificationList extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Consensus.getInstance().sendAgreementForBlock(block.getBlockHeader().getHash());
+                        String blockHash = block.getBlockHeader().getHash();
+                        String digitalSignature = ChainUtil.digitalSignature(block.getBlockHeader().getHash());
+                        String signedBlock = digitalSignature;
+                        Agreement agreement = new Agreement(digitalSignature, signedBlock, blockHash,
+                                KeyGenerator.getInstance().getPublicKeyAsString());
+                        Consensus.getInstance().handleAgreement(agreement);
                         Toast.makeText(CriticalNotificationList.this, "Sent your confirmation", Toast.LENGTH_SHORT).show();
                         MainActivity.notificationList.remove(block);
 
