@@ -61,9 +61,17 @@ public class NotificationActivity extends AppCompatActivity {
             String str1 = intent.getStringExtra("newNomApprovedBlockReceived");
             //TODO: Test this again
             String str = intent.getStringExtra("confirmationSent");
-            if (str.equals("confirmationSent") || str1.equals("newBlock")){
-                setArrayAdapterToNotificationList(MainActivity.notificationList);
+            if (str!=null){
+                if (str.equals("confirmationSent")){
+                    setArrayAdapterToNotificationList(MainActivity.notificationList);
+                }
             }
+            if (str1!=null){
+                if (str1.equals("newBlock")){
+                    setArrayAdapterToNotificationList(MainActivity.notificationList);
+                }
+            }
+
         }
     };
 

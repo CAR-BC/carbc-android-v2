@@ -19,7 +19,10 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import core.blockchain.Block;
 
@@ -29,6 +32,7 @@ public class ServiceSecondActivity extends AppCompatActivity {
     TextView service_station;
     ListView service_type_list;
     String vehicleNumber;
+    String station;
     ImageView backBtn;
     ArrayList<String> selectedServiceTypeList;
     Button doneBtn;
@@ -45,12 +49,14 @@ public class ServiceSecondActivity extends AppCompatActivity {
         doneBtn = (Button) findViewById(R.id.done_btn);
         cancelBtn = (Button) findViewById(R.id.cancel_btn);
 
-        Intent i = this.getIntent();
+        selectedServiceTypeList = new ArrayList<>();
+
+        Intent i = getIntent();
         if (i != null)
             vehicleNumber = i.getExtras().getString("vid");
-
+            station = i.getExtras().getString("station");
         vehicle_number.setText(vehicleNumber);
-
+        service_station.setText(station);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,10 +115,22 @@ public class ServiceSecondActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+       String[] arrayList = new String[]{"Change the engine oil", "Replace the oil filter", "Replace the air filter",
+               "Replace the fuel filter", "Replace the cabin filter",
+                "Replace the spark plugs", "Tune the engine", "Check level and refill brake fluid or clutch fluid",
+               "Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
+               "Check level and refill power steering fluid", "Grease and lubricate components",
+               "Inspect and replace the timing belt or timing chain if needed", "Check condition of the tires",
+               "Check for proper operation of all lights, wipers ",
+               "Check for any Error codes in the ECU and take corrective action",
+               "Wash the vehicle and clean the interiors", "Use scan tool read trouble code", "replacing head lights"};
+List<String> list =  Arrays.asList(arrayList);
+setArrayAdapterToServiceTypeList(list);
     }
 
 
-    private void setArrayAdapterToServiceTypeList(final ArrayList<String> nameList) {
+    private void setArrayAdapterToServiceTypeList(final List<String> nameList) {
 
         service_type_list = (ListView) findViewById(R.id.service_type_list);
         service_type_list.setAdapter(new BaseAdapter() {
@@ -134,36 +152,37 @@ public class ServiceSecondActivity extends AppCompatActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup viewGroup) {
                 final String serviceStation = nameList.get(position);
+                System.out.println("************************");
+                System.out.println(serviceStation + position);
                 View cellUser = null;
+
+                Placeholder ph;
+                TextView service_station;
+                CheckBox cBox;
 
                 if (convertView == null) {
                     //cellUser = inflater.inflate(R.layout.cell_notification, parent, false);
                     cellUser = LayoutInflater.from(ServiceSecondActivity.this).inflate(R.layout.cell_service_type_list, viewGroup, false);
-                } else {
-                    cellUser = convertView;
-                }
-                Placeholder ph = (Placeholder) cellUser.getTag();
-                TextView service_station;
-                CheckBox isSelected;
-
-                if (ph == null) {
-                    service_station = (TextView) cellUser.findViewById(R.id.serviceType);
-                    isSelected = (CheckBox) cellUser.findViewById(R.id.isSelected);
 
                     ph = new Placeholder();
-                    ph.service_station = service_station;
-                    ph.isSelect = isSelected;
+                    service_station = (TextView) cellUser.findViewById(R.id.serviceType);
+                    cBox = (CheckBox) cellUser.findViewById(R.id.isSelected);
 
+
+                    ph.service_station = service_station;
+                    ph.isSelect = cBox;
 
                     cellUser.setTag(ph);
                 } else {
+                    cellUser = convertView;
+                    ph = (Placeholder) cellUser.getTag();
                     service_station = ph.service_station;
-                    isSelected = ph.isSelect;
-
+                    cBox = ph.isSelect;
                 }
 
+
                 service_station.setText(serviceStation);
-                if (isSelected.isChecked()) {
+                if (cBox.isChecked()) {
                     selectedServiceTypeList.add(serviceStation);
                 } else {
                     selectedServiceTypeList.remove(serviceStation);

@@ -374,9 +374,9 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
         });
 
         Intent i = getIntent();
+        regNo = i.getStringExtra("vid");
         vehicleNumber = (TextView) findViewById(R.id.vehicle_number);
-//        vehicleNumber.setText(i.getExtras().getString("vid"));
-//        regNo = i.getExtras().getString("vid");
+        vehicleNumber.setText(regNo);
 
 
 //        String vid = i.getExtras().getString("vid");
@@ -780,6 +780,7 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
                 System.out.println("Current selected location : " + s.getAddress());
                 Intent i = new Intent(ServiceActivity.this, ServiceSecondActivity.class);
                 i.putExtra("vid",regNo);
+                i.putExtra("station",s.getName());
                 startActivity(i);
 
             }
