@@ -133,8 +133,8 @@ public class CriticalNotificationList extends AppCompatActivity {
                                 KeyGenerator.getInstance().getPublicKeyAsString());
                         Consensus.getInstance().handleAgreement(agreement);
                         Toast.makeText(CriticalNotificationList.this, "Sent your confirmation", Toast.LENGTH_SHORT).show();
-                        MainActivity.notificationList.remove(block);
 
+                        MainActivity.criticalNotificationList.remove(block);
                         Intent intent = new Intent("MainActivity");
                         intent.putExtra("confirmationSent", "confirmationSent");
                         System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
