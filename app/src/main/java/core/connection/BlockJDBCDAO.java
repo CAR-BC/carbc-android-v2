@@ -23,7 +23,9 @@ import java.sql.*;
 
 public class BlockJDBCDAO implements AsyncResponse {
 
+
     final static String base_url = "http://192.168.8.21:8080/";
+
     JSONArray jsonArray;
 
     public boolean addBlockToBlockchain(BlockInfo blockInfo, Identity identity) throws SQLException {
@@ -45,7 +47,7 @@ public class BlockJDBCDAO implements AsyncResponse {
             apiCaller.execute(base_url + "insertidentity?block_hash=" + identity.getBlock_hash() +
                     "&public_key" + identity.getPublic_key() +
                     "&role=" + identity.getRole() +
-                    "&name=" + identity.getName()+
+                    "&name=" + identity.getName() +
                     "location" + identity.getLocation(), "GET", "Identity", identity);
             while (jsonArray == null) {
                 try {
@@ -70,7 +72,7 @@ public class BlockJDBCDAO implements AsyncResponse {
                     "&sender=" + URLEncoder.encode(blockInfo.getSender(), "UTF-8") +
                     "&event=" + URLEncoder.encode(blockInfo.getEvent(), "UTF-8") +
                     "&data=" + URLEncoder.encode(blockInfo.getData(), "UTF-8") +
-                    "&address=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8" )+
+                    "&address=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8") +
                     "&rating=" + URLEncoder.encode(String.valueOf(blockInfo.getRating()), "UTF-8"
             ), "GET", "BlockInfo", blockInfo);
 
@@ -84,11 +86,11 @@ public class BlockJDBCDAO implements AsyncResponse {
 
 //            MainActivity.notificationList.remove()
 
-            if (blockInfo.getEvent().equals("ExchangeOwnership")){
+            if (blockInfo.getEvent().equals("ExchangeOwnership")) {
                 String data = blockInfo.getData();
                 JSONObject object = new JSONObject(data);
-                apiCaller2.execute(base_url + "updatevehicle?current_owner=" + URLEncoder.encode(object.getJSONObject("SecondaryParty").getJSONObject("NewOwner").getString("publicKey"), "UTF-8")+
-                        "&vehicle_id=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8" ) , "GET", "Identity", identity);
+                apiCaller2.execute(base_url + "updatevehicle?current_owner=" + URLEncoder.encode(object.getJSONObject("SecondaryParty").getJSONObject("NewOwner").getString("publicKey"), "UTF-8") +
+                        "&vehicle_id=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8"), "GET", "Identity", identity);
                 while (jsonArray == null) {
                     try {
                         Thread.sleep(1000);
@@ -99,8 +101,12 @@ public class BlockJDBCDAO implements AsyncResponse {
                 VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
                 MainActivity.vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
 
-                NavigationHandler.navigateTo("addtransactionFragment");
+                if (MainActivity.vehicle_numbers.size() > 0) {
+                    NavigationHandler.navigateTo("addtransaction");
+                }
             }
+
+
 
             if (blockInfo.getEvent().equals("BuyVehicle")){
                 String data = blockInfo.getData();
@@ -117,15 +123,17 @@ public class BlockJDBCDAO implements AsyncResponse {
                 VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
                 MainActivity.vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
 
-                NavigationHandler.navigateTo("addtransactionFragment");
+                if (MainActivity.vehicle_numbers.size() > 0) {
+                    NavigationHandler.navigateTo("addtransaction");
+                }
             }
 
             if(blockInfo.getEvent().equals("RegisterVehicle")){
                 String data = blockInfo.getData();
                 JSONObject object = new JSONObject(data);
-                apiCaller3.execute(base_url + "insertintovehicle?registration_number=" + URLEncoder.encode(object.getString("registrationNumber"), "UTF-8" )+
-                        "&vehicle_id=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8" ) +
-                                "&current_owner=" + URLEncoder.encode(object.getString("currentOwner"), "UTF-8" ), "GET", "Identity", "v");
+                apiCaller3.execute(base_url + "insertintovehicle?registration_number=" + URLEncoder.encode(object.getString("registrationNumber"), "UTF-8") +
+                        "&vehicle_id=" + URLEncoder.encode(blockInfo.getAddress(), "UTF-8") +
+                        "&current_owner=" + URLEncoder.encode(object.getString("currentOwner"), "UTF-8"), "GET", "Identity", "v");
                 while (jsonArray == null) {
                     try {
                         Thread.sleep(1000);
@@ -136,11 +144,10 @@ public class BlockJDBCDAO implements AsyncResponse {
 
                 VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
                 MainActivity.vehicle_numbers = vehicleJDBCDAO.getRegistrationNumbers(KeyGenerator.getInstance().getPublicKeyAsString());
-
-                NavigationHandler.navigateTo("addtransaction");
+                if (MainActivity.vehicle_numbers.size() > 0) {
+                    NavigationHandler.navigateTo("addtransaction");
+                }
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -305,7 +312,7 @@ public class BlockJDBCDAO implements AsyncResponse {
                     apiCaller1.execute(base_url + "insertidentity?block_hash=" + identity.getBlock_hash() +
                             "&public_key" + identity.getPublic_key() +
                             "&role=" + identity.getRole() +
-                            "&name=" + identity.getName()+
+                            "&name=" + identity.getName() +
                             "location" + identity.getLocation(), "GET", "Identity", identity);
                     while (jsonArray == null) {
                         try {
@@ -357,12 +364,12 @@ public class BlockJDBCDAO implements AsyncResponse {
     public JSONObject getVehicleInfoByEvent(String vehicleId, String event) throws SQLException, JSONException {
         APICaller apiCaller = new APICaller();
         jsonArray = null;
-JSONObject object = new JSONObject();
+        JSONObject object = new JSONObject();
         apiCaller.delegate = this;
         try {
 
             apiCaller.execute(base_url + "vehicleinfo?event=" + URLEncoder.encode(event, "UTF-8") +
-                    "&address=" + URLEncoder.encode(vehicleId, "UTF-8").replace("+","%20"), "GET", "v", "g");
+                    "&address=" + URLEncoder.encode(vehicleId, "UTF-8").replace("+", "%20"), "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -377,7 +384,7 @@ JSONObject object = new JSONObject();
 
         if (jsonArray.getBoolean(0)) {
             JSONArray array = jsonArray.getJSONArray(1);
-            object= array.getJSONObject(0);
+            object = array.getJSONObject(0);
         }
         return object;
     }
@@ -537,23 +544,23 @@ JSONObject object = new JSONObject();
                     JSONObject data = new JSONObject(object.getString("data"));
                     JSONObject vehicleInfo = new JSONObject();
 
-                    if (data.has("current_owner")){
+                    if (data.has("current_owner")) {
                         vehicleInfo.put("current_owner", object.getString("current_owner"));
                     }
-                    if (data.has("engine_number")){
+                    if (data.has("engine_number")) {
                         vehicleInfo.put("engine_number", data.getString("engine_number"));
                     }
-                    if (data.has("make")){
+                    if (data.has("make")) {
                         vehicleInfo.put("make", data.getString("make"));
                     }
-                    if (data.has("model")){
+                    if (data.has("model")) {
                         vehicleInfo.put("model", data.getString("model"));
 
                     }
-                    if (data.has("chassis_number")){
+                    if (data.has("chassis_number")) {
                         vehicleInfo.put("chassis_number", data.getString("chassis_number"));
                     }
-                    if (data.has("registration_number")){
+                    if (data.has("registration_number")) {
                         vehicleInfo.put("registration_number", data.getString("registration_number"));
                     }
                     vehicleInfo.put("rating", object.getDouble("rating"));
@@ -627,14 +634,14 @@ JSONObject object = new JSONObject();
         jsonArray = null;
         apiCaller.delegate = this;
         String validityTxt = "";
-        if (validity){
+        if (validity) {
             validityTxt = "1";
         } else {
             validityTxt = "0";
         }
 
         try {
-            apiCaller.execute(base_url + "setvalidityinblockchain" +"?validity="+ validityTxt + "&block_hash=" + blockhash, "GET", "v", "g");
+            apiCaller.execute(base_url + "setvalidityinblockchain" + "?validity=" + validityTxt + "&block_hash=" + blockhash, "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -654,7 +661,7 @@ JSONObject object = new JSONObject();
         JSONObject object = new JSONObject();
         jsonArray = null;
         try {
-            apiCaller2.execute(base_url + "checkpossibility" + "?pre_block_hash=" +  previousHash , "GET", "v", "g");
+            apiCaller2.execute(base_url + "checkpossibility" + "?pre_block_hash=" + previousHash, "GET", "v", "g");
 
             while (jsonArray == null) {
                 try {
@@ -670,10 +677,10 @@ JSONObject object = new JSONObject();
         try {
             if (jsonArray.getBoolean(0)) {
                 //JSONArray newArry = new JSONArray();
-               JSONArray array = jsonArray.getJSONArray(1);
-               JSONArray array1 = array.getJSONArray(0);
-                object.put("blockHash",array1.getString(0));
-                object.put("blockTimeStamp",array1.getString(1));
+                JSONArray array = jsonArray.getJSONArray(1);
+                JSONArray array1 = array.getJSONArray(0);
+                object.put("blockHash", array1.getString(0));
+                object.put("blockTimeStamp", array1.getString(1));
             }
 
         } catch (JSONException e) {

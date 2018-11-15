@@ -215,7 +215,10 @@ public class Consensus {
             if (addedBlock.length() != 0){
                 String blockHashInDB = addedBlock.getString("blockHash");
                 Timestamp blockTimestamp = ChainUtil.convertStringToTimestamp(block.getBlockHeader().getBlockTime());
-                Timestamp blockTimestampInDB = ChainUtil.convertStringToTimestamp2(addedBlock.getString("blockTimeStamp").substring(0, 19));
+
+                String time = addedBlock.getString("blockTimeStamp").replace("T", " ");
+                Timestamp blockTimestampInDB = ChainUtil.convertStringToTimestamp2(time.substring(0, 19));
+
                 if (blockTimestampInDB.after(blockTimestamp)) {
                     //timestamp in block in db > timestamp in this block
                     //set validity = 0 in block in db

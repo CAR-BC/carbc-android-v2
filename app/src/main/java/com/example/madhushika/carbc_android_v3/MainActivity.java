@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     private UnregisteredNewTransactionFragment unregisteredNewTransactionFragment;
     TextView notificationCount;
     TextView criticalNotificationCount;
-    FloatingActionButton fab;
+//    FloatingActionButton fab;
     private TransactionNew transactionNew;
 
     public static ArrayList<String> vehicle_numbers;
@@ -64,24 +64,23 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         ImageButton notifBtn = (ImageButton) findViewById(R.id.notificationBtn);
-        //notifBtn.setImageDrawable(getDrawable(R.drawable.ic_arrow_back_black_24dp));
         ImageButton searchBtn = (ImageButton) findViewById(R.id.searchBtn);
+        ImageButton criticalNotificationBtn = (ImageButton) findViewById(R.id.criticalNotificationBtn);
 
         notificationCount = (TextView) findViewById(R.id.notificationCount);
-        criticalNotificationCount = (TextView) findViewById(R.id.criticalNotificationCount);
+        criticalNotificationCount = (TextView) findViewById(R.id.CriticalNotificationCount);
 //        notificationCount.setText(String.valueOf(notificationList.size()));
 //        criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
 
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, NotificationActivity.class);
-                startActivity(i);
-            }
-        });
-        fab.setEnabled(false);
+//        fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(MainActivity.this, NotificationActivity.class);
+//                startActivity(i);
+//            }
+//        });
+//        fab.setEnabled(false);
 
         registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
 
@@ -97,6 +96,17 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        criticalNotificationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (criticalNotificationList.size() != 0) {
+                    Intent i = new Intent(MainActivity.this, CriticalNotificationList.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getApplicationContext(), "No critical notifications", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,6 +141,14 @@ public class MainActivity extends AppCompatActivity
         } else {
             notificationCount.setVisibility(View.GONE);
         }
+
+        if ((criticalNotificationList.size() != 0)) {
+            criticalNotificationCount.setVisibility(View.VISIBLE);
+
+            criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
+        } else {
+            criticalNotificationCount.setVisibility(View.GONE);
+        }
         super.onResume();
     }
 
@@ -160,9 +178,9 @@ public class MainActivity extends AppCompatActivity
                     if (criticalNotificationList.size() != 0) {
                         criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
                         criticalNotificationCount.setVisibility(View.VISIBLE);
-                        fab.setEnabled(true);
                     }else {
                         criticalNotificationCount.setVisibility(View.GONE);
+
                     }
                 }
             }
@@ -237,7 +255,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void displayFragment(String tag, int id) {
+    public void displayFragment(String tag, int id) {
         Fragment fragment = getFragment(id);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.contentLayout, fragment, tag);

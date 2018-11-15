@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorgGreen"
         android:orientation="horizontal"
-        android:weightSum="13">
+        android:weightSum="15">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -37,6 +37,44 @@
             android:theme="@style/AppTheme.AppBarOverlay"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/criticalNotificationBtn"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_critical_notifications_24dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/CriticalNotificationCount"
+                    android:layout_width="0dp"
+                    android:text="45"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/colorRed" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
@@ -90,30 +128,30 @@
         </FrameLayout>
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right">
+    <!--<FrameLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|right">-->
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:text="@android:string/ok" />
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fab"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="bottom|end"-->
+            <!--android:layout_margin="@dimen/fab_margin"-->
+            <!--android:text="@android:string/ok" />-->
 
-        <TextView
-            android:id="@+id/criticalNotificationCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:elevation="16dp"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/white" />
+        <!--<TextView-->
+            <!--android:id="@+id/criticalNotificationCount"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:elevation="16dp"-->
+            <!--android:text="0"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textColor="@android:color/white" />-->
 
-    </FrameLayout>
+    <!--</FrameLayout>-->
 
     <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
 

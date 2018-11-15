@@ -270,8 +270,7 @@ public class AgreementCollector extends Thread {
                                     //show notification icon 2
                                     log.info("pre owner sending agreements");
                                     MainActivity.criticalNotificationList.add(block);
-                                    //TODO: remove this line
-                                    MainActivity.notificationList.add(block);
+
                                     Intent intent = new Intent("MainActivity");
                                     intent.putExtra("newCriticalBlockReceived", "newCriticalBlock");
                                     intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);

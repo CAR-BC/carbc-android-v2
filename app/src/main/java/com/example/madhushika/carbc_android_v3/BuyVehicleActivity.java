@@ -58,6 +58,8 @@ public class BuyVehicleActivity extends AppCompatActivity {
 
                             VehicleJDBCDAO vehicleJDBCDAO = new VehicleJDBCDAO();
                             String preOwner = vehicleJDBCDAO.getCurrentOwner(vid.getText().toString());
+                            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+                            System.out.println(preOwner);
 
                             if (preOwner!= null){
                                 //call blockchain method
@@ -80,7 +82,7 @@ public class BuyVehicleActivity extends AppCompatActivity {
                                     object.put("ThirdParty", thirdParty);
 
                                     Controller controller = new Controller();
-                                    controller.sendTransaction("ExchangeOwnership", vid.getText().toString()
+                                    controller.sendTransaction("BuyVehicle", vid.getText().toString()
                                            , object);
 
                                 } catch (JSONException e) {

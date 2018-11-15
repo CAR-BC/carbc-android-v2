@@ -17,7 +17,6 @@ public class TimeKeeper extends Thread{
             System.out.println("Inside TimeKeeper");
             Thread.sleep(40000);
             Consensus.getInstance().checkAgreementsForBlock(blockHash);
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (SQLException e) {

@@ -123,7 +123,6 @@ public class Controller {
             node.initTest2("User", 42761);
 
         }
-
         node.startListening();
     }
 

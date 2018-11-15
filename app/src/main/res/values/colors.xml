@@ -9,9 +9,9 @@
     <color name="colorAcceptedGreen">#8eed6b</color>
     <color name="colorgGreen">#248f27</color>
     <color name="colorgWhite">#ffffff</color>
-    <color name="colorgWhiteNew">#f4eeee</color>
+    <color name="colorgWhiteNew">#64dd17</color>
     <color name="colorGreenCell">#e0fddc</color>
-    <color name="colorGreenCellMargin">#041e01</color>
+    <color name="colorGreenCellMargin">#24d60f</color>
     <color name="colortransparent">#80ffffff</color>
     <color name="colorBlue">#8082fa75</color>
 </resources>
