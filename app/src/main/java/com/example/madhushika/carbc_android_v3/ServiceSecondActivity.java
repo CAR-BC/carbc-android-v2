@@ -166,7 +166,6 @@ public class ServiceSecondActivity extends AppCompatActivity {
                 } else {
                     selectedServiceTypeList.remove(serviceStation);
                 }
-
                 return cellUser;
             }
         });

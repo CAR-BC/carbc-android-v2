@@ -39,7 +39,7 @@ public class CriticalNotificationList extends AppCompatActivity {
         });
 
         registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
-        setArrayAdapterToNotificationList(MainActivity.notificationList);
+        setArrayAdapterToNotificationList(MainActivity.criticalNotificationList);
     }
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -47,7 +47,7 @@ public class CriticalNotificationList extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String str = intent.getStringExtra("confirmationSent");
             if (str.equals("confirmationSent")){
-                setArrayAdapterToNotificationList(MainActivity.notificationList);
+                setArrayAdapterToNotificationList(MainActivity.criticalNotificationList);
             }
         }
     };
