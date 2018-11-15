@@ -50,6 +50,7 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
         MainActivity.criticalNotificationList = new ArrayList<>();
 
         StatusFragment.historyRecords = new ArrayList<>();
+        StatusFragment.allHistory = new ArrayList<>();
 
 
 

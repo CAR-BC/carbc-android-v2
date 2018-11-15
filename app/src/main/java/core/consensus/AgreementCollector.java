@@ -360,18 +360,24 @@ public class AgreementCollector extends Thread {
                         agreement.getBlockHash())) {
 
                     getAgreements().add(agreement);
-                    ArrayList<StatusItem> statusItems = StatusFragment.allHistory;
-                    for (int i = 0; i<statusItems.size();i++){
-                        StatusItem item = statusItems.get(i);
-                        if (item.getBlockHash().equals(agreement.getBlockHash())){
-                            item.setValue(item.getValue()+1);
 
-                            Intent intent = new Intent("StatusFragment");
-                            intent.putExtra("agreementReceived", "agreementReceived");
-                            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                            MyApp.getContext().sendBroadcast(intent);
+                    try {
+                        ArrayList<StatusItem> statusItems = StatusFragment.allHistory;
+                        for (int i = 0; i<statusItems.size();i++){
+                            StatusItem item = statusItems.get(i);
+                            if (item.getBlockHash().equals(agreement.getBlockHash())){
+                                item.setValue(item.getValue()+1);
+
+                                Intent intent = new Intent("StatusFragment");
+                                intent.putExtra("agreementReceived", "agreementReceived");
+                                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                MyApp.getContext().sendBroadcast(intent);
+                            }
                         }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
+
 
                     //check for mandatory
                     if (getMandatoryValidators().contains(agreement.getPublicKey())) {
