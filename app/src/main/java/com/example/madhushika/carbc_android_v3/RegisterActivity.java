@@ -131,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
                 password = passwordGiven.getText().toString();
                 roleGiven = spinner.getSelectedItem().toString();
 
-                if (isValidEmail(email) && checkStrongPassword(password) && password.equals(confirmPassword)
+                if (  password.equals(confirmPassword)
                         && !username.equals(" ") && !id.equals(" ")){
 
 
