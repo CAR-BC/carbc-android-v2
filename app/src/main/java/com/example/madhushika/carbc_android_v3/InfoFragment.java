@@ -6,16 +6,23 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import Objects.ReminderItem;
+import core.connection.BlockJDBCDAO;
 
 
 /**
@@ -25,6 +32,14 @@ public class InfoFragment extends Fragment {
 
     private Spinner spinner;
     private ListView listView;
+
+    private TextView engine_no;
+    private TextView chassis_number;
+    private TextView make;
+    private TextView vmodel;
+    private TextView rating;
+
+    String registrationNumber;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -38,93 +53,159 @@ public class InfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
 
         spinner = (Spinner) view.findViewById(R.id.vehicle_number);
-        List<String> list = new ArrayList<String>();
-        list.add("NW-6060");
-        list.add("WP-2112");
-        list.add("NW-6146");
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
-                R.layout.item_spinner, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                R.layout.item_spinner, MainActivity.vehicle_numbers);
+        dataAdapter.setDropDownViewResource(R.layout.vehicle_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
+        engine_no = view.findViewById(R.id.search_engine_no_txt);
+        chassis_number = view.findViewById(R.id.search_class_txt);
+        make = view.findViewById(R.id.search_make_txt);
+        rating = view.findViewById(R.id.search_rating_txt);
+        vmodel = view.findViewById(R.id.search_model_txt);
 
         listView = (ListView) view.findViewById(R.id.info_list);
 
-        final ReminderItem[] reminderItems = new ReminderItem[3];
-        ReminderItem item1 = new ReminderItem("NW-2563", "Leasing payment", "12/05/2018");
-        ReminderItem item2 = new ReminderItem("NW-6395", "insurance payment", "13/05/2018");
-        ReminderItem item3 = new ReminderItem("WP-3025", "annual service", "02/05/2018");
 
-        reminderItems[0] = item1;
-        reminderItems[1] = item2;
-        reminderItems[2] = item3;
-
-        listView.setAdapter(new BaseAdapter() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public int getCount() {
-                return reminderItems.length;
-            }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                registrationNumber = spinner.getSelectedItem().toString();
 
-            @Override
-            public Object getItem(int position) {
-                return reminderItems[position];
-            }
+                final BlockJDBCDAO blockJDBCDAO = new BlockJDBCDAO();
+                JSONObject data = blockJDBCDAO.getRegistrationInfoByRegistrationNumber(registrationNumber);
 
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
+                try {
+                    if (data.getBoolean("status")){
+                        try {
+                            JSONObject vehicleData = data.getJSONObject("data");
+                            engine_no.setText(vehicleData.getString("engine_number"));
+                            chassis_number.setText(vehicleData.getString("chassis_number"));
+                            vmodel.setText(vehicleData.getString("model"));
+                            make.setText(vehicleData.getString("make"));
+                            rating.setText(vehicleData.getString("rating"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                        engine_no.setText("N/A");
+                        chassis_number.setText("N/A");
+                        vmodel.setText("N/A");
+                        make.setText("N/A");
+                        rating.setText("N/A");
+                        Toast.makeText(getActivity(),"No such vehicle in the system",Toast.LENGTH_LONG).show();
 
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                ReminderItem reminderItem = reminderItems[position];
-                View cellUser = null;
-
-                if (convertView == null) {
-
-                    cellUser = inflater.inflate(R.layout.cell_reminder, parent, false);
-
-                } else {
-                    cellUser = convertView;
-                }
-                Placeholder ph = (Placeholder) cellUser.getTag();
-                TextView vid;
-                TextView job;
-                TextView date1;
-
-                if (ph == null) {
-                    vid = (TextView) cellUser.findViewById(R.id.reminder_vid);
-                    job = (TextView) cellUser.findViewById(R.id.reminder_job);
-                    date1 = (TextView) cellUser.findViewById(R.id.reminder_date);
-
-                    ph = new Placeholder();
-                    ph.job = job;
-                    ph.datet = date1;
-                    ph.vid = vid;
-
-                    cellUser.setTag(ph);
-                } else {
-                    job = ph.job;
-                    date1 = ph.datet;
-                    vid = ph.vid;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                job.setText(reminderItem.getjob());
-                date1.setText(reminderItem.getDate1());
-                vid.setText(reminderItem.getVid());
+                final JSONArray vehicledata = blockJDBCDAO.getVehicleInfoByRegistrationNumber(registrationNumber);
+                System.out.println(vehicledata);
+                if (vehicledata.length() > 0) {
+                    listView.setAdapter(new BaseAdapter() {
+                        @Override
+                        public int getCount() {
+                            return vehicledata.length();
+                        }
 
-                return cellUser;
+                        @Override
+                        public Object getItem(int position) {
+                            JSONObject obj = null;
+                            try {
+                                obj = vehicledata.getJSONObject(position);
+                                System.out.println(obj);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            return obj;
+                        }
+
+                        @Override
+                        public long getItemId(int position) {
+                            return position;
+                        }
+
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            JSONObject jsonObject = null;
+                            try {
+                                jsonObject = vehicledata.getJSONObject(position);
+                                System.out.println("++++++++++++++++++jsonObject+++++++++++++++++++++++");
+                                System.out.println(String.valueOf(position) + jsonObject);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            View cellUser = null;
+
+                            if (convertView == null) {
+
+                                cellUser = inflater.inflate(R.layout.cell_reminder, parent, false);
+
+                            } else {
+                                cellUser = convertView;
+                            }
+
+                            Placeholder ph = (Placeholder) cellUser.getTag();
+                            TextView job;
+                            TextView date1;
+
+                            if (ph == null) {
+                                job = (TextView) cellUser.findViewById(R.id.reminder_job);
+                                date1 = (TextView) cellUser.findViewById(R.id.reminder_date);
+
+                                ph = new Placeholder();
+                                ph.job = job;
+                                ph.datet = date1;
+
+                                cellUser.setTag(ph);
+                            } else {
+                                job = ph.job;
+                                date1 = ph.datet;
+                            }
+
+                            try {
+                                JSONObject data = new JSONObject(jsonObject.getString("data"));
+                                job.setText(jsonObject.getString("event"));
+                                date1.setText(data.getString("serviced_date"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            return cellUser;
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+
+
+
+
+
 
 
         return view;
     }
 
+    private void setArrayAdapterToTransactionList(){
+
+    }
+
     private class Placeholder {
         public TextView job;
         public TextView datet;
-        public TextView vid;
 
     }
 

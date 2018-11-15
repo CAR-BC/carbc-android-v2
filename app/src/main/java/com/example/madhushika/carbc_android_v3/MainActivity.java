@@ -246,6 +246,10 @@ public class MainActivity extends AppCompatActivity
                 }
             }, 300);
         } else if (id == R.id.navigation_info) {
+
+            if(vehicle_numbers.size()==0){
+                Toast.makeText(MainActivity.this,"Please register your vehicle",Toast.LENGTH_SHORT);
+            }
             displayFragment("InfoFragment", id);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -272,7 +276,12 @@ public class MainActivity extends AppCompatActivity
                 return new StatusFragment();
 
             case R.id.navigation_info:
-                return new InfoFragment();
+
+                if (vehicle_numbers.size() == 0) {
+                    return new UnregisteredNewTransactionFragment();
+                } else {
+                    return new InfoFragment();
+                }
 
             case R.id.progress_bar_item:
                 return new ProgressBarFragment();

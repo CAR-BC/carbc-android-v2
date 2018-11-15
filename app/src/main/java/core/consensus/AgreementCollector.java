@@ -356,7 +356,9 @@ public class AgreementCollector extends Thread {
                 PublicKey publicKey = KeyGenerator.getInstance().getInstance().getPublicKey(agreement.getPublicKey());
                 if (ChainUtil.getInstance().signatureVerification(agreement.getPublicKey(), agreement.getSignedBlock(),
                         agreement.getBlockHash())) {
+
                     getAgreements().add(agreement);
+
                     //check for mandatory
                     if (getMandatoryValidators().contains(agreement.getPublicKey())) {
                         System.out.println("Agreement received from a mandatory validator");
