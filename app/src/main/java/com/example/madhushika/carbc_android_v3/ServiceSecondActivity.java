@@ -64,6 +64,14 @@ public class ServiceSecondActivity extends AppCompatActivity {
             station = i.getExtras().getString("station");
             publicKey = i.getExtras().getString("publicKey");
 
+        try {
+            serviceStationJson.put("name", station);
+            serviceStationJson.put("publicKey", publicKey);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         vehicle_number.setText(vehicleNumber);
         service_station.setText(station);
         backBtn.setOnClickListener(new View.OnClickListener() {
