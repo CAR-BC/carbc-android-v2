@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     private UnregisteredNewTransactionFragment unregisteredNewTransactionFragment;
     TextView notificationCount;
     TextView criticalNotificationCount;
-//    FloatingActionButton fab;
+    //    FloatingActionButton fab;
     private TransactionNew transactionNew;
 
     public static ArrayList<String> vehicle_numbers;
@@ -157,18 +157,17 @@ public class MainActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent) {
             String str = "";
             String str2 = "";
-            String str3="";
+            String str3 = "";
             str = intent.getStringExtra("newNomApprovedBlockReceived");
             str2 = intent.getStringExtra("newCriticalBlockReceived");
             str3 = intent.getStringExtra("confirmationSent");
             if ((str != null)) {
 
-                if (str.equals("newBlock")|| str3.equals("confirmationSent")) {
+                if (str.equals("newBlock") || str3.equals("confirmationSent")) {
                     if ((notificationList.size() != 0)) {
                         notificationCount.setVisibility(View.VISIBLE);
                         notificationCount.setText(String.valueOf(notificationList.size()));
-                    }
-                    {
+                    } else {
                         notificationCount.setVisibility(View.GONE);
                     }
                 }
@@ -178,7 +177,7 @@ public class MainActivity extends AppCompatActivity
                     if (criticalNotificationList.size() != 0) {
                         criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
                         criticalNotificationCount.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         criticalNotificationCount.setVisibility(View.GONE);
 
                     }
@@ -192,7 +191,7 @@ public class MainActivity extends AppCompatActivity
         // TODO: Check which fragment is the current one and if it's home, exit. Else go to home.
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("StatusFragment");
         Fragment fragment1 = getSupportFragmentManager().findFragmentByTag("InfoFragment");
-        if (fragment != null || fragment1 != null){
+        if (fragment != null || fragment1 != null) {
             displayFragment("addtransaction", R.id.navigation_add_event);
         } else {
             super.onBackPressed();
@@ -239,16 +238,15 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.navigation_status) {
-            displayFragment("prigressBar",R.id.progress_bar_item);
+            displayFragment("prigressBar", R.id.progress_bar_item);
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     displayFragment("StatusFragment", id);
                 }
             }, 300);
-        }
-        else if (id == R.id.navigation_info) {
-            displayFragment("InfoFragment",id );
+        } else if (id == R.id.navigation_info) {
+            displayFragment("InfoFragment", id);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
