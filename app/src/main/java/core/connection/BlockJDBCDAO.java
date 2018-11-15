@@ -23,7 +23,7 @@ import java.sql.*;
 
 public class BlockJDBCDAO implements AsyncResponse {
 
-    final static String base_url = "http://192.168.8.103:8081/";
+    final static String base_url = "http://192.168.8.21:8081/";
     JSONArray jsonArray;
 
     public boolean addBlockToBlockchain(BlockInfo blockInfo, Identity identity) throws SQLException {

@@ -68,10 +68,9 @@ public class MainActivity extends AppCompatActivity
         ImageButton criticalNotificationBtn = (ImageButton) findViewById(R.id.criticalNotificationBtn);
 
         notificationCount = (TextView) findViewById(R.id.notificationCount);
-        criticalNotificationCount = (TextView) findViewById(R.id.criticalNotificationCount);
+        criticalNotificationCount = (TextView) findViewById(R.id.CriticalNotificationCount);
 //        notificationCount.setText(String.valueOf(notificationList.size()));
 //        criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
-
 
 //        fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {

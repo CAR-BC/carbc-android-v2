@@ -28,8 +28,7 @@ public class MessageSender {
 
     private static  MessageSender messageSender;
     private final static Logger log = LoggerFactory.getLogger(MessageSender.class);
-    private static String bootsrappingNodeId = "192.168.8.103";
-
+    private static String bootsrappingNodeId = "192.168.8.21";
 
     private MessageSender() {};
 

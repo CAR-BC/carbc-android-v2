@@ -45,8 +45,10 @@ public class ServiceSecondActivity extends AppCompatActivity {
         doneBtn = (Button) findViewById(R.id.done_btn);
         cancelBtn = (Button) findViewById(R.id.cancel_btn);
 
-        Intent i = getIntent();
-        vehicleNumber = i.getExtras().getString("vid");
+        Intent i = this.getIntent();
+        if (i != null)
+            vehicleNumber = i.getExtras().getString("vid");
+
         vehicle_number.setText(vehicleNumber);
 
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -61,25 +63,25 @@ public class ServiceSecondActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ServiceSecondActivity.this);
-                    builder.setTitle("Add a Transaction");
-                    builder.setMessage("Do you really need to add this transaction? ");
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ServiceSecondActivity.this);
+                builder.setTitle("Add a Transaction");
+                builder.setMessage("Do you really need to add this transaction? ");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
 
-                            finish();
-                        }
-                    });
-                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                            // User cancelled the dialog
-                        }
-                    });
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        // User cancelled the dialog
+                    }
+                });
 
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                AlertDialog dialog = builder.create();
+                dialog.show();
 
             }
         });
