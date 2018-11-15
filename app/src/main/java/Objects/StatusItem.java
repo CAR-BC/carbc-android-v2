@@ -5,12 +5,17 @@ public class StatusItem {
     private String date1;
     private String condition;
     private String registrationNumber;
+    private int value;
+    private  String blockHash;
 
-    public StatusItem(String job, String date1, String condition, String registrationNumber) {
+    public StatusItem(String job, String date1, String condition, String registrationNumber,int value ,String blockHash) {
         this.job = job;
         this.date1 = date1;
         this.condition = condition;
         this.setRegistrationNumber(registrationNumber);
+        this.value =value;
+        this.blockHash =blockHash;
+
     }
 
     public String getJob() {
@@ -44,5 +49,21 @@ public class StatusItem {
 
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public String getBlockHash() {
+        return blockHash;
+    }
+
+    public void setBlockHash(String blockHash) {
+        this.blockHash = blockHash;
     }
 }

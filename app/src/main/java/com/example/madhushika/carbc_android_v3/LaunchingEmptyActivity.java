@@ -49,6 +49,8 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
         MainActivity.notificationList = new ArrayList<>();
         MainActivity.criticalNotificationList = new ArrayList<>();
 
+        StatusFragment.historyRecords = new ArrayList<>();
+
 
 
         SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);
