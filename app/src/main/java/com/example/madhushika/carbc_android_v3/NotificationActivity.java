@@ -58,6 +58,7 @@ public class NotificationActivity extends AppCompatActivity {
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
             String str1 = intent.getStringExtra("newNomApprovedBlockReceived");
             //TODO: Test this again
             String str = intent.getStringExtra("confirmationSent");
@@ -189,6 +190,7 @@ public class NotificationActivity extends AppCompatActivity {
         public Button more_btn;
         public Button confirm_tx;
     }
+
     @Override
     protected void onPause() {
         super.onResume();

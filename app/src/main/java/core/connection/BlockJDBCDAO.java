@@ -23,7 +23,9 @@ import java.sql.*;
 
 public class BlockJDBCDAO implements AsyncResponse {
 
-    final static String base_url = "http://192.168.8.21:8081/";
+
+    final static String base_url = "http://192.168.8.21:8080/";
+
     JSONArray jsonArray;
 
     public boolean addBlockToBlockchain(BlockInfo blockInfo, Identity identity) throws SQLException {
@@ -545,8 +547,8 @@ public class BlockJDBCDAO implements AsyncResponse {
                     if (data.has("current_owner")) {
                         vehicleInfo.put("current_owner", object.getString("current_owner"));
                     }
-                    if (data.has("engine_number")) {
-                        vehicleInfo.put("engine_number", data.getString("engine_number"));
+                    if (data.has("engineNumber")) {
+                        vehicleInfo.put("engine_number", data.getString("engineNumber"));
                     }
                     if (data.has("make")) {
                         vehicleInfo.put("make", data.getString("make"));
@@ -555,11 +557,11 @@ public class BlockJDBCDAO implements AsyncResponse {
                         vehicleInfo.put("model", data.getString("model"));
 
                     }
-                    if (data.has("chassis_number")) {
-                        vehicleInfo.put("chassis_number", data.getString("chassis_number"));
+                    if (data.has("chassisNumber")) {
+                        vehicleInfo.put("chassis_number", data.getString("chassisNumber"));
                     }
-                    if (data.has("registration_number")) {
-                        vehicleInfo.put("registration_number", data.getString("registration_number"));
+                    if (data.has("registrationNumber")) {
+                        vehicleInfo.put("registration_number", data.getString("registrationNumber"));
                     }
                     vehicleInfo.put("rating", object.getDouble("rating"));
                     vehicleInfo.put("address", object.getString("address"));
