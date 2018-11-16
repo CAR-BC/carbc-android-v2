@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.Image;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -112,6 +113,7 @@ public class NotificationActivity extends AppCompatActivity {
                 TextView init_date;
                 Button confirm_tr;
                 Button request_more;
+                ImageButton discard;
 
                 if (ph == null) {
                     vehicle_id = (TextView) cellUser.findViewById(R.id.notification_vid);
@@ -119,6 +121,7 @@ public class NotificationActivity extends AppCompatActivity {
                     init_date = (TextView) cellUser.findViewById(R.id.notification_date);
                     confirm_tr = (Button) cellUser.findViewById(R.id.notification_confirm);
                     request_more = (Button) cellUser.findViewById(R.id.notification_request_more);
+                    discard = (ImageButton) cellUser.findViewById(R.id.discardBtn);
 
                     ph = new Placeholder();
                     ph.vehicle_Id = vehicle_id;
@@ -126,6 +129,7 @@ public class NotificationActivity extends AppCompatActivity {
                     ph.initiate_date = init_date;
                     ph.confirm_tx = confirm_tr;
                     ph.more_btn = request_more;
+                    ph.discardBtn =discard;
 
                     cellUser.setTag(ph);
                 } else {
@@ -134,6 +138,7 @@ public class NotificationActivity extends AppCompatActivity {
                     init_date = ph.initiate_date;
                     confirm_tr = ph.confirm_tx;
                     request_more = ph.more_btn;
+                    discard = ph.discardBtn;
                 }
 
                 vehicle_id.setText(block.getBlockBody().getTransaction().getAddress());
@@ -172,6 +177,19 @@ public class NotificationActivity extends AppCompatActivity {
                         //fill
                     }
                 });
+
+                discard.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MainActivity.notificationList.remove(block);
+                        Intent intent = new Intent("MainActivity");
+                        intent.putExtra("newNomApprovedBlockReceived", "newBlock");
+                        intent.putExtra("confirmationSent", "confirmationSent");
+                        System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
+                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        MyApp.getContext().sendBroadcast(intent);
+                    }
+                });
                 return cellUser;
             }
         });
@@ -189,6 +207,7 @@ public class NotificationActivity extends AppCompatActivity {
         public TextView initiate_date;
         public Button more_btn;
         public Button confirm_tx;
+        public ImageButton discardBtn;
     }
 
     @Override

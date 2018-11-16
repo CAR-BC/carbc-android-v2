@@ -332,5 +332,27 @@ public class HistoryDAO implements AsyncResponse {
             e.printStackTrace();
         }
     }
+
+    public void deleteRecord(String blockhash) {
+
+        APICaller apiCaller = new APICaller();
+        jsonArray = null;
+        apiCaller.delegate = this;
+
+        try {
+            apiCaller.execute(base_url + "deleteRecord" + "?block_hash=" + blockhash, "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }
 

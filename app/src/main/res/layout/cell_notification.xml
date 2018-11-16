@@ -9,6 +9,12 @@
         android:orientation="vertical"
         android:padding="10dp"
         android:layout_margin="20dp">
+        <ImageButton
+            android:id="@+id/discardBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:src="@drawable/ic_fail_24dp"/>
 
         <TextView
             android:id="@+id/notification_vid"

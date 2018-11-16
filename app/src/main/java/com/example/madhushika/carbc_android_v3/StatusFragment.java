@@ -139,9 +139,12 @@ public class StatusFragment extends Fragment {
                 }
                 if (statusItem.getCondition().equalsIgnoreCase("accepted")) {
                     condition.setImageDrawable(getResources().getDrawable(R.drawable.ic_success_24dp));
+                    progressBar.setVisibility(View.GONE);
                 }
                 if (statusItem.getCondition().equalsIgnoreCase("Failed")) {
                     condition.setImageDrawable(getResources().getDrawable(R.drawable.ic_fail_24dp));
+                    progressBar.setVisibility(View.GONE);
+
                     /*condition.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -180,8 +183,8 @@ public class StatusFragment extends Fragment {
 //                }
 //            }
 //        } else {
-            historyRecords = allHistory;
-       // }
+        historyRecords = allHistory;
+        // }
 
         listView.setAdapter(baseAdapter);
 
@@ -205,6 +208,8 @@ public class StatusFragment extends Fragment {
                         intent.putExtra("resendBlock", "resendBlock");
                         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         MyApp.getContext().sendBroadcast(intent);
+
+                        historyDAO.deleteRecord(historyRecords.get(position).getBlockHash());
                     } catch (SQLException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {

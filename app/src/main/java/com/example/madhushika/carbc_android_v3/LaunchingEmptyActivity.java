@@ -37,7 +37,7 @@ public class LaunchingEmptyActivity extends AppCompatActivity {
         MessageSender.requestIP();
 
        // KeyGenerator.getInstance().generateKeyPair();
-       // System.out.println("publickey: " + KeyGenerator.getInstance().getPublicKeyAsString());
+        System.out.println("publickey: " + KeyGenerator.getInstance().getPublicKeyAsString());
 
 //        KeyGenerator.getInstance().generateKeyPair();
 //        System.out.println("publickey: " + KeyGenerator.getInstance().getPublicKeyAsString());
