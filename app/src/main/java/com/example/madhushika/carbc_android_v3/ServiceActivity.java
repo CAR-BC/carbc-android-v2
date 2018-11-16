@@ -1,5 +1,6 @@
 package com.example.madhushika.carbc_android_v3;
 
+import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -51,8 +54,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import Objects.ServiceStation;
@@ -74,12 +80,16 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
     private JSONArray sparePartSellerList = new JSONArray();
     private Button done;
     private TextView vehicleDetailsText;
+
+    Calendar myCalendar = Calendar.getInstance();
+
     String regNo;
     ServiceStation serviceStationSelected;
     Controller controller;
     ArrayList<ServiceStation> stations;
     JSONArray locationList;
     ArrayList<ServiceStation> locationArray;
+    String datePicked;
 
     private static final String TAG = ServiceActivity.class.getSimpleName();
     private GoogleMap mMap;
@@ -378,6 +388,35 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
         vehicleNumber = (TextView) findViewById(R.id.vehicle_number);
         vehicleNumber.setText(regNo);
 
+        final EditText edittext= (EditText) findViewById(R.id.servicedDate);
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                String myFormat = "MM/dd/yyyy"; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                edittext.setText(sdf.format(myCalendar.getTime()));
+                datePicked = sdf.format(myCalendar.getTime());
+            }
+        };
+
+
+        edittext.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                new DatePickerDialog(ServiceActivity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
 
 //        String vid = i.getExtras().getString("vid");
         //get location and request nearby service stations
@@ -463,6 +502,8 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
 //            }
 //        });
     }
+
+
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -781,9 +822,14 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
                 Intent i = new Intent(ServiceActivity.this, ServiceSecondActivity.class);
                 i.putExtra("vid",regNo);
                 i.putExtra("station",s.getName());
+                i.putExtra("stationAddress",s.getAddress());
                 i.putExtra("publicKey",s.getPublicKey());
-                startActivity(i);
-
+                if (datePicked != null){
+                    i.putExtra("datePicked",datePicked);
+                    startActivity(i);
+                }else {
+                    Toast.makeText(ServiceActivity.this,"Please select the date",Toast.LENGTH_SHORT);
+                }
             }
         }
     }

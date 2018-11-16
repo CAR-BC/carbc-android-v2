@@ -49,8 +49,10 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="30dp">
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,6 +60,7 @@
                 android:layout_margin="20dp"
                 android:text="Vehicle Number : "
                 android:textSize="20dp" />
+
             <TextView
                 android:id="@+id/vehicle_number"
                 android:layout_width="wrap_content"
@@ -67,13 +70,26 @@
                 android:textSize="20dp" />
         </LinearLayout>
 
+        <EditText
+            android:id="@+id/servicedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@color/colorgWhite"
+            android:clickable="true"
+            android:editable="false"
+            android:focusable="false"
+            android:gravity="center"
+            android:hint="DD/MM/YYYY"
+            android:shadowColor="@color/colorgWhiteNew" />
+
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/service_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/service_map"
-            tools:context=".ServiceActivity"
-            android:name="com.google.android.gms.maps.SupportMapFragment" />
+            tools:context=".ServiceActivity" />
 
         <LinearLayout
             android:layout_width="match_parent"
