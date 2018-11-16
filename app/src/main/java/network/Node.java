@@ -150,7 +150,9 @@ public final class Node {
 
     //broadcast message to the network
     public void broadcast(RequestMessage requestMessage) {
+        log.info("neighbours list size: ", nodeConfig.getNeighbours().size());
         for(Neighbour neighbour: nodeConfig.getNeighbours()) {
+            log.info("broadcasted to: ", neighbour.getPeerID());
             Client client = new Client();
             client.initTest(neighbour.getIp(),neighbour.getPort(),requestMessage);
             client.start();
