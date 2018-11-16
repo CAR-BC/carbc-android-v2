@@ -21,8 +21,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import controller.Controller;
@@ -36,6 +41,7 @@ public class ServiceSecondActivity extends AppCompatActivity {
     String vehicleNumber;
     String station;
     String publicKey;
+    String datePicked;
     ImageView backBtn;
     ArrayList<String> selectedServiceTypeList;
     Button doneBtn;
@@ -44,6 +50,8 @@ public class ServiceSecondActivity extends AppCompatActivity {
     private JSONObject serviceDataJSON;
     private JSONObject serviceStationJson;
     private JSONArray sparePartSellerList = new JSONArray();
+
+    HashMap<String,String []> serviceTypes = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +71,10 @@ public class ServiceSecondActivity extends AppCompatActivity {
             vehicleNumber = i.getExtras().getString("vid");
             station = i.getExtras().getString("station");
             publicKey = i.getExtras().getString("publicKey");
+            datePicked = i.getExtras().getString("datePicked");
 
         try {
+            serviceStationJson = new JSONObject();
             serviceStationJson.put("name", station);
             serviceStationJson.put("publicKey", publicKey);
         } catch (JSONException e) {
@@ -96,7 +106,7 @@ public class ServiceSecondActivity extends AppCompatActivity {
                         try {
                             serviceDataJSON = new JSONObject();
                             serviceDataJSON.put("vehicle_id", vehicleNumber);
-                            serviceDataJSON.put("serviced_date", timestamp);
+                            serviceDataJSON.put("serviced_date", convertStringToTimestamp(datePicked));
                             serviceDataJSON.put("cost", 100000);
                             JSONArray services = new JSONArray();
 
@@ -108,7 +118,9 @@ public class ServiceSecondActivity extends AppCompatActivity {
                                 services.put(service);
                             }
                             serviceDataJSON.put("services", services);
-                            serviceDataJSON.put("SecondaryParty", serviceStationJson);
+                            JSONObject serviceStation = new JSONObject();
+                            serviceStation.put("serviceStation", serviceStationJson);
+                            serviceDataJSON.put("SecondaryParty", serviceStation);
 
                             JSONObject thirdParty = new JSONObject();
                             thirdParty.put("SparePartProvider", sparePartSellerList);
@@ -162,6 +174,38 @@ public class ServiceSecondActivity extends AppCompatActivity {
             }
         });
 
+
+        serviceTypes.put("ServiceStation",new String[] {"Change the engine oil", "Replace the oil filter", "Replace the air filter",
+                "Replace the fuel filter", "Replace the cabin filter",
+                "Replace the spark plugs"});
+        serviceTypes.put("Ashan Service Center",new String[]{"Tune the engine", "Check level and refill brake fluid or clutch fluid",
+                "Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
+                "Check level and refill power steering fluid"});
+        serviceTypes.put("Kumudu Service Center",new String []{"Grease and lubricate components",
+                "Inspect and replace the timing belt or timing chain if needed", "Check condition of the tires",
+                "Check for proper operation of all lights, wipers ",
+                "Check for any Error codes in the ECU and take corrective action"});
+        serviceTypes.put("Thinara Filling Stations",new String[]{"Wash the vehicle and clean the interiors",
+                "Use scan tool read trouble code", "replacing head lights"});
+        serviceTypes.put("Lanka IOC Fuel Station",new String []{"Replace the air filter",
+                "Replace the fuel filter", "Replace the cabin filter",
+                "Replace the spark plugs", "Tune the engine", "Check level and refill brake fluid or clutch fluid",
+                "Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
+                "Check level and refill power steering fluid"});
+        serviceTypes.put("Auto Miraj",new String []{"Check level and refill power steering fluid", "Grease and lubricate components",
+                "Inspect and replace the timing belt or timing chain if needed", "Check condition of the tires",
+                "Check for proper operation of all lights, wipers ",
+                "Check for any Error codes in the ECU and take corrective action"});
+        serviceTypes.put("Shantha Motors",new String []{"Replace the fuel filter", "Replace the cabin filter",
+                "Replace the spark plugs", "Tune the engine", "Check level and refill brake fluid or clutch fluid"});
+        serviceTypes.put("Motor Cycle Repair Center",new String [] {"Replace the cabin filter",
+                "Replace the spark plugs", "Tune the engine","Check for any Error codes in the ECU and take corrective action",
+                "Wash the vehicle and clean the interiors"});
+        serviceTypes.put("Caypetco",new String []{"Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
+                "Check level and refill power steering fluid", "Grease and lubricate components",
+                "Inspect and replace the timing belt or timing chain if needed"});
+
+
        String[] arrayList = new String[]{"Change the engine oil", "Replace the oil filter", "Replace the air filter",
                "Replace the fuel filter", "Replace the cabin filter",
                 "Replace the spark plugs", "Tune the engine", "Check level and refill brake fluid or clutch fluid",
@@ -171,10 +215,20 @@ public class ServiceSecondActivity extends AppCompatActivity {
                "Check for proper operation of all lights, wipers ",
                "Check for any Error codes in the ECU and take corrective action",
                "Wash the vehicle and clean the interiors", "Use scan tool read trouble code", "replacing head lights"};
-List<String> list =  Arrays.asList(arrayList);
+List<String> list =  Arrays.asList(serviceTypes.get(station));
 setArrayAdapterToServiceTypeList(list);
     }
 
+    public static Timestamp convertStringToTimestamp(String time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(time);
+        Date parsedDate = null;
+        try {
+            parsedDate = dateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new java.sql.Timestamp(parsedDate.getTime());
+    }
 
     private void setArrayAdapterToServiceTypeList(final List<String> nameList) {
 

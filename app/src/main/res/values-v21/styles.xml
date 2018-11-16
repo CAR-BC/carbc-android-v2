@@ -20,6 +20,10 @@
         <item name="android:windowMinWidthMajor">95%</item>
         <item name="android:windowMinWidthMinor">95%</item>
     </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/colorgGreen</item>
+    </style>
     Chat Conversation End
     Type a message...
 </resources>

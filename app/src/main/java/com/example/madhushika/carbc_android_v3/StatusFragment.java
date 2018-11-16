@@ -158,13 +158,16 @@ public class StatusFragment extends Fragment {
         allHistory = historyDAO.getAllHistory();
 
         //TODO: should change this
-        if (allHistory.size() != historyRecords.size()){
-            for (int i = 0;i<allHistory.size()-historyRecords.size();i++){
-                historyRecords.add(allHistory.get(i));
+        if (allHistory.size()>0 &&  historyRecords.size()>0){
+            for (int i = 0;i<allHistory.size();i++){
+                for (int j = 0; j<historyRecords.size(); j++){
+                    if (allHistory.get(i).getBlockHash().equals(historyRecords.get(j).getBlockHash())){
+                        historyRecords.get(j).setCondition(allHistory.get(i).getCondition());
+                    }
+                }
             }
         }else {
             historyRecords = allHistory;
-
         }
 
         listView.setAdapter(baseAdapter);
