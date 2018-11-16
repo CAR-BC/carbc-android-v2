@@ -387,14 +387,20 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
         regNo = i.getStringExtra("vid");
         vehicleNumber = (TextView) findViewById(R.id.vehicle_number);
         vehicleNumber.setText(regNo);
-
         final EditText edittext= (EditText) findViewById(R.id.servicedDate);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        edittext.setText(dateFormat.format(myCalendar.getTime()));
+
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
                 // TODO Auto-generated method stub
+
+
+
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -824,12 +830,9 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
                 i.putExtra("station",s.getName());
                 i.putExtra("stationAddress",s.getAddress());
                 i.putExtra("publicKey",s.getPublicKey());
-                if (datePicked != null){
-                    i.putExtra("datePicked",datePicked);
-                    startActivity(i);
-                }else {
-                    Toast.makeText(ServiceActivity.this,"Please select the date",Toast.LENGTH_SHORT);
-                }
+                i.putExtra("datePicked",datePicked);
+                startActivity(i);
+                Toast.makeText(ServiceActivity.this,"Please select the date",Toast.LENGTH_SHORT);
             }
         }
     }

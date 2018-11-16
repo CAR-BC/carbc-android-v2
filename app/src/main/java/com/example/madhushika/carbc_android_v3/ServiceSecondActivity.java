@@ -295,6 +295,5 @@ setArrayAdapterToServiceTypeList(list);
     private class Placeholder {
         public TextView service_station;
         public CheckBox isSelect;
-
     }
 }
