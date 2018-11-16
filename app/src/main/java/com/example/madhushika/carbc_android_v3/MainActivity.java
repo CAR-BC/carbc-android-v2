@@ -191,6 +191,10 @@ public class MainActivity extends AppCompatActivity
         // TODO: Check which fragment is the current one and if it's home, exit. Else go to home.
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("StatusFragment");
         Fragment fragment1 = getSupportFragmentManager().findFragmentByTag("InfoFragment");
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
         if (fragment != null || fragment1 != null) {
             displayFragment("addtransaction", R.id.navigation_add_event);
         } else {
