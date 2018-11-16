@@ -168,20 +168,20 @@ public class StatusFragment extends Fragment {
         allHistory = historyDAO.getAllHistory();
 
         //TODO: should change this
-        if (allHistory.size() > 0 && historyRecords.size() > 0) {
-            for (int i = 0; i < allHistory.size(); i++) {
-                for (int j = 0; j < historyRecords.size(); j++) {
-                    if (allHistory.get(i).getBlockHash().equals(historyRecords.get(j).getBlockHash())) {
-                        System.out.println("**************************************************************");
-                        System.out.println("history record" + historyRecords.get(j).getCondition());
-                        System.out.println("all history " + allHistory.get(i).getCondition());
-                        historyRecords.get(j).setCondition(allHistory.get(i).getCondition());
-                    }
-                }
-            }
-        } else {
+//        if (allHistory.size() > 0 && historyRecords.size() > 0) {
+//            for (int i = 0; i < allHistory.size(); i++) {
+//                for (int j = 0; j < historyRecords.size(); j++) {
+//                    if (allHistory.get(i).getBlockHash().equals(historyRecords.get(j).getBlockHash())) {
+//                        System.out.println("**************************************************************");
+//                        System.out.println("history record" + historyRecords.get(j).getCondition());
+//                        System.out.println("all history " + allHistory.get(i).getCondition());
+//                        historyRecords.get(j).setCondition(allHistory.get(i).getCondition());
+//                    }
+//                }
+//            }
+//        } else {
             historyRecords = allHistory;
-        }
+       // }
 
         listView.setAdapter(baseAdapter);
 

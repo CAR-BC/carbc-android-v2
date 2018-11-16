@@ -371,7 +371,7 @@ public class AgreementCollector extends Thread {
                             for (int i = 0; i < statusItems.size(); i++) {
                                 StatusItem item = statusItems.get(i);
                                 if (item.getBlockHash().equals(agreement.getBlockHash())) {
-                                    item.setValue(item.getValue() + 1);
+                                    item.setValue(getAgreements().size());
 
                                     Intent intent = new Intent("StatusFragment");
                                     intent.putExtra("agreementReceived", "agreementReceived");
