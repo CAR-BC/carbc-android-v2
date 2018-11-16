@@ -113,6 +113,36 @@ public class HistoryDAO implements AsyncResponse {
         return object;
     }
 
+    public JSONObject getBlockDataToResendBlock(String blockHash) throws SQLException, JSONException {
+        APICaller apiCaller = new APICaller();
+        JSONObject object = new JSONObject();
+        apiCaller.delegate = this;
+        jsonArray = null;
+
+        try {
+
+            apiCaller.execute(base_url + "historydatatoresendblock?block_hash="+ blockHash, "GET", "v", "g");
+
+            while (jsonArray == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        if (jsonArray.getBoolean(0)){
+            JSONArray array = jsonArray.getJSONArray(1);
+            object = array.getJSONObject(0);
+        }
+
+        return object;
+    }
+
 
     public String getAdditionalData(String blockHash) throws SQLException, JSONException {
         APICaller apiCaller = new APICaller();

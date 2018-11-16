@@ -82,13 +82,14 @@ public class AgreementCollector extends Thread {
                 secondaryCount = thirdParties.length();
                 rating.setSpecialValidators(secondaryCount);
                 String myPubKey = KeyGenerator.getInstance().getPublicKeyAsString();
+                String sender = block.getBlockBody().getTransaction().getSender();
 
 
                 //TODO: need to check whether parties are real or not before adding to the arrays
                 switch (event) {
                     case "ExchangeOwnership":
                         String vehicleId = block.getBlockBody().getTransaction().getAddress();
-                        String sender = block.getBlockBody().getTransaction().getSender();
+
 
                         OwnershipExchange ownershipExchange = new OwnershipExchange(vehicleId, sender);
 
@@ -161,14 +162,16 @@ public class AgreementCollector extends Thread {
                             if (show) {
                                 //show notification in notification icon 1
 
-                                MainActivity.notificationList.add(block);
-                                Intent intent = new Intent("MainActivity");
-                                intent.putExtra("newNomApprovedBlockReceived", "newBlock");
-                                System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
+                                if (!sender.equals(myPubKey)){
+                                    MainActivity.notificationList.add(block);
+                                    Intent intent = new Intent("MainActivity");
+                                    intent.putExtra("newNomApprovedBlockReceived", "newBlock");
+                                    System.out.println("+++++++++++newNomApprovedBlockReceived++++++++++");
 
-                                intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                                MyApp.getContext().sendBroadcast(intent);
+                                    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                    MyApp.getContext().sendBroadcast(intent);
 
+                                }
                             }
                         }
                         break;

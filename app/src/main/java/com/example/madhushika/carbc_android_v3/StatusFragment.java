@@ -23,10 +23,15 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import Objects.StatusItem;
+import controller.Controller;
 import core.connection.HistoryDAO;
 import core.consensus.AgreementCollector;
 
@@ -63,7 +68,7 @@ public class StatusFragment extends Fragment {
         MyApp.getContext().registerReceiver(broadcastReceiver, new IntentFilter("StatusFragment"));
 
         View view = inflater.inflate(R.layout.fragment_status, container, false);
-        listView = (ListView)view.findViewById(R.id.status_list);
+        listView = (ListView) view.findViewById(R.id.status_list);
         baseAdapter = new BaseAdapter() {
             @Override
             public int getCount() {
@@ -103,7 +108,7 @@ public class StatusFragment extends Fragment {
                     job = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_event);
                     date1 = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_date);
                     condition = (ImageView) cellUser.findViewById(R.id.cell_my_vehicle_status_condition);
-                    registrationNumber =(TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_registrationNumber);
+                    registrationNumber = (TextView) cellUser.findViewById(R.id.cell_my_vehicle_status_registrationNumber);
                     progressBar = (ProgressBar) cellUser.findViewById(R.id.progressBar);
 
                     ph = new Placeholder();
@@ -129,11 +134,13 @@ public class StatusFragment extends Fragment {
                 progressBar.setProgress(statusItem.getValue());
 
 
-                if (statusItem.getCondition().equalsIgnoreCase("pending")){
+                if (statusItem.getCondition().equalsIgnoreCase("pending")) {
                     condition.setImageDrawable(getResources().getDrawable(R.drawable.ic_progress_24dp));
-                } if (statusItem.getCondition().equalsIgnoreCase("accepted")){
+                }
+                if (statusItem.getCondition().equalsIgnoreCase("accepted")) {
                     condition.setImageDrawable(getResources().getDrawable(R.drawable.ic_success_24dp));
-                } if (statusItem.getCondition().equalsIgnoreCase("Failed")){
+                }
+                if (statusItem.getCondition().equalsIgnoreCase("Failed")) {
                     condition.setImageDrawable(getResources().getDrawable(R.drawable.ic_fail_24dp));
                     /*condition.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -149,24 +156,30 @@ public class StatusFragment extends Fragment {
                 return cellUser;
             }
         };
+
+        setClickListnerToStatusList();
+
         return view;
     }
 
-    private void setArrayAdapterTostatusList( ){
+    private void setArrayAdapterTostatusList() {
 
         HistoryDAO historyDAO = new HistoryDAO();
         allHistory = historyDAO.getAllHistory();
 
         //TODO: should change this
-        if (allHistory.size()>0 &&  historyRecords.size()>0){
-            for (int i = 0;i<allHistory.size();i++){
-                for (int j = 0; j<historyRecords.size(); j++){
-                    if (allHistory.get(i).getBlockHash().equals(historyRecords.get(j).getBlockHash())){
+        if (allHistory.size() > 0 && historyRecords.size() > 0) {
+            for (int i = 0; i < allHistory.size(); i++) {
+                for (int j = 0; j < historyRecords.size(); j++) {
+                    if (allHistory.get(i).getBlockHash().equals(historyRecords.get(j).getBlockHash())) {
+                        System.out.println("**************************************************************");
+                        System.out.println("history record" + historyRecords.get(j).getCondition());
+                        System.out.println("all history " + allHistory.get(i).getCondition());
                         historyRecords.get(j).setCondition(allHistory.get(i).getCondition());
                     }
                 }
             }
-        }else {
+        } else {
             historyRecords = allHistory;
         }
 
@@ -174,17 +187,35 @@ public class StatusFragment extends Fragment {
 
     }
 
-    private void setClickListnerToStatusList(){
+    private void setClickListnerToStatusList() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (historyRecords.get(position).getCondition().equalsIgnoreCase("Failed")){
+                if (historyRecords.get(position).getCondition().equalsIgnoreCase("Failed")) {
                     //TODO:resend block
+                    HistoryDAO historyDAO = new HistoryDAO();
+                    try {
+                        JSONObject object = historyDAO.getBlockDataToResendBlock(historyRecords.get(position).getBlockHash());
+                        Controller controller = new Controller();
+                        controller.sendTransaction(object.getString("event"),
+                                historyRecords.get(position).getRegistrationNumber(), new JSONObject(object.getString("data")));
+
+                        historyRecords.get(position).setCondition("Pending");
+                        Intent intent = new Intent("StatusFragment");
+                        intent.putExtra("resendBlock", "resendBlock");
+                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        MyApp.getContext().sendBroadcast(intent);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
 
     }
+
     private class Placeholder {
         public TextView job;
         public TextView datet;
@@ -197,12 +228,20 @@ public class StatusFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String string = intent.getStringExtra("agreementReceived");
-            if (string.equals("agreementReceived")){
-                ListAdapter adapter = StatusFragment.listView.getAdapter();
-                StatusFragment.baseAdapter.notifyDataSetChanged();
+            String string1 = intent.getStringExtra("resendBlock");
+            if (string != null) {
+                if (string.equals("agreementReceived")) {
+                    ListAdapter adapter = StatusFragment.listView.getAdapter();
+                    StatusFragment.baseAdapter.notifyDataSetChanged();
+                }
+            }
+
+            if (string1 != null) {
+                if (string1.equals("resendBlock")) {
+                    ListAdapter adapter = StatusFragment.listView.getAdapter();
+                    StatusFragment.baseAdapter.notifyDataSetChanged();
+                }
             }
         }
     };
-
-
 }
