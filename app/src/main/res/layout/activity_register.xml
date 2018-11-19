@@ -35,7 +35,7 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="0dp"
-                android:src="@drawable/ic_baseline_arrow_back_black_24dp" />
+                android:src="@drawable/ic_arrow_back_white_24dp" />
 
             <TextView
                 android:layout_width="150dp"
@@ -44,7 +44,8 @@
                 android:layout_marginLeft="15dp"
                 android:background="@null"
                 android:text="Register"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:gravity="center"/>
         </android.support.v7.widget.Toolbar>
 
         <LinearLayout
@@ -57,14 +58,14 @@
             <LinearLayout
                 android:id="@+id/signup_user_name"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/signup_user_name_label"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="left"
                     android:text="User Name"
                     android:textSize="20dp" />
@@ -72,37 +73,12 @@
                 <EditText
                     android:id="@+id/signup_name_txt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter your name"
+                    android:layout_height="match_parent"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:padding="5dp"
-                    android:textSize="15dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/signup_role_ll"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/signup_role_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="Role: "
-                    android:textSize="20dp" />
-
-                <Spinner
-                    android:id="@+id/signup_role_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter National ID number"
-                    android:inputType="textWebEmailAddress"
-                    android:maxLines="1"
-                    android:padding="5dp" />
+                    android:padding="10dp"
+                    android:layout_gravity="left"
+                    android:textSize="15dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -124,10 +100,9 @@
                     android:id="@+id/signup_id_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter National ID number"
                     android:inputType="textWebEmailAddress"
                     android:maxLines="1"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:textSize="15dp" />
             </LinearLayout>
 
@@ -150,10 +125,9 @@
                     android:id="@+id/signup_email_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Email"
                     android:inputType="textWebEmailAddress"
                     android:maxLines="1"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:textSize="15dp" />
             </LinearLayout>
 
@@ -176,10 +150,9 @@
                     android:id="@+id/signup_password_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter password"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:textSize="15dp" />
 
                 <TextView
@@ -209,10 +182,9 @@
                     android:id="@+id/signup_confirm_password_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter password again"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:textSize="15dp" />
 
             </LinearLayout>
@@ -221,13 +193,15 @@
 
         <Button
             android:id="@+id/sign_in_button"
-            android:layout_width="wrap_content"
+            android:layout_width="237dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:background="@drawable/button_bg_rounded"
             android:padding="10dp"
             android:text="Register"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textColor="@color/colorgWhite"/>
     </LinearLayout>
 
 </ScrollView>

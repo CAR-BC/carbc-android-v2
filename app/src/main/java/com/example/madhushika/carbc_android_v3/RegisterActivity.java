@@ -29,8 +29,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private TextView idLable;
 
-    private Spinner spinner;
-
     private Button register_btn;
 
     private String password;
@@ -50,7 +48,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         usernameGiven = (EditText) findViewById(R.id.signup_name_txt);
-        spinner =(Spinner)findViewById(R.id.signup_role_spinner);
         idGiven = (EditText) findViewById(R.id.signup_id_txt);
         emailGiven = (EditText) findViewById(R.id.signup_email_txt);
         passwordGiven = (EditText) findViewById(R.id.signup_password_txt);
@@ -64,7 +61,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,rolelist);
 
-        spinner.setAdapter(adapter);
         SharedPreferences preferences = getSharedPreferences("com.example.madhushika.carbc_android_v2", 0);
         final SharedPreferences.Editor editor = preferences.edit();
 
@@ -129,7 +125,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = emailGiven.getText().toString();
                 String confirmPassword = confirmPasswordGiven.getText().toString();
                 password = passwordGiven.getText().toString();
-                roleGiven = spinner.getSelectedItem().toString();
 
                 if (  password.equals(confirmPassword)
                         && !username.equals(" ") && !id.equals(" ")){
@@ -146,7 +141,6 @@ public class RegisterActivity extends AppCompatActivity {
                     editor.putString("password",password);
                     editor.putString("email",email);
                     editor.putString("id",id);
-                    editor.putString("role",roleGiven);
 
                     //TODO: create key pair
 

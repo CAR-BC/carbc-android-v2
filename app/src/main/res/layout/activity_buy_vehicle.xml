@@ -97,7 +97,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:gravity="center"
-                    android:text="Cancel" />
+                    android:text="Cancel"
+                    android:background="@color/colorRed"/>
 
                 <Button
                     android:id="@+id/done_btn"
@@ -105,7 +106,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:gravity="center"
-                    android:text="Done" />
+                    android:text="Done"
+                    android:background="@color/colorAcceptedGreen"/>
             </LinearLayout>
 
         </LinearLayout>

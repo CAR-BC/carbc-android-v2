@@ -22,7 +22,7 @@
 
             <EditText
                 android:id="@+id/login_name"
-                android:layout_width="250dp"
+                android:layout_width="358dp"
                 android:layout_height="wrap_content"
                 android:hint="Enter username"
                 android:inputType="text"
@@ -31,20 +31,22 @@
 
             <EditText
                 android:id="@+id/login_password"
-                android:layout_width="250dp"
+                android:layout_width="359dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:hint="Enter Password"
-                android:maxLines="1"
                 android:inputType="textPassword"
+                android:maxLines="1"
                 android:padding="10dp" />
 
             <Button
                 android:id="@+id/log_in"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="Log In"/>
+                android:background="@drawable/button_bg_rounded"
+                android:text="Log In"
+                android:textColor="@color/colorgWhite" />
             <!--android:onClick="onClick"-->
 
             <TextView

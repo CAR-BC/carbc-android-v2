@@ -37,9 +37,10 @@ public class MainActivity extends AppCompatActivity
     private NewTransactionFragment newTransactionFragment;
     private UnregisteredNewTransactionFragment unregisteredNewTransactionFragment;
     TextView notificationCount;
-    TextView criticalNotificationCount;
+    //TextView criticalNotificationCount;
     //    FloatingActionButton fab;
     private TransactionNew transactionNew;
+    ImageButton notifBtn;
 
     public static ArrayList<String> vehicle_numbers;
     public static ArrayList<Block> notificationList;
@@ -63,24 +64,13 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ImageButton notifBtn = (ImageButton) findViewById(R.id.notificationBtn);
+         notifBtn = (ImageButton) findViewById(R.id.notificationBtn);
         ImageButton searchBtn = (ImageButton) findViewById(R.id.searchBtn);
-        ImageButton criticalNotificationBtn = (ImageButton) findViewById(R.id.criticalNotificationBtn);
+        //ImageButton criticalNotificationBtn = (ImageButton) findViewById(R.id.criticalNotificationBtn);
 
         notificationCount = (TextView) findViewById(R.id.notificationCount);
-        criticalNotificationCount = (TextView) findViewById(R.id.CriticalNotificationCount);
-//        notificationCount.setText(String.valueOf(notificationList.size()));
-//        criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
+        //criticalNotificationCount = (TextView) findViewById(R.id.CriticalNotificationCount);
 
-//        fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(MainActivity.this, NotificationActivity.class);
-//                startActivity(i);
-//            }
-//        });
-//        fab.setEnabled(false);
 
         registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
 
@@ -96,17 +86,17 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        criticalNotificationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (criticalNotificationList.size() != 0) {
-                    Intent i = new Intent(MainActivity.this, CriticalNotificationList.class);
-                    startActivity(i);
-                } else {
-                    Toast.makeText(getApplicationContext(), "No critical notifications", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        criticalNotificationBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (criticalNotificationList.size() != 0) {
+//                    Intent i = new Intent(MainActivity.this, CriticalNotificationList.class);
+//                    startActivity(i);
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "No critical notifications", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,20 +124,27 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        if ((notificationList.size() != 0)) {
+        if ((notificationList.size() != 0 || criticalNotificationList.size() != 0)) {
             notificationCount.setVisibility(View.VISIBLE);
 
-            notificationCount.setText(String.valueOf(notificationList.size()));
+            notificationCount.setText(String.valueOf(notificationList.size()+criticalNotificationList.size()));
         } else {
             notificationCount.setVisibility(View.GONE);
         }
 
         if ((criticalNotificationList.size() != 0)) {
-            criticalNotificationCount.setVisibility(View.VISIBLE);
+            notificationCount.setVisibility(View.VISIBLE);
+            notifBtn.setImageDrawable(getDrawable(R.drawable.ic_critical_notifications_24dp));
 
-            criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
-        } else {
-            criticalNotificationCount.setVisibility(View.GONE);
+            notificationCount.setText(String.valueOf(criticalNotificationList.size() + notificationList.size()));
+        } else if(criticalNotificationList.size() == 0){
+            notifBtn.setImageDrawable(getDrawable(R.drawable.ic_notifications_white_24dp));
+
+        }
+        else {
+            notificationCount.setVisibility(View.GONE);
+            notifBtn.setImageDrawable(getDrawable(R.drawable.ic_notifications_white_24dp));
+
         }
         super.onResume();
     }
@@ -166,20 +163,33 @@ public class MainActivity extends AppCompatActivity
                 if (str.equals("newBlock") || str3.equals("confirmationSent")) {
                     if ((notificationList.size() != 0)) {
                         notificationCount.setVisibility(View.VISIBLE);
-                        notificationCount.setText(String.valueOf(notificationList.size()));
-                    } else {
+                        notificationCount.setText(String.valueOf(notificationList.size()+criticalNotificationList.size()));
+                    } else if(criticalNotificationList.size()!=0) {
+                        notificationCount.setVisibility(View.VISIBLE);
+                        notifBtn.setImageDrawable(getDrawable(R.drawable.ic_critical_notifications_24dp));
+                        notificationCount.setText(String.valueOf(notificationList.size() + criticalNotificationList.size()));
+                    }else if(notificationList.size() == 0 && criticalNotificationList.size()==0){
                         notificationCount.setVisibility(View.GONE);
+                        notifBtn.setImageDrawable(getDrawable(R.drawable.ic_notifications_white_24dp));
+                    }else if (criticalNotificationList.size()==0){
+                        notifBtn.setImageDrawable(getDrawable(R.drawable.ic_notifications_white_24dp));
                     }
                 }
             }
             if ((str2 != null)) {
                 if (str2.equals("newCriticalBlock")) {
                     if (criticalNotificationList.size() != 0) {
-                        criticalNotificationCount.setText(String.valueOf(criticalNotificationList.size()));
-                        criticalNotificationCount.setVisibility(View.VISIBLE);
-                    } else {
-                        criticalNotificationCount.setVisibility(View.GONE);
-
+                        notificationCount.setText(String.valueOf(criticalNotificationList.size()+notificationList.size()));
+                        notificationCount.setVisibility(View.VISIBLE);
+                        notifBtn.setImageDrawable(getDrawable(R.drawable.ic_critical_notifications_24dp));
+                    } else if (notificationList.size() != 0) {
+                        notificationCount.setText(String.valueOf(criticalNotificationList.size() + notificationList.size()));
+                        notificationCount.setVisibility(View.VISIBLE);
+                    }else if (notificationList.size() == 0 && criticalNotificationList.size()==0){
+                        notificationCount.setVisibility(View.GONE);
+                        notifBtn.setImageDrawable(getDrawable(R.drawable.ic_notifications_white_24dp));
+                    }else if (criticalNotificationList.size()==0){
+                        notifBtn.setImageDrawable(getDrawable(R.drawable.ic_notifications_white_24dp));
                     }
                 }
             }

@@ -53,8 +53,11 @@ public class NotificationActivity extends AppCompatActivity {
         });
 
         registerReceiver(broadcastReceiver, new IntentFilter("MainActivity"));
-        setArrayAdapterToNotificationList(MainActivity.notificationList);
-    }
+
+        ArrayList<Block> arrayList = new ArrayList<>();
+        arrayList.addAll(MainActivity.criticalNotificationList);
+        arrayList.addAll(MainActivity.notificationList);
+        setArrayAdapterToNotificationList(arrayList);    }
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -65,13 +68,18 @@ public class NotificationActivity extends AppCompatActivity {
             String str = intent.getStringExtra("confirmationSent");
             if (str!=null){
                 if (str.equals("confirmationSent")){
-                    setArrayAdapterToNotificationList(MainActivity.notificationList);
+                    ArrayList<Block> arrayList = new ArrayList<>();
+                    arrayList.addAll(MainActivity.criticalNotificationList);
+                    arrayList.addAll(MainActivity.notificationList);
+                    setArrayAdapterToNotificationList(arrayList);
                 }
             }
             if (str1!=null){
                 if (str1.equals("newBlock")){
-                    setArrayAdapterToNotificationList(MainActivity.notificationList);
-                }
+                    ArrayList<Block> arrayList = new ArrayList<>();
+                    arrayList.addAll(MainActivity.criticalNotificationList);
+                    arrayList.addAll(MainActivity.notificationList);
+                    setArrayAdapterToNotificationList(arrayList);                }
             }
 
         }
@@ -99,6 +107,8 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup viewGroup) {
                 final Block block = notificationList.get(position);
+
+
                 View cellUser = null;
 
                 if (convertView == null) {
@@ -141,6 +151,9 @@ public class NotificationActivity extends AppCompatActivity {
                     discard = ph.discardBtn;
                 }
 
+                if (MainActivity.criticalNotificationList.contains(block)){
+                    cellUser.setBackgroundColor(getResources().getColor(R.color.colorRejectedRed));
+                }
                 vehicle_id.setText(block.getBlockBody().getTransaction().getAddress());
                 vehicle_description.setText(block.getBlockBody().getTransaction().getEvent());
                 init_date.setText(block.getBlockBody().getTransaction().getTime());
