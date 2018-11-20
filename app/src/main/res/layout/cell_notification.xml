@@ -44,19 +44,19 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/notification_request_more"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:text="Request more info"
-                android:background="@drawable/button_bg_rounded"
-                android:textColor="@color/colorgWhite"/>
+            <!--<Button-->
+                <!--android:id="@+id/notification_request_more"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="5"-->
+                <!--android:text="Request more info"-->
+                <!--android:background="@drawable/button_bg_rounded"-->
+                <!--android:textColor="@color/colorgWhite"/>-->
 
             <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5" />
+                android:layout_weight="5" />
 
             <Button
                 android:id="@+id/notification_confirm"

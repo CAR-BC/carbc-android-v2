@@ -76,7 +76,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
         make.setAdapter(dataAdapter);
 
         ArrayAdapter<String> dataAdaptermodel = new ArrayAdapter<String>(this.getApplicationContext(),
-                R.layout.item_spinner, modelList);
+                R.layout.item_spinner_register_vehicle, modelList);
         dataAdaptermodel.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         model.setAdapter(dataAdaptermodel);
 

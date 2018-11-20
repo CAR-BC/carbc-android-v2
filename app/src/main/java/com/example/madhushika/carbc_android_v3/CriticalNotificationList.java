@@ -93,21 +93,21 @@ public class CriticalNotificationList extends AppCompatActivity {
                 TextView vehicle_description;
                 TextView init_date;
                 Button confirm_tr;
-                Button request_more;
+                //Button request_more;
 
                 if (ph == null) {
                     vehicle_id = (TextView) cellUser.findViewById(R.id.notification_vid);
                     vehicle_description = (TextView) cellUser.findViewById(R.id.notification_description);
                     init_date = (TextView) cellUser.findViewById(R.id.notification_date);
                     confirm_tr = (Button) cellUser.findViewById(R.id.notification_confirm);
-                    request_more = (Button) cellUser.findViewById(R.id.notification_request_more);
+                   // request_more = (Button) cellUser.findViewById(R.id.notification_request_more);
 
                     ph = new Placeholder();
                     ph.vehicle_Id = vehicle_id;
                     ph.vehicle_description = vehicle_description;
                     ph.initiate_date = init_date;
                     ph.confirm_tx = confirm_tr;
-                    ph.more_btn = request_more;
+                   // ph.more_btn = request_more;
 
                     cellUser.setTag(ph);
                 } else {
@@ -115,7 +115,7 @@ public class CriticalNotificationList extends AppCompatActivity {
                     vehicle_description = ph.vehicle_description;
                     init_date = ph.initiate_date;
                     confirm_tr = ph.confirm_tx;
-                    request_more = ph.more_btn;
+                   // request_more = ph.more_btn;
                 }
 
                 vehicle_id.setText(block.getBlockBody().getTransaction().getAddress());
@@ -149,15 +149,15 @@ public class CriticalNotificationList extends AppCompatActivity {
                     }
                 });
 
-                request_more.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intents = new Intent(CriticalNotificationList.this, ShowMoreInfoNotificationView.class);
-                        intents.putExtra("block", block);
-                        startActivity(intents);
-                        //fill
-                    }
-                });
+//                request_more.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intents = new Intent(CriticalNotificationList.this, ShowMoreInfoNotificationView.class);
+//                        intents.putExtra("block", block);
+//                        startActivity(intents);
+//                        //fill
+//                    }
+//                });
                 return cellUser;
             }
         });

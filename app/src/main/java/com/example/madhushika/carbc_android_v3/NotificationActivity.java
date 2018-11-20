@@ -124,7 +124,7 @@ public class NotificationActivity extends AppCompatActivity {
                 TextView vehicle_description;
                 TextView init_date;
                 Button confirm_tr;
-                Button request_more;
+                //Button request_more;
                 ImageButton discard;
 
                 if (ph == null) {
@@ -132,7 +132,7 @@ public class NotificationActivity extends AppCompatActivity {
                     vehicle_description = (TextView) cellUser.findViewById(R.id.notification_description);
                     init_date = (TextView) cellUser.findViewById(R.id.notification_date);
                     confirm_tr = (Button) cellUser.findViewById(R.id.notification_confirm);
-                    request_more = (Button) cellUser.findViewById(R.id.notification_request_more);
+                   // request_more = (Button) cellUser.findViewById(R.id.notification_request_more);
                     discard = (ImageButton) cellUser.findViewById(R.id.discardBtn);
 
                     ph = new Placeholder();
@@ -140,7 +140,7 @@ public class NotificationActivity extends AppCompatActivity {
                     ph.vehicle_description = vehicle_description;
                     ph.initiate_date = init_date;
                     ph.confirm_tx = confirm_tr;
-                    ph.more_btn = request_more;
+                    //ph.more_btn = request_more;
                     ph.discardBtn = discard;
 
                     cellUser.setTag(ph);
@@ -149,7 +149,7 @@ public class NotificationActivity extends AppCompatActivity {
                     vehicle_description = ph.vehicle_description;
                     init_date = ph.initiate_date;
                     confirm_tr = ph.confirm_tx;
-                    request_more = ph.more_btn;
+                   // request_more = ph.more_btn;
                     discard = ph.discardBtn;
                 }
 
@@ -185,6 +185,7 @@ public class NotificationActivity extends AppCompatActivity {
                         Consensus.getInstance().handleAgreement(agreement);
                         Toast.makeText(NotificationActivity.this, "Sent your confirmation", Toast.LENGTH_SHORT).show();
                         MainActivity.notificationList.remove(block);
+                        MainActivity.criticalNotificationList.remove(block);
 
                         Intent intent = new Intent("MainActivity");
                         intent.putExtra("newNomApprovedBlockReceived", "newBlock");
@@ -196,20 +197,21 @@ public class NotificationActivity extends AppCompatActivity {
                     }
                 });
 
-                request_more.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intents = new Intent(NotificationActivity.this, ShowMoreInfoNotificationView.class);
-                        intents.putExtra("block", block);
-                        startActivity(intents);
-                        //fill
-                    }
-                });
+//                request_more.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intents = new Intent(NotificationActivity.this, ShowMoreInfoNotificationView.class);
+//                        intents.putExtra("block", block);
+//                        startActivity(intents);
+//                        //fill
+//                    }
+//                });
 
                 discard.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         MainActivity.notificationList.remove(block);
+                        MainActivity.criticalNotificationList.remove(block);
                         Intent intent = new Intent("MainActivity");
                         intent.putExtra("newNomApprovedBlockReceived", "newBlock");
                         intent.putExtra("confirmationSent", "confirmationSent");
