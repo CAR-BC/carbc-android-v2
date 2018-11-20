@@ -165,7 +165,7 @@ public class NotificationActivity extends AppCompatActivity {
                 if (block.getBlockBody().getTransaction().getEvent().equalsIgnoreCase("RegisterVehicle")) {
                     vehicle_description.setText("Register new vehicle");
                 }
-                if (block.getBlockBody().getTransaction().getEvent().equalsIgnoreCase("OwnershipExchange")) {
+                if (block.getBlockBody().getTransaction().getEvent().equalsIgnoreCase("ExchangeOwnership")) {
                     vehicle_description.setText("Sell vehicle");
                 }
                 if (block.getBlockBody().getTransaction().getEvent().equalsIgnoreCase("ServiceRepair")) {
