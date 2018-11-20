@@ -831,6 +831,7 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
                 i.putExtra("stationAddress",s.getAddress());
                 i.putExtra("publicKey",s.getPublicKey());
                 i.putExtra("datePicked",datePicked);
+                System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"+datePicked);
                 startActivity(i);
                 Toast.makeText(ServiceActivity.this,"Please select the date",Toast.LENGTH_SHORT);
             }
