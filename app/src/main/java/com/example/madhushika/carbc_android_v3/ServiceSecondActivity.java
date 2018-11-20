@@ -212,14 +212,19 @@ setArrayAdapterToServiceTypeList(list);
     }
 
     public static Timestamp convertStringToTimestamp(String time) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(time);
+        System.out.println("service time: " + time);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         Date parsedDate = null;
+        Timestamp timestamp = null;
         try {
             parsedDate = dateFormat.parse(time);
+            timestamp = new Timestamp(parsedDate.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return new java.sql.Timestamp(parsedDate.getTime());
+        return timestamp;
     }
 
     private void setArrayAdapterToServiceTypeList(final List<String> nameList) {
