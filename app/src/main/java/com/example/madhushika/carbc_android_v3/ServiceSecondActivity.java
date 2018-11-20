@@ -50,7 +50,7 @@ public class ServiceSecondActivity extends AppCompatActivity {
     private JSONObject serviceStationJson;
     private JSONArray sparePartSellerList = new JSONArray();
 
-    HashMap<String,String []> serviceTypes = new HashMap<>();
+    HashMap<String, String[]> serviceTypes = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +67,10 @@ public class ServiceSecondActivity extends AppCompatActivity {
         Intent i = getIntent();
         if (i != null)
             vehicleNumber = i.getExtras().getString("vid");
-            station = i.getExtras().getString("station");
-            publicKey = i.getExtras().getString("publicKey");
-            datePicked = i.getExtras().getString("datePicked");
-        System.out.println("DDDDDDDDDDDDDDDDDDD22222222222222"+datePicked);
+        station = i.getExtras().getString("station");
+        publicKey = i.getExtras().getString("publicKey");
+        datePicked = i.getExtras().getString("datePicked");
+        System.out.println("DDDDDDDDDDDDDDDDDDD22222222222222" + datePicked);
 
         try {
             serviceStationJson = new JSONObject();
@@ -103,10 +103,14 @@ public class ServiceSecondActivity extends AppCompatActivity {
                             serviceDataJSON.put("cost", 100000);
                             JSONArray services = new JSONArray();
 
-                            for (int k = 0; k < selectedServiceTypeList.size(); k++){
+                            for (int k = 0; k < selectedServiceTypeList.size(); k++) {
                                 JSONObject service = new JSONObject();
                                 service.put("serviceType", selectedServiceTypeList.get(k));
-                                service.put("serviceData", new JSONArray());
+                                JSONArray array = new JSONArray();
+                                JSONObject jsonObject = new JSONObject();
+                                array.put(jsonObject);
+                                service.put("serviceData", array);
+
 
                                 services.put(service);
                             }
@@ -168,48 +172,48 @@ public class ServiceSecondActivity extends AppCompatActivity {
         });
 
 
-        serviceTypes.put("ServiceStation",new String[] {"Change the engine oil", "Replace the oil filter", "Replace the air filter",
+        serviceTypes.put("ServiceStation", new String[]{"Change the engine oil", "Replace the oil filter", "Replace the air filter",
                 "Replace the fuel filter", "Replace the cabin filter",
                 "Replace the spark plugs"});
-        serviceTypes.put("Ashan Service Center",new String[]{"Tune the engine", "Check level and refill brake fluid or clutch fluid",
+        serviceTypes.put("Ashan Service Center", new String[]{"Tune the engine", "Check level and refill brake fluid or clutch fluid",
                 "Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
                 "Check level and refill power steering fluid"});
-        serviceTypes.put("Kumudu Service Center",new String []{"Grease and lubricate components",
+        serviceTypes.put("Kumudu Service Center", new String[]{"Grease and lubricate components",
                 "Inspect and replace the timing belt or timing chain if needed", "Check condition of the tires",
                 "Check for proper operation of all lights, wipers ",
                 "Check for any Error codes in the ECU and take corrective action"});
-        serviceTypes.put("Thinara Filling Stations",new String[]{"Wash the vehicle and clean the interiors",
+        serviceTypes.put("Thinara Filling Stations", new String[]{"Wash the vehicle and clean the interiors",
                 "Use scan tool read trouble code", "replacing head lights"});
-        serviceTypes.put("Lanka IOC Fuel Station",new String []{"Replace the air filter",
+        serviceTypes.put("Lanka IOC Fuel Station", new String[]{"Replace the air filter",
                 "Replace the fuel filter", "Replace the cabin filter",
                 "Replace the spark plugs", "Tune the engine", "Check level and refill brake fluid or clutch fluid",
                 "Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
                 "Check level and refill power steering fluid"});
-        serviceTypes.put("Auto Miraj",new String []{"Check level and refill power steering fluid", "Grease and lubricate components",
+        serviceTypes.put("Auto Miraj", new String[]{"Check level and refill power steering fluid", "Grease and lubricate components",
                 "Inspect and replace the timing belt or timing chain if needed", "Check condition of the tires",
                 "Check for proper operation of all lights, wipers ",
                 "Check for any Error codes in the ECU and take corrective action"});
-        serviceTypes.put("Shantha Motors",new String []{"Replace the fuel filter", "Replace the cabin filter",
+        serviceTypes.put("Shantha Motors", new String[]{"Replace the fuel filter", "Replace the cabin filter",
                 "Replace the spark plugs", "Tune the engine", "Check level and refill brake fluid or clutch fluid"});
-        serviceTypes.put("Motor Cycle Repair Center",new String [] {"Replace the cabin filter",
-                "Replace the spark plugs", "Tune the engine","Check for any Error codes in the ECU and take corrective action",
+        serviceTypes.put("Motor Cycle Repair Center", new String[]{"Replace the cabin filter",
+                "Replace the spark plugs", "Tune the engine", "Check for any Error codes in the ECU and take corrective action",
                 "Wash the vehicle and clean the interiors"});
-        serviceTypes.put("Caypetco",new String []{"Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
+        serviceTypes.put("Caypetco", new String[]{"Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
                 "Check level and refill power steering fluid", "Grease and lubricate components",
                 "Inspect and replace the timing belt or timing chain if needed"});
 
 
-       String[] arrayList = new String[]{"Change the engine oil", "Replace the oil filter", "Replace the air filter",
-               "Replace the fuel filter", "Replace the cabin filter",
+        String[] arrayList = new String[]{"Change the engine oil", "Replace the oil filter", "Replace the air filter",
+                "Replace the fuel filter", "Replace the cabin filter",
                 "Replace the spark plugs", "Tune the engine", "Check level and refill brake fluid or clutch fluid",
-               "Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
-               "Check level and refill power steering fluid", "Grease and lubricate components",
-               "Inspect and replace the timing belt or timing chain if needed", "Check condition of the tires",
-               "Check for proper operation of all lights, wipers ",
-               "Check for any Error codes in the ECU and take corrective action",
-               "Wash the vehicle and clean the interiors", "Use scan tool read trouble code", "replacing head lights"};
-List<String> list =  Arrays.asList(serviceTypes.get(station));
-setArrayAdapterToServiceTypeList(list);
+                "Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
+                "Check level and refill power steering fluid", "Grease and lubricate components",
+                "Inspect and replace the timing belt or timing chain if needed", "Check condition of the tires",
+                "Check for proper operation of all lights, wipers ",
+                "Check for any Error codes in the ECU and take corrective action",
+                "Wash the vehicle and clean the interiors", "Use scan tool read trouble code", "replacing head lights"};
+        List<String> list = Arrays.asList(serviceTypes.get(station));
+        setArrayAdapterToServiceTypeList(list);
     }
 
     public static Timestamp convertStringToTimestamp(String time) {
@@ -256,7 +260,7 @@ setArrayAdapterToServiceTypeList(list);
 
                 Placeholder ph;
                 TextView service_station;
-                CheckBox cBox;
+                final CheckBox cBox;
 
                 if (convertView == null) {
                     //cellUser = inflater.inflate(R.layout.cell_notification, parent, false);
@@ -280,11 +284,19 @@ setArrayAdapterToServiceTypeList(list);
 
 
                 service_station.setText(serviceStation);
-                if (cBox.isChecked()) {
-                    selectedServiceTypeList.add(serviceStation);
-                } else {
-                    selectedServiceTypeList.remove(serviceStation);
-                }
+
+                cBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (cBox.isChecked()) {
+                            System.out.println("***************************");
+                            selectedServiceTypeList.add(serviceStation);
+                        } else {
+                            selectedServiceTypeList.remove(serviceStation);
+                        }
+                    }
+                });
+
                 return cellUser;
             }
         });

@@ -391,6 +391,8 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         edittext.setText(dateFormat.format(myCalendar.getTime()));
+        datePicked = edittext.getText().toString();
+
 
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -408,7 +410,7 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
                 edittext.setText(sdf.format(myCalendar.getTime()));
-                datePicked = sdf.format(myCalendar.getTime());
+                datePicked = edittext.getText().toString();
             }
         };
 
