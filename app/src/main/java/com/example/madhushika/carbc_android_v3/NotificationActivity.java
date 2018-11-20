@@ -57,7 +57,8 @@ public class NotificationActivity extends AppCompatActivity {
         ArrayList<Block> arrayList = new ArrayList<>();
         arrayList.addAll(MainActivity.criticalNotificationList);
         arrayList.addAll(MainActivity.notificationList);
-        setArrayAdapterToNotificationList(arrayList);    }
+        setArrayAdapterToNotificationList(arrayList);
+    }
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -66,26 +67,27 @@ public class NotificationActivity extends AppCompatActivity {
             String str1 = intent.getStringExtra("newNomApprovedBlockReceived");
             //TODO: Test this again
             String str = intent.getStringExtra("confirmationSent");
-            if (str!=null){
-                if (str.equals("confirmationSent")){
+            if (str != null) {
+                if (str.equals("confirmationSent")) {
                     ArrayList<Block> arrayList = new ArrayList<>();
                     arrayList.addAll(MainActivity.criticalNotificationList);
                     arrayList.addAll(MainActivity.notificationList);
                     setArrayAdapterToNotificationList(arrayList);
                 }
             }
-            if (str1!=null){
-                if (str1.equals("newBlock")){
+            if (str1 != null) {
+                if (str1.equals("newBlock")) {
                     ArrayList<Block> arrayList = new ArrayList<>();
                     arrayList.addAll(MainActivity.criticalNotificationList);
                     arrayList.addAll(MainActivity.notificationList);
-                    setArrayAdapterToNotificationList(arrayList);                }
+                    setArrayAdapterToNotificationList(arrayList);
+                }
             }
 
         }
     };
 
-    private void setArrayAdapterToNotificationList(final ArrayList<Block> notificationList){
+    private void setArrayAdapterToNotificationList(final ArrayList<Block> notificationList) {
         notification = (ListView) findViewById(R.id.list_view_notification);
 
         notification.setAdapter(new BaseAdapter() {
@@ -139,7 +141,7 @@ public class NotificationActivity extends AppCompatActivity {
                     ph.initiate_date = init_date;
                     ph.confirm_tx = confirm_tr;
                     ph.more_btn = request_more;
-                    ph.discardBtn =discard;
+                    ph.discardBtn = discard;
 
                     cellUser.setTag(ph);
                 } else {
@@ -151,11 +153,24 @@ public class NotificationActivity extends AppCompatActivity {
                     discard = ph.discardBtn;
                 }
 
-                if (MainActivity.criticalNotificationList.contains(block)){
+                if (MainActivity.criticalNotificationList.contains(block)) {
                     cellUser.setBackgroundColor(getResources().getColor(R.color.colorRejectedRed));
                 }
+
                 vehicle_id.setText(block.getBlockBody().getTransaction().getAddress());
-                vehicle_description.setText(block.getBlockBody().getTransaction().getEvent());
+
+                if (block.getBlockBody().getTransaction().getEvent().equals("BuyVehicle")) {
+                    vehicle_description.setText("Buy new Vehicle");
+                }
+                if (block.getBlockBody().getTransaction().getEvent().equals("RegisterVehicle")) {
+                    vehicle_description.setText("Register new vehicle");
+                }
+                if (block.getBlockBody().getTransaction().getEvent().equals("OwnershipExchange")) {
+                    vehicle_description.setText("Sell vehicle");
+                }
+                if (block.getBlockBody().getTransaction().getEvent().equals("ServiceRepair")) {
+                    vehicle_description.setText("Service & repair");
+                }
                 init_date.setText(block.getBlockBody().getTransaction().getTime());
 
                 confirm_tr.setOnClickListener(new View.OnClickListener() {
@@ -214,6 +229,7 @@ public class NotificationActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
     }
+
     private class Placeholder {
         public TextView vehicle_Id;
         public TextView vehicle_description;

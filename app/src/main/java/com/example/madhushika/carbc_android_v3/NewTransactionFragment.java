@@ -39,14 +39,14 @@ public class NewTransactionFragment extends Fragment {
 
     private Spinner spinner;
 
-    private CardView buyVehicle;
+//    private CardView buyVehicle;
     private CardView sellVehicle;
     private CardView serviceVehicle;
-    private CardView registerVehicle;
-    private CardView insureVehicle;
-    private CardView leasing;
-    private CardView leasePayment;
-    private CardView emissionTesting;
+    //private CardView registerVehicle;
+   // private CardView insureVehicle;
+//    private CardView leasing;
+//    private CardView leasePayment;
+    //private CardView emissionTesting;
 
 
     public NewTransactionFragment() {
@@ -77,10 +77,10 @@ public class NewTransactionFragment extends Fragment {
         sellVehicle = (CardView) view.findViewById(R.id.tr_sell_vehicle2);
         serviceVehicle = (CardView) view.findViewById(R.id.tr_service_vehicle);
         //registerVehicle = (CardView) view.findViewById(R.id.tr_reg_new_vehicle);
-        insureVehicle = (CardView) view.findViewById(R.id.tr_insure_vehicle);
+        //insureVehicle = (CardView) view.findViewById(R.id.tr_insure_vehicle);
        // leasing = (CardView) view.findViewById(R.id.tr_leasing_vehicle);
         //leasePayment =(CardView) view.findViewById(R.id.tr_leasing_payment_vehicle);
-        emissionTesting = (CardView) view.findViewById(R.id.tr_emision_vehicle);
+        //emissionTesting = (CardView) view.findViewById(R.id.tr_emision_vehicle);
 
 //        ArrayList<String> arrayList = new ArrayList<>();
 //        arrayList.add("23456");
@@ -128,16 +128,16 @@ public class NewTransactionFragment extends Fragment {
 //
 //            }
 //        });
-        insureVehicle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), InsureActivity.class);
-                String vehiclNo = spinner.getSelectedItem().toString();
-                i.putExtra("vid",vehiclNo);
-                startActivity(i);
-
-            }
-        });
+//        insureVehicle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getActivity(), InsureActivity.class);
+//                String vehiclNo = spinner.getSelectedItem().toString();
+//                i.putExtra("vid",vehiclNo);
+//                startActivity(i);
+//
+//            }
+//        });
 //        leasing.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -160,16 +160,16 @@ public class NewTransactionFragment extends Fragment {
 //
 //            }
 //        });
-        emissionTesting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), EmmisiontestingActivity.class);
-                String vehiclNo = spinner.getSelectedItem().toString();
-                i.putExtra("vid",vehiclNo);
-                startActivity(i);
-
-            }
-        });
+//        emissionTesting.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getActivity(), EmmisiontestingActivity.class);
+//                String vehiclNo = spinner.getSelectedItem().toString();
+//                i.putExtra("vid",vehiclNo);
+//                startActivity(i);
+//
+//            }
+//        });
 
 
 

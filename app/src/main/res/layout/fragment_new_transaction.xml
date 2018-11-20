@@ -191,37 +191,37 @@
                 <!--</LinearLayout>-->
                 <!--</android.support.v7.widget.CardView>-->
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/tr_insure_vehicle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:padding="16dp"
-                    app:cardCornerRadius="3dp"
-                    app:cardElevation="8dp">
+                <!--<android.support.v7.widget.CardView-->
+                    <!--android:id="@+id/tr_insure_vehicle"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_columnWeight="1"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:layout_marginRight="16dp"-->
+                    <!--android:layout_marginBottom="16dp"-->
+                    <!--android:padding="16dp"-->
+                    <!--app:cardCornerRadius="3dp"-->
+                    <!--app:cardElevation="8dp">-->
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:orientation="vertical">
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:orientation="vertical">-->
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_insure" />
+                        <!--<ImageView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_gravity="center"-->
+                            <!--android:src="@drawable/ic_insure" />-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Insure" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="Insure" />-->
+                    <!--</LinearLayout>-->
+                <!--</android.support.v7.widget.CardView>-->
 
                 <!--<android.support.v7.widget.CardView-->
                 <!--android:id="@+id/tr_leasing_vehicle"-->
@@ -287,37 +287,37 @@
                 <!--</LinearLayout>-->
                 <!--</android.support.v7.widget.CardView>-->
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/tr_emision_vehicle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:padding="16dp"
-                    app:cardCornerRadius="3dp"
-                    app:cardElevation="8dp">
+                <!--<android.support.v7.widget.CardView-->
+                    <!--android:id="@+id/tr_emision_vehicle"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_columnWeight="1"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:layout_marginRight="16dp"-->
+                    <!--android:layout_marginBottom="16dp"-->
+                    <!--android:padding="16dp"-->
+                    <!--app:cardCornerRadius="3dp"-->
+                    <!--app:cardElevation="8dp">-->
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:orientation="vertical">
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_margin="5dp"-->
+                        <!--android:orientation="vertical">-->
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_emmision" />
+                        <!--<ImageView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_gravity="center"-->
+                            <!--android:src="@drawable/ic_emmision" />-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Emision Testing" />
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="Emision Testing" />-->
+                    <!--</LinearLayout>-->
+                <!--</android.support.v7.widget.CardView>-->
 
                 <!--<android.support.v7.widget.CardView-->
                 <!--android:id="@+id/tr_regatcarbc_vehicle"-->
