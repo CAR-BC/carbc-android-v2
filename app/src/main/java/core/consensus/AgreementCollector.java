@@ -108,7 +108,7 @@ public class AgreementCollector extends Thread {
                                 if (newOwnerPubKey.equals(myPubKey)) {
                                     //show notification icon 2
                                     MainActivity.criticalNotificationList.add(block);
-                                    Intent intent = new Intent("newCriticalBlockReceived");
+                                    Intent intent = new Intent("MainActivity");
                                     intent.putExtra("newCriticalBlockReceived", "newCriticalBlock");
                                     intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                                     MyApp.getContext().sendBroadcast(intent);
@@ -118,7 +118,7 @@ public class AgreementCollector extends Thread {
                                 } else {
                                     //show notification icon 1
                                     MainActivity.notificationList.add(block);
-                                    Intent intent = new Intent("newBlockReceived");
+                                    Intent intent = new Intent("MainActivity");
                                     intent.putExtra("newNomApprovedBlockReceived", "newBlock");
                                     intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                                     MyApp.getContext().sendBroadcast(intent);

@@ -70,6 +70,7 @@ public class ServiceSecondActivity extends AppCompatActivity {
             station = i.getExtras().getString("station");
             publicKey = i.getExtras().getString("publicKey");
             datePicked = i.getExtras().getString("datePicked");
+        System.out.println("DDDDDDDDDDDDDDDDDDD22222222222222"+datePicked);
 
         try {
             serviceStationJson = new JSONObject();
