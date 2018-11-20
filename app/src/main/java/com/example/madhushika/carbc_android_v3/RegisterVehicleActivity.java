@@ -71,7 +71,7 @@ public class RegisterVehicleActivity extends AppCompatActivity {
 //        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 //        imm.hideSoftInputFromWindow(chassisNumber.getWindowToken(), 0);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this.getApplicationContext(),
-                R.layout.item_spinner, makeList);
+                R.layout.item_spinner_register_vehicle, makeList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         make.setAdapter(dataAdapter);
 

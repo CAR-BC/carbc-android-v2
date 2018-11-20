@@ -250,9 +250,12 @@ public class MainActivity extends AppCompatActivity
             startActivity(i);
 
         } else if (id == R.id.navigation_notifications) {
-            Intent i = new Intent(MainActivity.this, NotificationActivity.class);
-            startActivity(i);
-
+            if (notificationList.size()==0 && criticalNotificationList.size()==0){
+                displayFragment("addtransaction", id);
+            }else {
+                Intent i = new Intent(MainActivity.this, NotificationActivity.class);
+                startActivity(i);
+            }
         } else if (id == R.id.navigation_status) {
             displayFragment("prigressBar", R.id.progress_bar_item);
             new Handler().postDelayed(new Runnable() {
@@ -299,7 +302,6 @@ public class MainActivity extends AppCompatActivity
                 return new StatusFragment();
 
             case R.id.navigation_info:
-
                 if (vehicle_numbers.size() == 0) {
                     return new UnregisteredNewTransactionFragment();
                 } else {

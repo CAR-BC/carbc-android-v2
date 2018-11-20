@@ -159,16 +159,16 @@ public class NotificationActivity extends AppCompatActivity {
 
                 vehicle_id.setText(block.getBlockBody().getTransaction().getAddress());
 
-                if (block.getBlockBody().getTransaction().getEvent().equals("BuyVehicle")) {
+                if (block.getBlockBody().getTransaction().getEvent().equalsIgnoreCase("BuyVehicle")) {
                     vehicle_description.setText("Buy new Vehicle");
                 }
-                if (block.getBlockBody().getTransaction().getEvent().equals("RegisterVehicle")) {
+                if (block.getBlockBody().getTransaction().getEvent().equalsIgnoreCase("RegisterVehicle")) {
                     vehicle_description.setText("Register new vehicle");
                 }
-                if (block.getBlockBody().getTransaction().getEvent().equals("OwnershipExchange")) {
+                if (block.getBlockBody().getTransaction().getEvent().equalsIgnoreCase("OwnershipExchange")) {
                     vehicle_description.setText("Sell vehicle");
                 }
-                if (block.getBlockBody().getTransaction().getEvent().equals("ServiceRepair")) {
+                if (block.getBlockBody().getTransaction().getEvent().equalsIgnoreCase("ServiceRepair")) {
                     vehicle_description.setText("Service & repair");
                 }
                 init_date.setText(block.getBlockBody().getTransaction().getTime());
