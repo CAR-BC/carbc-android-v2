@@ -6,7 +6,7 @@
     <color name="colorPrimaryVLight">#e464bf</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorRed">#d10c0c</color>
-    <color name="colorRejectedRed">#df8cc7</color>
+    <color name="colorRejectedRed">#ffb8ea</color>
     <color name="colorYellow">#fffd7b</color>
     <color name="colorAcceptedGreen">#8eed6b</color>
     <color name="colorgGreen">#248f27</color>
