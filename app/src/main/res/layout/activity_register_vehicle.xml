@@ -35,7 +35,7 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="0dp"
-                android:src="@drawable/ic_baseline_arrow_back_black_24dp" />
+                android:src="@drawable/ic_arrow_back_white_24dp" />
 
             <TextView
                 android:layout_width="150dp"
@@ -159,8 +159,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <Button
@@ -168,9 +170,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="100dp"
                 android:gravity="center"
-                android:text="Cancel" />
+                android:text="Cancel"
+                android:background="@drawable/button_bg_rounded_cancel"/>
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                />
 
             <Button
                 android:id="@+id/done_btn"
@@ -178,7 +185,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:gravity="center"
-                android:text="Done" />
+                android:text="Done"
+                android:textColor="@color/colorgWhite"
+                android:background="@drawable/button_bg_rounded_done"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -37,7 +37,7 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="0dp"
-                android:src="@drawable/ic_baseline_arrow_back_black_24dp" />
+                android:src="@drawable/ic_arrow_back_white_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -53,22 +53,21 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:text="Registration Number : "
-                android:textSize="20dp" />
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/vehicle_number"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginVertical="20dp"
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:textColor="@color/colorgWhite"
+                android:background="@drawable/button_bg_rounded"
+                android:textAlignment="center"/>
         </LinearLayout>
 
         <LinearLayout
@@ -105,9 +104,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
+                android:layout_marginTop="25dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="50dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -115,13 +114,25 @@
                     android:id="@+id/cancel_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cancel" />
+                    android:layout_gravity="left"
+                    android:gravity="center"
+                    android:text="Cancel"
+                    android:background="@drawable/button_bg_rounded_cancel"/>
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    />
 
                 <Button
                     android:id="@+id/done_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Done" />
+                    android:layout_gravity="right"
+                    android:gravity="center"
+                    android:text="Done"
+                    android:textColor="@color/colorgWhite"
+                    android:background="@drawable/button_bg_rounded_done"/>
             </LinearLayout>
         </LinearLayout>
 
