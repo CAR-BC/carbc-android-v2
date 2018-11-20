@@ -152,9 +152,7 @@ public class APICaller extends AsyncTask<Object,String,JSONArray> {
 
     @Override
     protected void onPostExecute(JSONArray o) {
-        System.out.println("before deligate////////////////////////////////////////////////////////");
         super.onPostExecute(o);
         //delegate.processFinish(o);
-        System.out.println("ater deligate////////////////////////////////////////////////////////////////////////");
     }
 }

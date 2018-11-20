@@ -77,10 +77,10 @@ public class MainActivity extends AppCompatActivity
         notifBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (notificationList.size() != 0) {
+                if (notificationList.size() != 0 || criticalNotificationList.size()!=0) {
                     Intent i = new Intent(MainActivity.this, NotificationActivity.class);
                     startActivity(i);
-                } else {
+                } else if (notificationList.size() == 0 && criticalNotificationList.size()==0){
                     Toast.makeText(getApplicationContext(), "No notifications", Toast.LENGTH_SHORT).show();
                 }
             }
