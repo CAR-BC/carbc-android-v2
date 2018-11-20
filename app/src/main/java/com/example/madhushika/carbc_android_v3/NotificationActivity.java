@@ -171,7 +171,7 @@ public class NotificationActivity extends AppCompatActivity {
                 if (block.getBlockBody().getTransaction().getEvent().equalsIgnoreCase("ServiceRepair")) {
                     vehicle_description.setText("Service & repair");
                 }
-                init_date.setText(block.getBlockBody().getTransaction().getTime());
+                init_date.setText(block.getBlockBody().getTransaction().getTime().substring(0,18));
 
                 confirm_tr.setOnClickListener(new View.OnClickListener() {
                     @Override
