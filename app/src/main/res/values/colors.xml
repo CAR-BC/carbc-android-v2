@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4E083A</color>
-    <color name="colorPrimaryDark">#4E083A</color>
-    <color name="colorPrimaryLight">#b60b85</color>
+    <color name="colorPrimary">#3b032b</color>
+    <color name="colorPrimaryDark">#23031a</color>
+    <color name="colorPrimaryLight">#940b6d</color>
+    <color name="colorPrimaryVLight">#e464bf</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorRed">#d10c0c</color>
-    <color name="colorRejectedRed">#f15454</color>
+    <color name="colorRejectedRed">#df8cc7</color>
     <color name="colorYellow">#fffd7b</color>
     <color name="colorAcceptedGreen">#8eed6b</color>
     <color name="colorgGreen">#248f27</color>
@@ -13,6 +14,6 @@
     <color name="colorgWhiteNew">#64dd17</color>
     <color name="colorGreenCell">#e0fddc</color>
     <color name="colorGreenCellMargin">#24d60f</color>
-    <color name="colortransparent">#80ffffff</color>
+    <color name="colortransparent">#00ffffff</color>
     <color name="colorBlue">#8082fa75</color>
 </resources>

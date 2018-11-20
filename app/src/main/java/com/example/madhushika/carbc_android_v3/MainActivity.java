@@ -80,7 +80,9 @@ public class MainActivity extends AppCompatActivity
                 if (notificationList.size() != 0 || criticalNotificationList.size()!=0) {
                     Intent i = new Intent(MainActivity.this, NotificationActivity.class);
                     startActivity(i);
+
                 } else if (notificationList.size() == 0 && criticalNotificationList.size()==0){
+
                     Toast.makeText(getApplicationContext(), "No notifications", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -263,8 +265,15 @@ public class MainActivity extends AppCompatActivity
 
             if(vehicle_numbers.size()==0){
                 Toast.makeText(MainActivity.this,"Please register your vehicle",Toast.LENGTH_SHORT);
+            }else {
+                displayFragment("prigressBar", R.id.progress_bar_item);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        displayFragment("InfoFragment", id);
+                    }
+                }, 300);
             }
-            displayFragment("InfoFragment", id);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

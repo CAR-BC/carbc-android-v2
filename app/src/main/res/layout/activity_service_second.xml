@@ -14,30 +14,15 @@
         android:orientation="vertical"
         android:weightSum="10">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/vehicle_number"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:layout_weight="2"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <ImageView
-                android:id="@+id/back_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_arrow_back_white_24dp" />
-
-            <TextView
-                android:id="@+id/vehicle_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="9"
-                android:gravity="center_horizontal"
-                android:text="wsd"
-                android:textSize="20dp" />
-        </LinearLayout>
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@color/colorgWhite"
+            android:background="@drawable/button_bg_rounded"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/service_station_address"
@@ -46,20 +31,22 @@
             android:layout_gravity="center"
             android:layout_marginBottom="4dp"
             android:layout_weight="1"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:padding="8dp"
+            android:textStyle="bold"/>
 
         <ListView
             android:id="@+id/service_type_list"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_weight="7"></ListView>
+            android:layout_weight="7"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="2"
+            android:layout_height="70dp"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <Button
@@ -67,9 +54,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="100dp"
                 android:gravity="center"
-                android:text="Cancel" />
+                android:text="Cancel"
+                android:background="@drawable/button_bg_rounded_cancel"/>
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                />
 
             <Button
                 android:id="@+id/done_btn"
@@ -77,7 +69,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:gravity="center"
-                android:text="Done" />
+                android:text="Done"
+                android:textColor="@color/colorgWhite"
+                android:background="@drawable/button_bg_rounded_done"/>
         </LinearLayout>
     </LinearLayout>
 

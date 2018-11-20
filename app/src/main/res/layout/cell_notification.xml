@@ -14,7 +14,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|top"
-            android:src="@drawable/ic_fail_24dp"/>
+            android:background="@null"
+            android:src="@drawable/ic_cancel_black_24dp"/>
 
         <TextView
             android:id="@+id/notification_vid"
@@ -47,23 +48,27 @@
                 android:id="@+id/notification_request_more"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="8"
-                android:text="Request more info" />
+                android:layout_weight="5"
+                android:text="Request more info"
+                android:background="@drawable/button_bg_rounded"
+                android:textColor="@color/colorgWhite"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
 
             <Button
                 android:id="@+id/notification_confirm"
                 android:layout_width="0dp"
-                android:layout_weight="3"
+                android:layout_weight="5"
                 android:layout_height="wrap_content"
-                android:text="Confirm" />
+                android:text="Confirm"
+                android:background="@drawable/button_bg_rounded"
+                android:textColor="@color/colorgWhite"/>
 
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/colorgGreen" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

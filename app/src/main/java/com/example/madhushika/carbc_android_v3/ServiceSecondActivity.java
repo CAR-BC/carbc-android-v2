@@ -42,7 +42,6 @@ public class ServiceSecondActivity extends AppCompatActivity {
     String station;
     String publicKey;
     String datePicked;
-    ImageView backBtn;
     ArrayList<String> selectedServiceTypeList;
     Button doneBtn;
     Button cancelBtn;
@@ -60,7 +59,6 @@ public class ServiceSecondActivity extends AppCompatActivity {
 
         vehicle_number = (TextView) findViewById(R.id.vehicle_number);
         service_station = (TextView) findViewById(R.id.service_station_address);
-        backBtn = (ImageView) findViewById(R.id.back_button);
         doneBtn = (Button) findViewById(R.id.done_btn);
         cancelBtn = (Button) findViewById(R.id.cancel_btn);
 
@@ -84,12 +82,6 @@ public class ServiceSecondActivity extends AppCompatActivity {
 
         vehicle_number.setText(vehicleNumber);
         service_station.setText(station);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override

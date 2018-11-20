@@ -9,5 +9,6 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:textAlignment="center"
-    android:textSize="20sp" />
+    android:textSize="20sp"
+    android:textColor="@color/colorgWhite"/>
     <!--style="?android:attr/spinnerItemStyle"-->
