@@ -114,8 +114,8 @@ public class Rating {
     public void ratingForRegisterVehicle(int mandatory) {
         int mandatoryCount = this.mandatory - mandatory;
         int other = agreementCount - mandatoryCount;
-        if(other > 20) { other = 20; }
-        value = 80 * mandatoryCount + 1 * other ;
+        if(other > 50) { other = 50; }
+        value = 50 * mandatoryCount + 1 * other ;
     }
 
 }
