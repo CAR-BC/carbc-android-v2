@@ -65,6 +65,7 @@ public class NotificationActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
 
             String str1 = intent.getStringExtra("newNomApprovedBlockReceived");
+            String str2 = intent.getStringExtra("newCriticalBlockReceived");
             //TODO: Test this again
             String str = intent.getStringExtra("confirmationSent");
             if (str != null) {
@@ -77,6 +78,14 @@ public class NotificationActivity extends AppCompatActivity {
             }
             if (str1 != null) {
                 if (str1.equals("newBlock")) {
+                    ArrayList<Block> arrayList = new ArrayList<>();
+                    arrayList.addAll(MainActivity.criticalNotificationList);
+                    arrayList.addAll(MainActivity.notificationList);
+                    setArrayAdapterToNotificationList(arrayList);
+                }
+            }
+            if (str2 != null) {
+                if (str2.equals("newCriticalBlock")) {
                     ArrayList<Block> arrayList = new ArrayList<>();
                     arrayList.addAll(MainActivity.criticalNotificationList);
                     arrayList.addAll(MainActivity.notificationList);

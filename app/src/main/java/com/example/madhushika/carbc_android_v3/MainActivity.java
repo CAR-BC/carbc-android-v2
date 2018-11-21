@@ -251,7 +251,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.navigation_notifications) {
             if (notificationList.size()==0 && criticalNotificationList.size()==0){
-                displayFragment("addtransaction", id);
+//                displayFragment("addtransaction", id);
+                Toast.makeText(MainActivity.this,"no notifications",Toast.LENGTH_SHORT);
             }else {
                 Intent i = new Intent(MainActivity.this, NotificationActivity.class);
                 startActivity(i);

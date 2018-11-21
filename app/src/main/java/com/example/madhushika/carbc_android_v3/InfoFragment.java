@@ -171,6 +171,22 @@ public class InfoFragment extends Fragment {
                             try {
                                 JSONObject data = new JSONObject(jsonObject.getString("data"));
                                 job.setText(jsonObject.getString("event"));
+
+                                if (jsonObject.getString("event").equalsIgnoreCase("BuyVehicle")) {
+                                    job.setText("Buy this Vehicle");
+                                }
+                                if (jsonObject.getString("event").equalsIgnoreCase("RegisterVehicle")) {
+                                    job.setText("Register this vehicle");
+                                }
+                                if (jsonObject.getString("event").equalsIgnoreCase("ExchangeOwnership")) {
+                                    job.setText("Sell this vehicle");
+                                }
+                                if (jsonObject.getString("event").equalsIgnoreCase("ServiceRepair")) {
+                                    job.setText("Service & repair");
+                                }
+
+                                System.out.println("**********************************************************");
+                                System.out.println(data.getString("serviced_date"));
                                 date1.setText(data.getString("serviced_date"));
                             } catch (JSONException e) {
                                 e.printStackTrace();

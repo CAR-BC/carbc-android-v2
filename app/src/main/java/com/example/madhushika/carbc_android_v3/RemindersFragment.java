@@ -88,30 +88,30 @@ public class RemindersFragment extends Fragment {
                     cellUser = convertView;
                 }
                 Placeholder ph = (Placeholder) cellUser.getTag();
-                TextView vid;
+//                TextView vid;
                 TextView job;
                 TextView date1;
 
                 if (ph == null) {
-                    vid = (TextView) cellUser.findViewById(R.id.reminder_vid);
+                    //vid = (TextView) cellUser.findViewById(R.id.reminder_vid);
                     job = (TextView) cellUser.findViewById(R.id.reminder_job);
                     date1 = (TextView) cellUser.findViewById(R.id.reminder_date);
 
                     ph = new Placeholder();
                     ph.job = job;
                     ph.datet = date1;
-                    ph.vid = vid;
+                    //ph.vid = vid;
 
                     cellUser.setTag(ph);
                 } else {
                     job = ph.job;
                     date1 = ph.datet;
-                    vid = ph.vid;
+//                    vid = ph.vid;
                 }
 
                 job.setText(reminderItem.getjob());
                 date1.setText(reminderItem.getDate1());
-                vid.setText(reminderItem.getVid());
+//                vid.setText(reminderItem.getVid());
 
                 return cellUser;
             }

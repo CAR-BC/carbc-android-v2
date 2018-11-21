@@ -81,6 +81,8 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
     private Button done;
     private TextView vehicleDetailsText;
 
+    public static ServiceActivity serviceActivity;
+
     Calendar myCalendar = Calendar.getInstance();
 
     String regNo;
@@ -355,6 +357,8 @@ public class ServiceActivity extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
         hideActionBar();
+
+        serviceActivity = this;
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
