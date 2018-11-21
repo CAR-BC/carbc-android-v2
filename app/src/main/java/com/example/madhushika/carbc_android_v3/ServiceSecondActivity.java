@@ -1,5 +1,6 @@
 package com.example.madhushika.carbc_android_v3;
 
+import android.app.ActivityManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -131,6 +132,8 @@ public class ServiceSecondActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
+                        //Intent intent = new Intent(ServiceActivity,ServiceActivit);
+                        ServiceActivity.serviceActivity.finish();
                         finish();
                     }
                 });

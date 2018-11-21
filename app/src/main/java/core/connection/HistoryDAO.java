@@ -285,7 +285,7 @@ public class HistoryDAO implements AsyncResponse {
 
                     System.out.println("-----------------------------------------");
                     System.out.println(vid);
-                    System.out.println(VehicleJDBCDAO.registrationNumbersWithVehicleNumbers.get(vid));
+//                    System.out.println(VehicleJDBCDAO.registrationNumbersWithVehicleNumbers.get(vid));
                     statusItems.add(statusItem);
                 }
             }

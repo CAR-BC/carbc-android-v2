@@ -148,6 +148,7 @@ public class StatusFragment extends Fragment {
 
                 if (statusItem.getCondition().equalsIgnoreCase("pending")) {
                     condition.setImageDrawable(getResources().getDrawable(R.drawable.ic_progress_24dp));
+                    progressBar.setVisibility(View.VISIBLE);
                 }
                 if (statusItem.getCondition().equalsIgnoreCase("accepted")) {
                     condition.setImageDrawable(getResources().getDrawable(R.drawable.ic_success_24dp));
