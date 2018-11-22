@@ -53,6 +53,10 @@ public class Rating {
             case "RegisterVehicle":
                 ratingForRegisterVehicle(mandatory);
                 break;
+
+            case "BuyVehicle":
+                ratingForBuyVehicle(mandatory);
+                break;
 //
 //            case "BankLoan":
 //                getMandatoryValidators().add(secondaryParties.getJSONObject("Bank")
@@ -84,8 +88,8 @@ public class Rating {
     public void ratingForExchangeOwnership(int mandatory) {
         int mandatoryCount = this.mandatory - mandatory;
         int other = agreementCount - mandatoryCount;
-        if(other > 20) { other = 20; }
-        value = 40 * mandatoryCount + 1 * other ;
+        if(other > 40) { other = 40; }
+        value = 30 * mandatoryCount + 1 * other ;
     }
 
     public void ratingForServiceRepair(int mandatory, int secondary) {
@@ -116,6 +120,13 @@ public class Rating {
         int other = agreementCount - mandatoryCount;
         if(other > 50) { other = 50; }
         value = 50 * mandatoryCount + 1 * other ;
+    }
+
+    public void ratingForBuyVehicle(int mandatory) {
+        int mandatoryCount = this.mandatory - mandatory;
+        int other = agreementCount - mandatoryCount;
+        if(other > 40) { other = 40; }
+        value = 30 * mandatoryCount + 1 * other ;
     }
 
 }

@@ -38,7 +38,7 @@
                 android:id="@+id/reminder_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="DD/MM/YYYY"
+                android:text="22/11/2018"
                 android:textSize="16dp" />
 
         </LinearLayout>

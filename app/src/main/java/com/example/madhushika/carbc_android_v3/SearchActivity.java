@@ -197,7 +197,9 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     JSONObject data = new JSONObject(jsonObject.getString("data"));
                     eventData.setText(jsonObject.getString("event"));
-                    init_date.setText(data.getString("serviced_date"));
+                    if(data.has("serviced_date")){
+                        init_date.setText(data.getString("serviced_date"));
+                    }
                     rating.setText(jsonObject.getString("rating"));
 
                 } catch (JSONException e) {

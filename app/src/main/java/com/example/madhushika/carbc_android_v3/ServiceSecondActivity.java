@@ -178,9 +178,9 @@ public class ServiceSecondActivity extends AppCompatActivity {
         serviceTypes.put("ServiceStation", new String[]{"Change the engine oil", "Replace the oil filter", "Replace the air filter",
                 "Replace the fuel filter", "Replace the cabin filter",
                 "Replace the spark plugs"});
-        serviceTypes.put("Ashan Service Center", new String[]{"Tune the engine", "Check level and refill brake fluid or clutch fluid",
-                "Check Brake Pads or Liners, Brake Discs or Drums, and replace if worn out",
-                "Check level and refill power steering fluid"});
+        serviceTypes.put("Ashan Service Center", new String[]{"Tune the engine", "Change the engine oil", "Replace the spark plugs",
+                "Replace the cabin filter",
+                "Replace the fuel filter"});
         serviceTypes.put("Kumudu Service Center", new String[]{"Grease and lubricate components",
                 "Inspect and replace the timing belt or timing chain if needed", "Check condition of the tires",
                 "Check for proper operation of all lights, wipers ",
