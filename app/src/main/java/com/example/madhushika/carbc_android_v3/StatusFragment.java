@@ -129,20 +129,28 @@ public class StatusFragment extends Fragment {
 
                 if (statusItem.getJob().equalsIgnoreCase("BuyVehicle")) {
                     job.setText("Buy new Vehicle");
+                    progressBar.setMax(12);
+
                 }
                 if (statusItem.getJob().equalsIgnoreCase("RegisterVehicle")) {
                     job.setText("Register new vehicle");
+                    progressBar.setMax(12);
+
                 }
                 if (statusItem.getJob().equalsIgnoreCase("ExchangeOwnership")) {
                     job.setText("Sell vehicle");
+                    progressBar.setMax(12);
+
                 }
                 if (statusItem.getJob().equalsIgnoreCase("ServiceRepair")) {
                     job.setText("Service & repair");
+                    progressBar.setMax(12);
+
                 }
 
                 date1.setText(statusItem.getDate1());
                 registrationNumber.setText(statusItem.getRegistrationNumber());
-                progressBar.setMax(3);
+//                progressBar.setMax(3);
                 progressBar.setProgress(statusItem.getValue());
 
 

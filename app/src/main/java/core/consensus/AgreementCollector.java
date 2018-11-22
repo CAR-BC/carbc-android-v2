@@ -60,7 +60,7 @@ public class AgreementCollector extends Thread {
         this.identityJDBC = new IdentityJDBC();
         this.mandatoryValidators = new ArrayList<>();
         this.specialValidators = new ArrayList<>();
-        this.threshold = 1;
+        this.threshold = 10;
 
         setMandatoryAgreements();
 
